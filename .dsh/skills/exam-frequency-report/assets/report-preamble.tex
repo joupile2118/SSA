@@ -1,0 +1,138 @@
+% =====================================================================
+%  exam-frequency-report / assets/report-preamble.tex
+%  Reusable preamble for an exam-frequency report.
+%
+%  Compile with XeLaTeX (twice).  Load-bearing choices, each of which
+%  fixes a real failure mode -- see the skill's Pitfalls table:
+%    * ctexart + xelatex          -> CJK actually renders
+%    * amsmath only, before newtxmath -> avoids the \Bbbk clash with amssymb
+%    * xcolor[table]              -> \rowcolor is defined
+%    * \noindent before \rule/\tabularx -> no 17pt \parindent overfull
+%  Adjust \setReportMeta and the geometry block per task.
+% =====================================================================
+\documentclass[11pt]{ctexart}
+
+% --- page geometry ---------------------------------------------------
+% Keep the long edge at a size you have already validated (A4 height
+% preserves the vertical layout).  To match a reading device, set
+%   paperwidth = paperheight * Wpx / Hpx
+% e.g. 13-inch iPad Air M2 portrait (2048x2732):
+%   paperheight=297mm, paperwidth=297*512/683=222.6413mm
+\usepackage[paperwidth=222.6413mm,paperheight=297mm,
+            left=1.9cm,right=1.9cm,top=2.1cm,bottom=1.7cm,headsep=0.5cm]{geometry}
+
+% --- math: order matters ---------------------------------------------
+% DO NOT load newtxtext in a CJK (ctex) document.
+% On macOS ctex falls back to the macold fontset, whose \ttfamily CJK slot
+% points at STFangsong -- absent from current macOS.  Any Chinese inside
+% \texttt (e.g. a path written as \code{试卷/教材}) then fails with
+%   ! Font TU/STFangsong ... not loadable
+% and those glyphs come out as mojibake.  Verified: newtxtext triggers it,
+% newtxmath is harmless, and \setCJKmonofont does NOT repair it.
+% Pure-ASCII (non-ctex) documents may load newtxtext normally.
+\usepackage{amsmath}
+\usepackage{newtxmath}
+
+% --- tables, colour, boxes -------------------------------------------
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx,xltabular,needspace}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{ragged2e}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{patterns}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage[hidelinks,bookmarksnumbered]{hyperref}
+
+% --- palette ---------------------------------------------------------
+\definecolor{ink}{HTML}{1F2933}
+\definecolor{deepblue}{HTML}{1B3A5C}
+\definecolor{accentA}{HTML}{B23A48}   % S tier
+\definecolor{accentB}{HTML}{D97706}   % A tier
+\definecolor{accentC}{HTML}{2F6F4E}   % B tier
+\definecolor{accentD}{HTML}{6B7280}   % C tier
+\definecolor{tintA}{HTML}{FBE9EB}
+\definecolor{tintB}{HTML}{FDF2E3}
+\definecolor{tintC}{HTML}{E8F2EC}
+\definecolor{tintD}{HTML}{F0F1F3}
+\definecolor{rulegray}{HTML}{C9CED6}
+\definecolor{tabhead}{HTML}{1B3A5C}
+
+% --- headings --------------------------------------------------------
+\titleformat{\section}{\normalfont\Large\bfseries\color{deepblue}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{deepblue!85!black}}{\thesubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{1.2em}{0.6em}
+\titlespacing*{\subsection}{0pt}{1.0em}{0.5em}
+
+% --- running head ----------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\footnotesize\color{deepblue}\ReportShortTitle}
+\fancyhead[R]{\footnotesize\color{deepblue}\thepage}
+\fancyfoot[C]{\scriptsize\color{accentD}\ReportSourceLine}
+\newcommand{\ReportShortTitle}{Exam-frequency report}
+\newcommand{\ReportSourceLine}{}
+
+% --- helpers ---------------------------------------------------------
+% Section-code tag.  Use the textbook's OWN numbering.
+\newcommand{\secode}[1]{\texttt{\color{deepblue}#1}}
+\newcommand{\tierS}{\textbf{\color{accentA}S}}
+\newcommand{\tierA}{\textbf{\color{accentB}A}}
+\newcommand{\tierB}{\textbf{\color{accentC}B}}
+\newcommand{\tierC}{\textbf{\color{accentD}C}}
+\newcommand{\hot}[1]{\textcolor{accentA}{\bfseries #1}}
+\newcommand{\code}[1]{\texttt{\small #1}}
+\newcommand{\thd}[1]{\textcolor{white}{\bfseries #1}}
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+% NOTE: \newlist needs an explicit label= or enumitem raises "Undefined label".
+\newlist{qparts}{enumerate}{1}
+\setlist[qparts]{label=(\alph*),leftmargin=1.5em,itemsep=2.5pt,topsep=3pt,parsep=0pt}
+\newlist{qnum}{enumerate}{1}
+\setlist[qnum]{label=(\arabic*),leftmargin=1.5em,itemsep=2.5pt,topsep=3pt,parsep=0pt}
+\newlist{bul}{itemize}{1}
+\setlist[bul]{label=\textbullet,leftmargin=1.6em,itemsep=1.5pt,topsep=2pt,parsep=0pt}
+\captionsetup{font={small,color=deepblue},labelfont=bf,skip=5pt}
+
+% --- callout boxes ---------------------------------------------------
+\newtcolorbox{keybox}[1][]{colback=tintC,colframe=accentC,boxrule=0.7pt,arc=2pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=accentC,breakable,#1}
+\newtcolorbox{warnbox}[1][]{colback=tintA,colframe=accentA,boxrule=0.7pt,arc=2pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=accentA,breakable,#1}
+\newtcolorbox{infobox}[1][]{colback=tintB,colframe=accentB,boxrule=0.7pt,arc=2pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=accentB,breakable,#1}
+
+% --- one-item-per-page layout (review sets) --------------------------
+% tcolorbox `height fill` absorbs the remaining page height.
+% Do NOT combine with `breakable`.
+\newtcolorbox{workspace}{height fill,enhanced,colback=white,colframe=gray!45,
+  boxrule=0.5pt,arc=1.5pt,left=9pt,right=9pt,top=6pt,bottom=6pt}
+
+% --- pgfplots reference lines on a symbolic axis ---------------------
+% A numeric line on `symbolic x coords` fails with
+%   "the input coordinate '...' has not been defined".
+% Draw it in axis-description coordinates instead, e.g. y=33.75 of ymax=60:
+%   \draw[accentA,dashed,thick]
+%     (axis description cs:0,0.5625) -- (axis description cs:1,0.5625);
+%   \node[anchor=south west,font=\scriptsize,color=accentA]
+%     at (axis description cs:0.02,0.578) {four-year mean};
+
+\clubpenalty=10000\widowpenalty=10000\displaywidowpenalty=10000
+\begin{document}
+% \noindent before every full-width rule and every top-level tabularx,
+% otherwise it inherits \parindent (17pt at 11pt) and overfulls.
+% \noindent{\color{deepblue}\rule{\textwidth}{1.2pt}}
+% \noindent\begin{tabularx}{\textwidth}{@{}L{3cm}X@{}}

@@ -1,0 +1,275 @@
+% =====================================================================
+%  exam-frequency-report / assets/report-template.tex
+%
+%  Skeleton for a per-chapter exam-frequency report.  Fill the CAPS
+%  placeholders, delete the sections you do not need, keep the order.
+%
+%  This file is SELF-CONTAINED by design (workspace convention): no
+%  \input, no external images.  Paste the preamble from report-preamble.tex
+%  below the \documentclass line.
+%
+%  Compile:  xelatex -interaction=nonstopmode -output-directory=tmp/report <this>.tex   (twice)
+%  Verify :  python3 <skill>/scripts/check_tex_pdf.py --log tmp/report/<name>.log \
+%                                                 --pdf output/试卷/<name>.pdf --pages N
+% =====================================================================
+\documentclass[11pt]{ctexart}
+
+\usepackage[paperwidth=222.6413mm,paperheight=297mm,
+            left=1.9cm,right=1.9cm,top=2.1cm,bottom=1.7cm,headsep=0.5cm]{geometry}
+\usepackage{amsmath}
+% 不要加载 newtxtext（CJK 文档）！
+% ctex 在 macOS 上会退到 macold 字体集，其 \ttfamily 的 CJK 槽指向 STFangsong；
+% 只要文档里出现"中文 + \texttt"（例如 \code{试卷/教材}），就会报
+%   ! Font TU/STFangsong ... not loadable
+% 并导致那些中文字形变成乱码。实测：newtxtext 是触发条件，newtxmath 无害。
+% 纯英文文档（非 ctex）可以照常用 newtxtext。
+\usepackage{newtxmath}
+
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{ragged2e}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage[hidelinks,bookmarksnumbered]{hyperref}
+
+\definecolor{ink}{HTML}{1F2933}
+\definecolor{deepblue}{HTML}{1B3A5C}
+\definecolor{accentA}{HTML}{B23A48}
+\definecolor{accentB}{HTML}{D97706}
+\definecolor{accentC}{HTML}{2F6F4E}
+\definecolor{accentD}{HTML}{6B7280}
+\definecolor{tintA}{HTML}{FBE9EB}
+\definecolor{tintB}{HTML}{FDF2E3}
+\definecolor{tintC}{HTML}{E8F2EC}
+\definecolor{tintD}{HTML}{F0F1F3}
+\definecolor{rulegray}{HTML}{C9CED6}
+\definecolor{tabhead}{HTML}{1B3A5C}
+
+\titleformat{\section}{\normalfont\Large\bfseries\color{deepblue}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{deepblue!85!black}}{\thesubsection}{0.6em}{}
+\newcommand{\secode}[1]{\texttt{\color{deepblue}#1}}
+\newcommand{\tierS}{\textbf{\color{accentA}S}}
+\newcommand{\tierA}{\textbf{\color{accentB}A}}
+\newcommand{\tierB}{\textbf{\color{accentC}B}}
+\newcommand{\tierC}{\textbf{\color{accentD}C}}
+\newcommand{\hot}[1]{\textcolor{accentA}{\bfseries #1}}
+\newcommand{\code}[1]{\texttt{\small #1}}
+\newcommand{\thd}[1]{\textcolor{white}{\bfseries #1}}
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+\newlist{bul}{itemize}{1}
+\setlist[bul]{label=\textbullet,leftmargin=1.6em,itemsep=2pt,topsep=2pt,parsep=0pt}
+\captionsetup{font={small,color=deepblue},labelfont=bf,skip=5pt}
+\newtcolorbox{keybox}[1][]{colback=tintC,colframe=accentC,boxrule=0.7pt,arc=2pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=accentC,breakable,#1}
+\newtcolorbox{warnbox}[1][]{colback=tintA,colframe=accentA,boxrule=0.7pt,arc=2pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=accentA,breakable,#1}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\footnotesize\color{deepblue}随机信号分析 \textperiodcentered\ 第 CHAPTER 章考频分析报告}
+\fancyhead[R]{\footnotesize\color{deepblue}\thepage}
+\fancyfoot[C]{\scriptsize\color{accentD}数据来源：2022--2025 学年四套期末考试真题（UESTC 3024 / UESTCHN 3016）}
+
+\begin{document}
+
+% =====================================================================
+\section*{第 CHAPTER 章 CHAPTER-TITLE 历年考频分析报告}
+\addcontentsline{toc}{section}{第 CHAPTER 章考频分析报告}
+
+% ---- 封面的"一句话结论"：先写结论，再让数据支撑它 ----------------
+\begin{warnbox}[title={一句话结论}]
+第 CHAPTER 章在四套真题中的核心分值平均为 \textbf{MEAN 分/套}（占 100 分的 MEAN\%），
+最高一套 MEAN-MAX 分（YEAR）。第一热点是 \secode{§X.Y}（MARKS 分），
+其次是 \secode{§X.Y}（MARKS 分）。与第 1 章的 33.75 分相比，CHAPTER-COMPARE。
+\end{warnbox}
+
+% =====================================================================
+\section{报告说明}
+
+\subsection{分析对象与数据来源}
+四套真题（\code{试卷/}）：2022--23、2023--24、2024--25、2025--26，各 4 道大题、共 100 分。
+教材目录取自《随机信号分析》（第 5 版）第 IX--XII 页，第 CHAPTER 章为书 p. PAGES。
+
+\subsection{统计口径}
+两级归类，逐题明细见第 \ref{sec:audit} 节，使每个分值可追溯。
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\textwidth}{@{}L{2.6cm}L{5.0cm}L{4.2cm}X@{}}
+\toprule
+\rowcolor{tabhead}\thd{归类} & \thd{判定标准} & \thd{计分方式} & \thd{例} \\
+\midrule
+\textbf{核心考点} & 该小问主要考查的技能就是本章内容 & 分值\textbf{全额}计入，且每小问只归一个 & EXP \\
+\textbf{间接涉及} & 主体属别的章，但解题必须用到本章结论 & 不计分，只记"涉及" & EXP \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent\textbf{算学校验}（必须写进报告）：
+（1）每套试卷分值为题干方括号内标注值，四套均已逐题累加校验为 100 分；
+（2）各考点核心分值之和 $=$ 四套试卷本章核心分值之和，可交叉校验。
+
+\subsection{统计的局限}
+样本仅 4 套，任何"考频"结论都是趋势参考而非规律；某考点"0 命中"只说明近四年未考。
+核心/间接的归类含判断成分，故第 \ref{sec:audit} 节给出逐题明细供重新汇总。
+CHAPTER-SCOPE-CAVEAT（如第 7 章不在课程覆盖范围，需在此声明。）
+
+% =====================================================================
+\section{第 CHAPTER 章命题地图}
+% 三种命题形态：独立成题 / 工具嵌入 / 前提条件
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabularx}{\textwidth}{@{}L{2.3cm}L{4.2cm}L{3.6cm}X@{}}
+\toprule
+\rowcolor{tabhead}\thd{命题形态} & \thd{典型问法} & \thd{对应考点} & \thd{出现场合} \\
+\midrule
+\textbf{形态一} 独立成题 & \ldots & \secode{§X.Y} & YEAR Qn \\
+\textbf{形态二} 工具嵌入 & \ldots & \secode{§X.Y} & YEAR Qn \\
+\textbf{形态三} 前提条件 & \ldots & \secode{§X.Y} & YEAR Qn \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+% =====================================================================
+% Natural reading pagination: no forced break per section.
+\section{四套真题逐题考点标注}\label{sec:audit}
+% 每份卷一节；这是全部结论的审计轨迹，不可省。
+\subsection{YEAR（考试日期 \ldots）}
+\begin{center}
+\footnotesize
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{@{}C{0.9cm}C{0.9cm}C{0.8cm}L{4.5cm}L{3.2cm}X@{}}
+\toprule
+\rowcolor{tabhead}\thd{题} & \thd{小问} & \thd{分值} & \thd{题目要求（摘要）} & \thd{\color{white}核心考点} & \thd{间接涉及} \\
+\midrule
+\multirow{3}{*}{Q1}
+ & (a) & 0  & SHORT & --- & \secode{§X.Y} \\
+ & (b) & \textbf{0} & SHORT & \cellcolor{tintA}\textbf{\secode{§X.Y}} & --- \\
+ & (c) & 0  & SHORT & --- & Ch.\,N \\
+\bottomrule
+\end{tabularx}
+\end{center}
+\noindent\textbf{本年本章核心分值合计：} SUM 分。
+
+% =====================================================================
+% Natural reading pagination: no forced break per section.
+\section{考频统计与热度分级}
+
+\subsection{一级考点考频总表}
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}L{1.6cm}L{3.9cm}C{1.6cm}C{1.5cm}C{1.4cm}C{1.4cm}L{2.0cm}@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{编码} & \thd{考点} & \thd{核心分值\newline 合计} & \thd{核心\newline 命中/4} & \thd{间接\newline 涉及/4} & \thd{总命中\newline 率} & \thd{命中试卷} \\
+\midrule
+\rowcolor{tintA}\secode{§X.Y} & \textbf{TOPIC} & \hot{0} & \hot{0} & \hot{0} & \hot{0\%} & \ldots \\
+\midrule
+\multicolumn{2}{@{}l}{\textbf{合计}} & \textbf{TOTAL} & --- & --- & --- & --- \\
+\bottomrule
+\end{tabularx}
+\end{center}
+% 备注：0 核心分但高涉及率的"前提型"考点单列成行并说明。
+
+\subsection{各年度本章核心分值走势}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  ybar, bar width=22pt, width=14.2cm, height=6.4cm,
+  ymin=0, ymax=60,
+  % 不要在 symbolic x 轴上写 xmin/xmax：会报
+  %   "the input coordinate '-0.6' has not been defined"。
+  % 横向留白由 enlarge x limits 控制（见下）。
+  symbolic x coords={Y1,Y2,Y3,Y4},   % 注意：坐标名避开 `--`
+  xtick=data, xticklabels={2022--23,2023--24,2024--25,2025--26},
+  ylabel={\small 本章核心分值（分）},
+  ytick={0,10,20,30,40,50,60},
+  enlarge x limits=0.16, nodes near coords,
+  axis line style={draw=rulegray}, tick align=outside,
+  every axis plot/.append style={fill=deepblue!72,draw=deepblue},
+  grid=major, major grid style={draw=rulegray!45,dotted},
+]
+\addplot coordinates {(Y1,0) (Y2,0) (Y3,0) (Y4,0)};
+% 参考线必须用 axis description cs：symbolic x 轴上给数值坐标会报
+% "the input coordinate ... has not been defined"。
+\draw[accentA,dashed,thick] (axis description cs:0,0.5625) -- (axis description cs:1,0.5625);
+\node[anchor=south west,font=\scriptsize,color=accentA]
+  at (axis description cs:0.02,0.578) {四年均值 0 分};
+\end{axis}
+\end{tikzpicture}
+\captionof{figure}{四套试卷第 CHAPTER 章核心分值走势（满分 100 分）}
+\end{center}
+
+\subsection{考点热度分布}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  xbar, bar width=13pt, width=14.2cm, height=7.6cm,
+  xmin=0, xmax=42,
+  symbolic y coords={A1,A2},
+  ytick=data, yticklabels={\secode{§X.Y} 考点一,\secode{§X.Y} 考点二},
+  xlabel={\small 四年核心分值合计（分）},
+  nodes near coords, axis line style={draw=rulegray}, tick align=outside,
+  every axis plot/.append style={fill=accentB!78,draw=accentB},
+  grid=major, major grid style={draw=rulegray!45,dotted},
+]
+\addplot coordinates {(0,A1) (0,A2)};
+\end{axis}
+\end{tikzpicture}
+\captionof{figure}{第 CHAPTER 章各考点四年核心分值排行}
+\end{center}
+
+\subsection{热度分级结论}
+\begin{center}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabularx}{\textwidth}{@{}C{1.5cm}L{3.3cm}C{1.5cm}C{1.3cm}X@{}}
+\toprule
+\rowcolor{tabhead}\thd{级别} & \thd{考点} & \thd{分值} & \thd{命中} & \thd{\color{white}掌握标准} \\
+\midrule
+\rowcolor{tintA}\cellcolor{accentA}\textcolor{white}{\bfseries S 级}
+ & \secode{§X.Y} TOPIC & 0 & 0/4 & STANDARD \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+% =====================================================================
+% Natural reading pagination: no forced break per section.
+\section{与当前作业的对接分析}
+% 双向缺口：作业没覆盖的高频考点 / 作业覆盖但从不考的考点。
+% 这是报告最有行动价值的一节。
+\subsection{作业题目 $\to$ 考点映射}
+\subsection{高频但作业未覆盖（补强清单）}
+\begin{warnbox}[title={必须自行补强：\secode{§X.Y} TOPIC（MARKS 分）}]
+GAP-DESCRIPTION
+\end{warnbox}
+\subsection{作业覆盖但四年真题未直接考查}
+\begin{keybox}[title={对接分析结论}]
+BOTTOM-LINE
+\end{keybox}
+
+% =====================================================================
+\section{复习优先级与公式速查}
+\subsection{按考频排序的复习路线}
+\subsection{高频考点公式速查}
+
+\appendix
+\section{四套真题第 CHAPTER 章考点标注汇总表}
+\section{数据来源与核对说明}
+% 必须写明：pdftotext 抽取 + pdftoppm 渲染逐页人工比对；
+% 并列出实际发现并更正过的抽取错误（这是可信度的来源）。
+
+\end{document}

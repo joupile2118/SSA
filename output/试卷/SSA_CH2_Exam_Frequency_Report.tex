@@ -37,7 +37,7 @@
 \usepackage[table]{xcolor}
 \usepackage{booktabs}
 \usepackage{longtable}
-\usepackage{tabularx}
+\usepackage{tabularx,xltabular,needspace}
 \usepackage{array}
 \usepackage{multirow}
 \usepackage{makecell}
@@ -70,8 +70,8 @@
 % --- headings --------------------------------------------------------
 \titleformat{\section}{\normalfont\Large\bfseries\color{deepblue}}{\thesection}{0.7em}{}
 \titleformat{\subsection}{\normalfont\large\bfseries\color{deepblue!85!black}}{\thesubsection}{0.6em}{}
-\titlespacing*{\section}{0pt}{1.6em}{0.7em}
-\titlespacing*{\subsection}{0pt}{1.2em}{0.5em}
+\titlespacing*{\section}{0pt}{1.2em}{0.6em}
+\titlespacing*{\subsection}{0pt}{1.0em}{0.5em}
 
 % --- running head ----------------------------------------------------
 \pagestyle{fancy}
@@ -130,268 +130,302 @@
 %   \node[anchor=south west,font=\scriptsize,color=accentA]
 %     at (axis description cs:0.02,0.578) {four-year mean};
 
+\clubpenalty=10000\widowpenalty=10000\displaywidowpenalty=10000
+\renewcommand{\ReportShortTitle}{第2章考频分析报告（八套真题版）}\renewcommand{\ReportSourceLine}{八套试卷 · 文件代号201812--202512 · 更新2026-10-13}
 
-\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
-\setlength{\headheight}{14pt}
-\newcommand{\E}{\mathbb E}\newcommand{\Var}{\operatorname{Var}}\newcommand{\Cov}{\operatorname{Cov}}
-\newcommand{\key}[1]{\par\textbf{\color{deepblue}#1}\par}
-\newcommand{\pagehead}[1]{\clearpage\section*{#1}}
-\renewcommand{\ReportShortTitle}{随机信号分析 · 第二章考频分析}
-\renewcommand{\ReportSourceLine}{四套真题 · 2022--23 至 2025--26 · 2026-10-13}
-\begin{document}
 
-\thispagestyle{empty}\vspace*{15mm}
-{\Huge\bfseries\color{deepblue}第二章：随机信号\par 历年考频分析报告\par}
-\vspace{8mm}{\Large 真题审计 · 作业覆盖 · 七天复习路线\par}
-\vspace{12mm}
-\begin{keybox}[title=先看结论]
-沿用第一章的唯一主考点归属后，第二章四套试卷的核心分值为
-\[\boxed{29\;/\;0\;/\;7\;/\;0},\qquad\text{均值 }9.00\text{ 分/套}.\]
-核心共 36 分，占四套总分的 9\%；2/4 套有核心小问，0/4 套有完整 25 分大题全部归本章。
-但高斯信号在四套试卷中均被用到。\textbf{核心分少不代表可以跳过本章：很多分数已经归入第一章，或以平稳性、滤波、带通题形式出现。}
-\end{keybox}
-\vspace{5mm}
-\textbf{复习顺序：}先练高斯有限维分布与四阶矩，再练互相关、随机相位与独立性，最后查漏样本函数和离散分布。
-\vspace{6mm}
-\begin{infobox}[title=本次配套]
-英文复习题集 21 题，7 天、每天 3 题；中文详解逐题对应。第二次作业 10 题全部覆盖，另加 11 题真题改编或补缺训练。
-作业必做：2.3、2.13、2.16、2.19；选做：2.1、2.4、2.7、2.8、2.11、\textbf{2.18}。
-\end{infobox}
-\vfill
-教材：李晓峰等《随机信号分析（第5版）》第二章，书 pp.37--62。\\
-统计样本：工作区四套真题；不是考试预测，也不是官方评分细则。
-\pagehead{1\quad 统计口径与跨章边界}
-\key{核心与间接}
-每个小问只保留一个主考点，全部分数计给它。间接标签只统计小问数和命中卷数，绝不累加分值。
-本报告保留第一章已登记的全部归属；第一章和第二章不能重复拿同一道小问的分数。
-\begin{center}\begin{tabular}{lrrrr}\toprule
-学年 & 2022--23 & 2023--24 & 2024--25 & 2025--26\\\midrule
-试卷总分 &100&100&100&100\\
-第一章（已锁定）&29&33&24&49\\
-第二章（本报告）&29&0&7&0\\
-留给其余章节&42&67&69&51\\\bottomrule\end{tabular}\end{center}
-\key{三个需要解释的归属}
-\begin{bul}
-\item 2022--23 Q3(b) 的 15 分归 §2.4.3：由(a)的功率谱得到相关函数，平方器要求计算高斯信号四阶矩，对应教材习题2.17。滤波环节(a)仍归第五章；本小问只计一次。
-\item 2023--24 Q1(c) 归 §3.4.2：题目只给功率谱，先做傅里叶反变换才能开始数值计算；§2.3.2 记为间接涉及。
-\item 2024--25 Q3(c) 归 §5.1.2：必须先由RC两支路频响确定互相关；第二章的相关展开是工具，不重复计分。
-\end{bul}
-\key{可复算的检验}
-沿用清单中已核验的100分结构；逐小问登记后，每卷总分仍为100。
-\[6+8+15+7=36=29+0+7+0.\]
-各小节核心分之和等于各试卷本章分之和。数据表另存为同目录 JSON，便于后续章节延用。
-\begin{warnbox}[title=解释范围]
-如果把“出现在随机过程题里”的所有概率运算都算第二章，数字会明显变大，却与第一章重复。本报告的9分是\textbf{固定跨章归属后的独占均值}，不是第二章知识实际支持的总分。
-\end{warnbox}
-\pagehead{2\quad 教材知识地图}
-\small\begin{tabularx}{\textwidth}{@{}l L{5cm} X@{}}\toprule 小节 & 教材标题 & 本次训练重点\\\midrule
-2.1.1 & 概念与定义 & 样本函数与固定时刻的随机变量\\
-2.1.2 & 基本概率特性 & 离散原子、边缘分布和归一化\\
-2.1.3 & 基本数字特征 & 均值、相关、协方差的区分\\
-2.2.1 & 随机正弦信号 & 幅度与相位随机性\\
-2.2.2 & 伯努利随机序列 & 独立重采样与共享同一次试验\\
-2.2.3 & 半随机二进制传输信号 & 本样本未单独考查\\
-2.2.4 & 泊松过程 & 本样本未单独考查\\
-2.3.1 & n阶概率特性 & 所有有限维联合分布\\
-2.3.2 & 联合特性 & 互相关及正交、无关\\
-2.3.3 & 相关函数与协方差函数的性质 & 半正定、对称性与线性展开\\
-2.3.4 & 微分和积分（选学） & 均方微积分；积分交换条件\\
-2.4.1 & 多维高斯分布 & 先检验协方差是否奇异\\
-2.4.2 & 高斯随机变量的性质 & 线性变换、联合高斯与独立性\\
-2.4.3 & 高斯随机信号 & 有限维分布、高阶矩、线性系统\\
-2.5 & 独立信号 & 所有有限采样向量之间的独立性\\
-\bottomrule\end{tabularx}\normalsize
-\vspace{5mm}\begin{infobox}[title=章节界线]
-平稳性和功率谱属于第三章，各态历经性属于第四章，LTI滤波属于第五章，带通正交分量属于第六章。第二章提供分布与矩的基础。
-本书第二章到 §2.5 为止，\textbf{没有 §2.6}。§2.3.4 为选学，本次仍列入并注明零核心。
-\end{infobox}
-\pagehead{3\quad 2022--23：逐小问审计}
-\small\renewcommand{\arraystretch}{1.5}\begin{tabularx}{\textwidth}{@{}l r l L{3.5cm} X@{}}\toprule 小问 & 分 & 唯一主考点 & 第二章间接标签 & 判定依据\\\midrule
-Q1a & 6 & \textbf{2.1.1} & — & 固定随机参数画样本函数\\
+\begin{document}\begin{titlepage}\centering\vspace*{2cm}
+
+{\Huge\bfseries 随机信号分析}\par\vspace{1cm}
+
+{\LARGE\bfseries 第2章考频分析报告（八套真题版）}\par\vspace{1cm}
+
+{\large 教材第5版 · 随机信号}\par\vspace{1cm}
+
+\begin{keybox}[title=样本扩充后的结论]
+
+本章独占核心分值合计 125 分，八套均值 15.625 分/套。新增旧四套均值 22.25，最近四套均值 9.00。
+
+旧卷提高了随机正弦、半随机二进制信号和高斯过程的历史权重；最近四套核心分值仍较低。它们在后续章节中作为解题前提的作用须另看间接涉及。
+
+\end{keybox}\par\bigskip\begin{minipage}{\textwidth}\small\RaggedRight 新增四套来自\url{https://github.com/StrikerLeecy126/UESTC_Glasgow_College_CE_Final_Exams}，固定提交\texttt{6d1f1ff98185154e02d346036439ddd0964a0e4d}。本地试卷完整保存在顶层“试卷”；来源、SHA-256、全量主归属及统计保存在\texttt{SSA\_Exam\_Corpus.json}。教材题面来自已验收的自包含重排源码；已有作业英译保持原措辞。\end{minipage}\vfill 八套试卷 · 40道大题 · 107个计分小问 · 800分\par 2026年10月13日\end{titlepage}
+
+\tableofcontents\clearpage
+
+\section{统计方法与可追溯性}
+
+每个计分小问只有一个主考点，分值全额计入该主考点；解题用到其他小节时记作间接涉及，\textbf{不另计分}。本章各节分值之和等于本章八套核心分值之和。每套试卷全部主归属合计100分，两章之间无重复核心计分。
+
+分级只表达本样本的复习优先级：S为核心总分至少30且至少3套核心命中；A为有核心分且总分至少15或至少2套命中；B为其余有核心分；C为无核心分且未达到前提类标准。前提类为无核心分但至少4套间接涉及。两章采用同一口径。
+
+命中率以试卷为单位，同一小节在一套卷多次出现仍只算1套。间接涉及套数允许与核心命中套数重叠，二者不能相加解释为独立样本数。小节代码直接沿用教材目录。间接标签记录明确用到的必要工具，不将每次常规积分都自动记为概率论命中。
+
+旧四套全部页面已渲染核对：公式、上下标、支持域、图形标注、日期与小问分值均以页面为准。最近四套沿用已验收的分值与主归属记录，并补充第一章间接标签；未将特定系统题整体归到概率论或高斯章节。
+
+\subsection{边界说明}
+
+计算采样向量的协方差矩阵或联合特征函数，分别归§1.4.2或§1.5.2；题目主要要求建立高斯过程的有限维分布时归§2.4.3。随机相位正弦的均值与相关归§2.2.1；半随机二进制信号归§2.2.3。以平稳、各态历经、滤波或窄带结构为主的小问，主归属仍在第3--6章。已有最近四套主归属保持一致。
+
+\section{试卷清单与逐套分值}
+
+\begin{xltabular}{\textwidth}{@{}l l r r r@{}}\toprule 文件代号 & 封面考试日期 & 计分小问 & 总分 & 本章核心\\\midrule\endfirsthead\toprule 文件代号 & 封面考试日期 & 计分小问 & 总分 & 本章核心\\\midrule\endhead\midrule\multicolumn{5}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+201812 & 2019-01-04 & 14 & 100 & 15\\*
+201912 & 2019-12-29 & 19 & 100 & 21\\
+202104 & 2021-01-11 & 11 & 100 & 31\\
+202112 & 2022-01-04 & 15 & 100 & 22\\
+202212 & 2023-02-28 & 10 & 100 & 29\\
+202312 & 2023-12-28 & 13 & 100 & 0\\
+202412 & 2024-12 & 12 & 100 & 7\\*
+202512 & 2026-01-04 & 13 & 100 & 0\\\end{xltabular}
+
+
+\par\medskip 文件代号不等于考试日期。尤其202104文件封面写2021-01-11；202212文件封面写2023-02-28。2019卷PDF第5页提前写“End of question paper”，但后续第6--7页仍有Q6--Q8，均完整纳入。
+
+\begin{xltabular}{\textwidth}{@{}l r r r@{}}\toprule 样本组 & 套数 & 本章总分 & 均值/100\\\midrule\endfirsthead\toprule 样本组 & 套数 & 本章总分 & 均值/100\\\midrule\endhead\midrule\multicolumn{4}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+新增旧四套 & 4 & 89 & 22.25\\*
+最近四套 & 4 & 36 & 9.00\\*
+全部八套 & 8 & 125 & 15.625\\\end{xltabular}
+
+
+\par\medskip 全部40道大题中，有2道的所有小问均归本章核心。其余为混合章节题，不能把整道题的分值都计给本章。
+
+\subsection{逐套趋势与小节核心分值}
+
+\begin{center}\begin{tikzpicture}\begin{axis}[width=0.95\textwidth,height=5cm,ybar,ymin=0,ymax=60,bar width=13pt,xtick={0,1,2,3,4,5,6,7},xticklabels={18/19,19/20,20/21,21/22,22/23,23/24,24/25,25/26},ylabel={核心分值},nodes near coords]\addplot[fill=deepblue] coordinates {(0,15) (1,21) (2,31) (3,22) (4,29) (5,0) (6,7) (7,0)};\end{axis}\end{tikzpicture}\end{center}
+
+\begin{center}\begin{tikzpicture}\begin{axis}[width=0.95\textwidth,height=5cm,ybar,ymin=0,bar width=13pt,xtick={0,1,2,3,4},xticklabels={2.2.1,2.4.3,2.3.2,2.2.3,2.1.1},ylabel={八套累计核心分},nodes near coords]\addplot[fill=accentC] coordinates {(0,50) (1,40) (2,19) (3,10) (4,6)};\end{axis}\end{tikzpicture}\end{center}
+
+\section{小节考频与复习分级}
+
+\begin{xltabular}{\textwidth}{@{}l X r r r l@{}}\toprule 小节 & 教材考点 & 核心分 & 命中 & 间接 & 级别\\\midrule\endfirsthead\toprule 小节 & 教材考点 & 核心分 & 命中 & 间接 & 级别\\\midrule\endhead\midrule\multicolumn{6}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+2.2.1 & 随机正弦信号 & 50 & 4/8 & 6/8 & S\\*
+2.4.3 & 高斯随机信号 & 40 & 3/8 & 7/8 & S\\
+2.3.2 & 联合特性 & 19 & 2/8 & 6/8 & A\\
+2.2.3 & 半随机二进制传输信号 & 10 & 1/8 & 0/8 & B\\
+2.1.1 & 概念与定义 & 6 & 1/8 & 0/8 & B\\
+2.1.2 & 基本概率特性 & 0 & 0/8 & 2/8 & C\\
+2.1.3 & 基本数字特征 & 0 & 0/8 & 5/8 & 前提\\
+2.2.2 & 伯努利随机序列 & 0 & 0/8 & 1/8 & C\\
+2.2.4 & 泊松过程 & 0 & 0/8 & 0/8 & C\\
+2.3.1 & n阶概率特性 & 0 & 0/8 & 1/8 & C\\
+2.3.3 & 相关与协方差的性质 & 0 & 0/8 & 2/8 & C\\
+2.3.4 & 微分和积分（选学） & 0 & 0/8 & 0/8 & C\\
+2.4.1 & 多维高斯分布 & 0 & 0/8 & 7/8 & 前提\\
+2.4.2 & 高斯随机变量的性质 & 0 & 0/8 & 6/8 & 前提\\*
+2.5 & 独立信号 & 0 & 0/8 & 7/8 & 前提\\\end{xltabular}
+
+
+\par\medskip “间接”为该小节作为解题工具出现的试卷数，不是分值。0核心仅说明本样本中未独立计分，不能推断考试不会考。
+
+\Needspace{10\baselineskip}\section{逐小问审计：201812}
+
+封面日期：2019-01-04；全部小问100分；本章独占核心15分。下表保留全部章节的主归属，便于审计跨章不重复计分。
+
+{\small\renewcommand{\arraystretch}{1.25}\begin{xltabular}{\textwidth}{@{}l r l L{2.6cm} X@{}}\toprule 小问 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endfirsthead\toprule 小问 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endhead\midrule\multicolumn{5}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+Q1 & 10 & 1.3.1 & -- & 均匀变量的仿射变换 Y=5X+1\\*
+Q2a & 4 & 1.2.1 & -- & 联合密度 A sin(x+y) 的归一化\\
+Q2b & 6 & 1.4.1 & -- & 由联合密度求两个均值\\
+Q3 & 10 & 2.2.1 & 2.4.2, 2.3.2 & 独立高斯系数正余弦的均值与相关\\
+Q4a & 5 & 2.2.1 & -- & 随机相位回波的均值与相关；幅度条件须说明\\
+Q4b & 5 & 4.1.1 & 2.2.1 & 正弦回波的时间均值\\
+Q4c & 6 & 4.1.2 & 2.2.1 & 随机幅度下的各态历经条件\\
+Q5 & 7 & 5.1.2 & 2.3.2 & 级联系统中两输出的互相关\\
+Q6a & 8 & 5.1.2 & -- & 已知谱经一阶滤波后的均值与功率\\
+Q6b & 5 & 5.2.3 & -- & 等效噪声带宽\\
+Q6c & 3 & 5.3.2 & -- & 输出的等效矩形带宽\\
+Q7a & 10 & 6.3.2 & -- & 三角形带通谱的正交分量相关\\
+Q7b & 6 & 6.4.1 & 2.4.1, 2.4.3 & 窄带高斯正交分量的联合密度\\*
+Q8 & 15 & 5.1.2 & 2.2.1 & 随机相位单频输入的一阶滤波输出相关\\\end{xltabular}
+}
+
+\par\medskip 本章核心：Q3(10), Q4a(5)。
+
+\Needspace{10\baselineskip}\section{逐小问审计：201912}
+
+封面日期：2019-12-29；全部小问100分；本章独占核心21分。下表保留全部章节的主归属，便于审计跨章不重复计分。
+
+{\small\renewcommand{\arraystretch}{1.25}\begin{xltabular}{\textwidth}{@{}l r l L{2.6cm} X@{}}\toprule 小问 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endfirsthead\toprule 小问 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endhead\midrule\multicolumn{5}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+Q1a & 6 & 1.3.1 & -- & Y=6X+2 的密度；Gaussian in [0,1] 有歧义\\*
+Q1b & 4 & 1.5.1 & -- & 仿射变换特征函数；分布参数须澄清\\
+Q2 & 8 & 1.2.1 & -- & 联合密度 x exp[-x(y+1)] 的边缘密度\\
+Q3a & 4 & 2.2.3 & -- & 半随机 0/1 二进制信号均值\\
+Q3b & 6 & 2.2.3 & 2.1.3 & 同一符号区间与不同区间的相关\\
+Q4a & 4 & 2.2.1 & -- & 随机相位正弦回波均值与相关\\
+Q4b & 4 & 4.1.1 & 2.2.1 & 回波信号的时间均值\\
+Q4c & 6 & 4.1.2 & 2.2.1 & 随机幅度与相关各态历经\\
+Q5a & 3 & 2.2.1 & -- & sgn(A) 随机相位正弦的二阶量\\
+Q5b & 7 & 4.1.2 & 2.2.1 & 符号随机幅度的广义各态历经\\
+Q6a & 8 & 5.1.2 & -- & 一阶滤波后的均值与功率\\
+Q6b & 5 & 5.2.3 & -- & 等效噪声带宽\\
+Q6c & 3 & 5.3.2 & -- & 等效矩形带宽\\
+Q7a & 8 & 6.3.2 & -- & 正交分量谱与相关\\
+Q7b & 6 & 6.4.1 & 2.4.1, 2.4.3 & 窄带高斯联合密度\\
+Q8a & 4 & 2.2.1 & -- & 同步检波本振的均值与相关\\
+Q8b & 6 & 6.3.2 & 2.3.2, 2.5 & 独立相乘信号的均值与相关\\
+Q8c & 4 & 6.3.2 & -- & 混频及低通后的功率谱\\*
+Q8d & 4 & 6.3.2 & -- & 低通输出相关与平均功率\\\end{xltabular}
+}
+
+\par\medskip 本章核心：Q3a(4), Q3b(6), Q4a(4), Q5a(3), Q8a(4)。
+
+\Needspace{10\baselineskip}\section{逐小问审计：202104}
+
+封面日期：2021-01-11；全部小问100分；本章独占核心31分。下表保留全部章节的主归属，便于审计跨章不重复计分。
+
+{\small\renewcommand{\arraystretch}{1.25}\begin{xltabular}{\textwidth}{@{}l r l L{2.6cm} X@{}}\toprule 小问 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endfirsthead\toprule 小问 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endhead\midrule\multicolumn{5}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+Q1a & 15 & 2.4.3 & 2.4.1, 2.4.2 & A+B cos(t) 的一维与二维高斯分布\\*
+Q1b & 10 & 1.4.2 & 2.1.3, 2.4.1 & 两时刻采样向量的协方差矩阵\\
+Q2a & 8 & 2.2.1 & 2.5 & 随机相位正弦加独立噪声的均值\\
+Q2b & 8 & 2.2.1 & 2.3.2, 2.5 & 正弦与白噪声之和的相关；连续白噪声须谨慎\\
+Q2c & 2 & 3.1.1 & 2.2.1 & 判断广义平稳\\
+Q2d & 7 & 3.4.2 & 2.2.1 & 正弦线谱与白噪声谱叠加\\
+Q3a & 10 & 5.1.2 & -- & 三角相关输入经RC后的功率谱\\
+Q3b & 15 & 5.1.2 & 2.3.2 & 输出减输入的功率谱\\
+Q4a & 8 & 5.1.2 & -- & 指数相关高斯输入经指数冲激响应\\
+Q4b & 10 & 1.6 & 2.4.3 & 滤波高斯输出的一维密度\\*
+Q4c & 7 & 1.6 & 2.4.3 & 零均值非退化高斯变量为正的概率\\\end{xltabular}
+}
+
+\par\medskip 本章核心：Q1a(15), Q2a(8), Q2b(8)。
+
+\Needspace{10\baselineskip}\section{逐小问审计：202112}
+
+封面日期：2022-01-04；全部小问100分；本章独占核心22分。下表保留全部章节的主归属，便于审计跨章不重复计分。
+
+{\small\renewcommand{\arraystretch}{1.25}\begin{xltabular}{\textwidth}{@{}l r l L{2.6cm} X@{}}\toprule 小问 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endfirsthead\toprule 小问 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endhead\midrule\multicolumn{5}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+Q1a & 5 & 1.4.2 & 2.1.3 & A+B cos(t) 的均值与自相关\\*
+Q1b & 10 & 2.4.3 & 2.4.1, 2.4.2 & 一维与二维高斯密度及奇异时刻\\
+Q1c & 10 & 1.5.2 & 2.4.1 & X(0),X(pi/2) 的联合特征函数与协方差\\
+Q2a & 7 & 2.3.2 & 2.5 & 独立回波与噪声之和的均值、相关\\
+Q2b & 5 & 2.3.2 & 2.5 & 发射信号与带时延回波的互相关\\
+Q2c & 5 & 3.1.1 & 2.3.2 & 回波加噪声的广义平稳性\\
+Q2d & 8 & 3.1.2 & 2.3.2 & 输入与回波的联合广义平稳\\
+Q3a & 5 & 5.1.2 & -- & RC/RL频响及输出差分的谱\\
+Q3b & 7 & 5.1.2 & 2.3.2 & RC/RL频响及输出差分的谱\\
+Q3c & 5 & 5.1.2 & -- & RC/RL频响及输出差分的谱\\
+Q3d & 8 & 5.1.2 & 2.3.2 & RC/RL频响及输出差分的谱\\
+Q4a & 6 & 3.4.2 & -- & 带通余弦谱积分求功率\\
+Q4b & 7 & 6.3.2 & -- & 正交分量功率谱\\
+Q4c & 7 & 6.3.2 & 2.3.2 & 同相与正交分量互谱及互相关\\*
+Q4d & 5 & 1.4.3 & 2.3.2 & 由零互相关和零均值判断正交、无关\\\end{xltabular}
+}
+
+\par\medskip 本章核心：Q1b(10), Q2a(7), Q2b(5)。
+
+\Needspace{10\baselineskip}\section{逐小问审计：202212}
+
+封面日期：2023-02-28；全部小问100分；本章独占核心29分。下表保留全部章节的主归属，便于审计跨章不重复计分。
+
+{\small\renewcommand{\arraystretch}{1.25}\begin{xltabular}{\textwidth}{@{}l r l L{2.6cm} X@{}}\toprule 小问 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endfirsthead\toprule 小问 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endhead\midrule\multicolumn{5}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+Q1a & 6 & 2.1.1 & -- & 固定随机参数画样本函数\\*
 Q1b & 9 & 1.5.1 & 2.1.2 & 平移均匀变量的特征函数\\
 Q1c & 10 & 1.4.2 & 2.1.3 & 随机直线的均值与协方差\\
-Q2a & 8 & \textbf{2.2.1} & 2.5 & 均匀随机相位平均为零\\
-Q2b & 8 & 3.1.1 & 2.2.1 / 2.5 & 计算相关后判断广义平稳\\
-Q2c & 9 & 3.4.2 & — & 由相关函数变换得到调制谱\\
-Q3a & 10 & 5.2.1 & — & 白噪声通过RC低通\\
-Q3b & 15 & \textbf{2.4.3} & 2.4.2 & 承接(a)，平方器输出需高斯四阶矩\\
-Q4a & 15 & 5.1.2 & — & LTI输出均值、谱和相关\\
-Q4b & 10 & 1.3.1 & 2.4.3 / 2.4.1 & 高斯输入经线性系统保持高斯\\
-\bottomrule\end{tabularx}\normalsize\vspace{5mm}
-本章核心：29 分。粗体主考点属于第二章；第一章归属与既有报告一致。
-\begin{infobox}[title=读题核对记录]Q3(b)：$N(t)$ 明确为高斯白噪声，$Y(t)=aX^2(t)$；不能把 $Y$ 也当成高斯。$R_Y$ 中必须保留均值平方项。\end{infobox}\pagehead{4\quad 2023--24：逐小问审计}
-\small\renewcommand{\arraystretch}{1.5}\begin{tabularx}{\textwidth}{@{}l r l L{3.5cm} X@{}}\toprule 小问 & 分 & 唯一主考点 & 第二章间接标签 & 判定依据\\\midrule
-Q1a & 12 & 3.1.2 & 2.3.2 / 2.5 & 和差信号的联合平稳性\\
-Q1b & 6 & 3.4.2 & — & 和信号的功率谱\\
+Q2a & 8 & 2.2.1 & 2.5 & 均匀随机相位平均为零\\
+Q2b & 8 & 3.1.1 & 2.2.1, 2.5 & 计算相关后判断广义平稳\\
+Q2c & 9 & 3.4.2 & -- & 由相关函数变换得到调制谱\\
+Q3a & 10 & 5.2.1 & -- & 白噪声通过RC低通\\
+Q3b & 15 & 2.4.3 & 2.4.2 & 承接(a)，平方器输出需高斯四阶矩\\
+Q4a & 15 & 5.1.2 & -- & LTI输出均值、谱和相关\\*
+Q4b & 10 & 1.3.1 & 2.4.1, 2.4.3 & 高斯输入经线性系统保持高斯\\\end{xltabular}
+}
+
+\par\medskip 本章核心：Q1a(6), Q2a(8), Q3b(15)。
+
+\Needspace{10\baselineskip}\section{逐小问审计：202312}
+
+封面日期：2023-12-28；全部小问100分；本章独占核心0分。下表保留全部章节的主归属，便于审计跨章不重复计分。
+
+{\small\renewcommand{\arraystretch}{1.25}\begin{xltabular}{\textwidth}{@{}l r l L{2.6cm} X@{}}\toprule 小问 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endfirsthead\toprule 小问 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endhead\midrule\multicolumn{5}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+Q1a & 12 & 3.1.2 & 2.3.2, 2.5 & 和差信号的联合平稳性\\*
+Q1b & 6 & 3.4.2 & -- & 和信号的功率谱\\
 Q1c & 7 & 3.4.2 & 2.3.2 & 由已知谱反变换并组合互相关\\
-Q2a & 10 & 5.2.1 & — & 白噪声滤波后的相关函数\\
+Q2a & 10 & 5.2.1 & -- & 白噪声滤波后的相关函数\\
 Q2b & 7 & 5.1.2 & 2.3.3 & 延时差分的输出谱\\
 Q2c & 8 & 1.6 & 2.4.3 & 白噪声未明说高斯，结论需条件\\
-Q3a & 4 & 1.2.1 & — & 联合密度归一化\\
-Q3b & 8 & 1.4.1 & — & 由密度求均值\\
-Q3c & 6 & 1.4.2 & — & 由密度求方差\\
-Q3d & 7 & 1.4.2 & — & 联合矩与相关系数\\
-Q4a & 4 & 6.3.1 & — & 希尔伯特变换与正交分量\\
-Q4b & 15 & 6.3.2 & — & 正交分量功率谱与互谱\\
-Q4c & 6 & 6.3.2 & — & 载频位置改变互谱\\
-\bottomrule\end{tabularx}\normalsize\vspace{5mm}
-本章核心：0 分。粗体主考点属于第二章；第一章归属与既有报告一致。
-\begin{infobox}[title=读题核对记录]Q2 只写 white noise，没有给 Gaussian。Q2(c) 的“是否高斯”不能仅由白噪声性质肯定；详解第21题给出条件式答案。\end{infobox}\pagehead{5\quad 2024--25：逐小问审计}
-\small\renewcommand{\arraystretch}{1.5}\begin{tabularx}{\textwidth}{@{}l r l L{3.5cm} X@{}}\toprule 小问 & 分 & 唯一主考点 & 第二章间接标签 & 判定依据\\\midrule
-Q1a & 7 & \textbf{2.3.2} & 2.2.1 & 离散正弦和余弦的互相关\\
-Q1b & 9 & 1.4.3 & 2.3.2 / 2.5 & 正交、无关与独立性区别\\
+Q3a & 4 & 1.2.1 & -- & 联合密度归一化\\
+Q3b & 8 & 1.4.1 & -- & 由密度求均值\\
+Q3c & 6 & 1.4.2 & -- & 由密度求方差\\
+Q3d & 7 & 1.4.2 & -- & 联合矩与相关系数\\
+Q4a & 4 & 6.3.1 & -- & 希尔伯特变换与正交分量\\
+Q4b & 15 & 6.3.2 & -- & 正交分量功率谱与互谱\\*
+Q4c & 6 & 6.3.2 & -- & 载频位置改变互谱\\\end{xltabular}
+}
+
+\par\medskip 本章核心：无（0分）。
+
+\Needspace{10\baselineskip}\section{逐小问审计：202412}
+
+封面日期：2024-12；全部小问100分；本章独占核心7分。下表保留全部章节的主归属，便于审计跨章不重复计分。
+
+{\small\renewcommand{\arraystretch}{1.25}\begin{xltabular}{\textwidth}{@{}l r l L{2.6cm} X@{}}\toprule 小问 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endfirsthead\toprule 小问 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endhead\midrule\multicolumn{5}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+Q1a & 7 & 2.3.2 & 2.2.1 & 离散正弦和余弦的互相关\\*
+Q1b & 9 & 1.4.3 & 2.3.2, 2.5 & 正交、无关与独立性区别\\
 Q1c & 9 & 3.1.2 & 2.3.2 & 联合平稳性判断\\
-Q2a & 12 & 3.1.1 & 2.3.2 / 2.2.1 & 正交调制和信号的平稳条件\\
-Q2b & 8 & 3.4.2 & — & 由平稳条件求功率谱\\
+Q2a & 12 & 3.1.1 & 2.2.1, 2.3.2 & 正交调制和信号的平稳条件\\
+Q2b & 8 & 3.4.2 & -- & 由平稳条件求功率谱\\
 Q2c & 5 & 1.4.3 & 2.3.2 & 无关条件下交叉项简化\\
-Q3a & 9 & 5.2.1 & — & RC电阻、电容支路频响\\
-Q3b & 6 & 5.2.1 & — & 由支路谱求相关\\
+Q3a & 9 & 5.2.1 & -- & RC电阻、电容支路频响\\
+Q3b & 6 & 5.2.1 & -- & 由支路谱求相关\\
 Q3c & 10 & 5.1.2 & 2.3.2 & 先由支路频响求互相关\\
-Q4a & 9 & 6.3.2 & — & 理想带通噪声及正交分量\\
-Q4b & 6 & 6.3.2 & — & 同相与正交分量互谱\\
-Q4c & 10 & 1.6 & 2.4.1 / 2.4.2 / 2.4.3 & 联合高斯密度及无关推独立\\
-\bottomrule\end{tabularx}\normalsize\vspace{5mm}
-本章核心：7 分。粗体主考点属于第二章；第一章归属与既有报告一致。
-\begin{infobox}[title=读题核对记录]Q1 的 $n$ 为整数，故 $\sin(2\pi n+\phi)=\sin\phi$、$\cos(2\pi n+\phi)=\cos\phi$。卷面日期空白，学年标签沿用文件清单。\end{infobox}\pagehead{6\quad 2025--26：逐小问审计}
-\small\renewcommand{\arraystretch}{1.5}\begin{tabularx}{\textwidth}{@{}l r l L{3.5cm} X@{}}\toprule 小问 & 分 & 唯一主考点 & 第二章间接标签 & 判定依据\\\midrule
-Q1a & 6 & 1.1.2 & 2.1.2 & 同一次投币定义的单时刻密度\\
+Q4a & 9 & 6.3.2 & -- & 理想带通噪声及正交分量\\
+Q4b & 6 & 6.3.2 & -- & 同相与正交分量互谱\\*
+Q4c & 10 & 1.6 & 2.4.1, 2.4.2, 2.4.3 & 联合高斯密度及无关推独立\\\end{xltabular}
+}
+
+\par\medskip 本章核心：Q1a(7)。
+
+\Needspace{10\baselineskip}\section{逐小问审计：202512}
+
+封面日期：2026-01-04；全部小问100分；本章独占核心0分。下表保留全部章节的主归属，便于审计跨章不重复计分。
+
+{\small\renewcommand{\arraystretch}{1.25}\begin{xltabular}{\textwidth}{@{}l r l L{2.6cm} X@{}}\toprule 小问 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endfirsthead\toprule 小问 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endhead\midrule\multicolumn{5}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+Q1a & 6 & 1.1.2 & 2.1.2 & 同一次投币定义的单时刻密度\\*
 Q1b & 6 & 1.2.1 & 2.3.1 & 同一次投币定义的二时刻密度\\
 Q1c & 6 & 1.4.2 & 2.1.3 & 两个样本函数的协方差\\
-Q1d & 7 & 1.2.1 & 2.2.2 / 2.5 & 每个时刻重新独立投币\\
-Q2a & 9 & 1.5.1 & 2.2.1 / 2.5 & 相位特征函数控制平稳条件\\
-Q2b & 7 & 3.4.2 & — & 随机幅度调制的功率谱\\
+Q1d & 7 & 1.2.1 & 2.2.2, 2.5 & 每个时刻重新独立投币\\
+Q2a & 9 & 1.5.1 & 2.2.1, 2.5 & 相位特征函数控制平稳条件\\
+Q2b & 7 & 3.4.2 & -- & 随机幅度调制的功率谱\\
 Q2c & 9 & 4.1.1 & 2.1.3 & 利用时间平均方差判断均值各态历经\\
 Q3a & 10 & 5.1.2 & 2.3.3 & 两径LTI系统输出相关与谱\\
-Q3b & 10 & 5.4.3 & — & 匹配滤波后的相关与谱\\
-Q3c & 5 & 5.3.2 & — & 等效矩形带宽与时延\\
-Q4a & 10 & 6.3.2 & — & 非中心载频的正交分量谱\\
-Q4b & 7 & 1.6 & 2.4.1 / 2.4.2 / 2.4.3 & 同一时刻二维高斯分布\\
-Q4c & 8 & 1.4.2 & 2.4.1 / 2.4.3 & 异时刻协方差决定联合密度\\
-\bottomrule\end{tabularx}\normalsize\vspace{5mm}
-本章核心：0 分。粗体主考点属于第二章；第一章归属与既有报告一致。
-\begin{infobox}[title=读题核对记录]Q1 中必须保留 $t^2,n^2$。Q2(c) 原文为 $R_A(\tau)=e^{-|\tau|}$，不是 $R_X$；它与前述 $m_A\ne0$ 在通常有限二阶矩WSS模型下不相容，因此本题未纳入第二章训练。Q4 图中 $144\pi\le|\omega|\le156\pi$，高度1，载频 $148\pi$ 不在频带中心。\end{infobox}\pagehead{7\quad 小节考频：分值与涉及率}\small\renewcommand{\arraystretch}{1.3}\begin{tabularx}{\textwidth}{@{}l X r r r r r@{}}\toprule 小节 & 标题 & 核心分 & 核心卷 & 间接问 & 间接卷 & 并集卷\\\midrule2.1.1 & 概念与定义 & 6 & 1/4 & 0 & 0/4 & 1/4\\
-2.1.2 & 基本概率特性 & 0 & 0/4 & 2 & 2/4 & 2/4\\
-2.1.3 & 基本数字特征 & 0 & 0/4 & 3 & 2/4 & 2/4\\
-2.2.1 & 随机正弦信号 & 8 & 1/4 & 4 & 3/4 & 3/4\\
-2.2.2 & 伯努利随机序列 & 0 & 0/4 & 1 & 1/4 & 1/4\\
-2.2.3 & 半随机二进制传输信号 & 0 & 0/4 & 0 & 0/4 & 0/4\\
-2.2.4 & 泊松过程 & 0 & 0/4 & 0 & 0/4 & 0/4\\
-2.3.1 & n阶概率特性 & 0 & 0/4 & 1 & 1/4 & 1/4\\
-2.3.2 & 联合特性 & 7 & 1/4 & 7 & 2/4 & 2/4\\
-2.3.3 & 相关函数与协方差函数的性质 & 0 & 0/4 & 2 & 2/4 & 2/4\\
-2.3.4 & 微分和积分（选学） & 0 & 0/4 & 0 & 0/4 & 0/4\\
-2.4.1 & 多维高斯分布 & 0 & 0/4 & 4 & 3/4 & 3/4\\
-2.4.2 & 高斯随机变量的性质 & 0 & 0/4 & 3 & 3/4 & 3/4\\
-2.4.3 & 高斯随机信号 & 15 & 1/4 & 5 & 4/4 & 4/4\\
-2.5 & 独立信号 & 0 & 0/4 & 6 & 4/4 & 4/4\\
-\bottomrule\end{tabularx}\normalsize
-\vspace{4mm}
-“间接问”是一小问对一个小节至多计一次；同一小问可以涉及多个小节，故该列不能相加当作题数或分值。
-“并集卷”是核心或间接涉及的不同试卷数；0/4、1/4、2/4、3/4、4/4分别对应0\%、25\%、50\%、75\%、100\%。
-\begin{keybox}[title=读表结论]
-§2.4.3 四套均涉及，是最值得先复习的知识连接点。§2.5 虽然核心为0，也在四套中作为独立性前提出现。
-§2.4.1 的多维高斯分布没有本章独占分数，却支撑后续联合密度题，不能据“0分”略过。
-\end{keybox}
-\pagehead{8\quad 趋势与核心分排名}
-\begin{center}\begin{tikzpicture}\begin{axis}[width=.86\textwidth,height=6cm,ybar,bar width=24pt,ymin=0,ymax=35,ytick={0,7,14,21,29,35},symbolic x coords={22--23,23--24,24--25,25--26},xtick=data,ylabel={核心分},nodes near coords,axis lines*=left]
-\addplot[fill=deepblue!65] coordinates {(22--23,29)(23--24,0)(24--25,7)(25--26,0)};
-\draw[accentA,dashed] (axis description cs:0,0.25714)--(axis description cs:1,0.25714);
-\node[anchor=west,font=\small,color=accentA] at(axis description cs:.65,.31){均值9分};
-\end{axis}\end{tikzpicture}\end{center}
-\begin{center}\begin{tikzpicture}\begin{axis}[width=.86\textwidth,height=6cm,xbar,bar width=18pt,xmin=0,xmax=18,symbolic y coords={2.1.1,2.3.2,2.2.1,2.4.3},ytick=data,xlabel={四套核心分合计},nodes near coords,axis lines*=left]
-\addplot[fill=accentC!70] coordinates {(6,2.1.1)(7,2.3.2)(8,2.2.1)(15,2.4.3)};
-\end{axis}\end{tikzpicture}\end{center}
-最近一套核心为0，是归属边界造成的读数：其Q1仍完整训练过程的有限维分布，Q4仍用高斯信号工具。四个样本不支持“第二章越来越不考”的趋势判断。
-\pagehead{9\quad 复习等级与补缺优先级}
-沿用第一章按核心分、命中卷数判断 S/A/B/C，并将前提型单列。既有资料只明确 S 为核心累计至少25分，未给其余档的统一数值切线；本章沿用已完成报告的实例尺度，\textbf{不补造精确阈值}。
-\begin{center}\begin{tabularx}{\textwidth}{@{}l L{4.6cm} X@{}}\toprule 等级 & 考点 & 解释与行动\\\midrule
-S & 本章无 & 最高15分，未达既有25分标准。\\
-A & §2.4.3（15分，1/4核心） & 四套均涉及；先掌握有限维高斯和四阶矩。\\
-B & §2.2.1（8）、§2.3.2（7）、§2.1.1（6） & 均为1/4核心；分别练相位平均、互相关展开、样本函数。\\
-前提型 & §2.5、§2.4.1、§2.4.2 & 无独占分但反复涉及；优先级不按零分处理。\\
-C & 其余零核心小节 & 结合作业保底；零命中不是不考承诺。\\\bottomrule\end{tabularx}\end{center}
-\key{三个作业之外的高价值补缺}
-\begin{qnum}
-\item \textbf{高斯四阶矩：}作业未列2.17，2022--23 Q3(b)却要求它。配套第3、4题给证明与平方器应用。
-\item \textbf{高斯前提检查：}白噪声不等于高斯白噪声；边缘高斯不等于联合高斯。配套第1、21题专练。
-\item \textbf{相关性质和独立信号：}会写矩的定义不足以判断过程独立；必须考虑任意有限采样向量。配套第10、12题补齐。
-\end{qnum}
-\key{两道不能套公式的已布置题}
-2.11只给“两两独立”，不足以分解三因子的期望；2.18的三维协方差矩阵奇异，普通三维PDF不存在。题面照录，答案中明确解释，不悄悄修改条件。
-\pagehead{10\quad 第二次作业覆盖审计}
-\small\begin{tabularx}{\textwidth}{@{}l l L{3cm} X l@{}}\toprule 题号 & 性质 & 小节 & 对应能力／缺口 & 复习题\\\midrule
-2.3 & 必做 & 2.1.2 / 2.3.1 & 同次投币的边缘与联合CDF；接最新Q1 & 13\\
-2.13 & 必做 & 2.2.1 / 2.3.4 & 随机相位、微分与电流均方值 & 19\\
-2.16 & 必做 & 2.4.3 / 2.4.1 & 有限维高斯、退化采样时刻 & 5\\
-2.19 & 必做 & 2.4.1 & 多维PDF、逆矩阵及联合特征函数 & 2\\
-2.1 & 选做 & 2.1.1 / 2.2.1 & 样本函数、缩放密度、零振幅原子 & 15\\
-2.4 & 选做 & 2.2.2 & 独立比特串与平均向量 & 16\\
-2.7 & 选做 & 2.4.2 / 2.1.3 & 高斯线性组合与时变均值方差 & 18\\
-2.8 & 选做 & 2.2.2 / 2.1.3 & 离散密度、对角协方差 & 17\\
-2.11 & 选做 & 2.3.2 / 2.5 & 互相关与两两独立不足的反例 & 9\\
-2.18 & 选做 & 2.4.1 / 2.4.3 & 奇异协方差，密度不存在的判断 & 6\\\bottomrule\end{tabularx}\normalsize
-\vspace{6mm}
-\begin{keybox}[title=覆盖结果]
-必做4/4、选做6/6、全部10/10均在复习题集中逐字沿用既有英文题面。高斯相关题放在前两天，随后衔接随机相位与互相关。
-作业训练覆盖强，但没有直接训练2.17四阶矩证明与白噪声高斯性判断，所以增加对应真题改编。
-\end{keybox}
-\key{暂未展开}
-§2.2.3半随机二进制传输信号、§2.2.4泊松过程在四套样本中无本章核心或必要间接标签，且不在本次作业清单，21题未另设专项。
-选学§2.3.4保留作业2.13，并增补2.14积分，避免仅会微分不会处理相关函数的双重积分。
-\pagehead{11\quad 七天路线与使用方法}
-\begin{center}\begin{tabularx}{\textwidth}{@{}c l X@{}}\toprule 天 & 题号 & 主题与完成标准\\\midrule
-1&1--3&高斯定义、2.19、2.17：会判断PDF存在，会证明四阶矩。\\
-2&4--6&平方器真题、2.16、2.18：检查非线性与奇异情形。\\
-3&7--9&随机相位真题、离散正余弦真题、2.11：先查独立性条件。\\
-4&10--12&相关性质、随机直线真题、独立信号：补概念与展开步骤。\\
-5&13--15&2.3、最新投币真题、2.1：共享一次随机试验与重新采样。\\
-6&16--18&2.4、2.8、2.7：离散序列与高斯线性组合。\\
-7&19--21&2.13、2.14、白噪声真题辨析：微积分与条件检查。\\\bottomrule\end{tabularx}\end{center}
-每天先独立完成3题，再核对中文详解。错题标记为：条件未读清、模型建立错误、积分/代数错误、退化情形遗漏；次日先重做错题关键步骤。
-\begin{infobox}[title=与提交日期的关系]
-作业布置日期为2026-10-13，截止2026-10-27。七天计划是复习节奏，不新增截止日期；可在余下时间复做错题与完成提交稿。
-\end{infobox}
-\key{复习题来源标记}
-“Textbook”题目来自教材重排；本次作业题沿用既有英译，不称官方英译。
-“Adapted from”表示改编或提取考点，新增条件明确写出，不冒充原卷全文。
-“Recall / extension”是自编的概念核验，无真题分值。
-\pagehead{12\quad 公式速查：先条件，后代入}
-\key{均值、相关与协方差（实值过程）}
-\[m_X(t)=\E X(t),\quad R_X(s,t)=\E[X(s)X(t)],\quad C_X(s,t)=R_X(s,t)-m_X(s)m_X(t).\]
-\[R_{XY}(s,t)=\E[X(s)Y(t)],\quad C_{XY}=R_{XY}-m_X(s)m_Y(t).\]
-\[C_X(t,t)=\Var X(t),\quad R_X(t,t)=\E X^2(t).\]
-\key{高斯向量：$C$须半正定，普通PDF须正定}
-\[\phi_{\boldsymbol X}(\boldsymbol u)=\exp\{j\boldsymbol u^T\boldsymbol\mu-\tfrac12\boldsymbol u^TC\boldsymbol u\}.\]
-\[f(\boldsymbol x)=\frac{\exp[-\tfrac12(\boldsymbol x-\boldsymbol\mu)^TC^{-1}(\boldsymbol x-\boldsymbol\mu)]}{(2\pi)^{n/2}\sqrt{\det C}},\quad C>0.\]
-\[Y=GX+b:\quad \mu_Y=G\mu_X+b,\quad C_Y=GC_XG^T.\]
-联合高斯时，零互协方差等价于对应分量独立；只知道各边缘为高斯不够。
-\key{零均值联合高斯的四阶矩（由特征函数或矩母函数导出）}
-\[\E[X_1X_2X_3X_4]=C_{12}C_{34}+C_{13}C_{24}+C_{14}C_{23}.\]
-\[Y=aX^2,\quad R_Y(s,t)=a^2\{C_X(s,s)C_X(t,t)+2C_X(s,t)^2\}.\]
-\key{独立均匀相位与积分}
-\[\E\cos(\alpha+\Theta)=0,\quad \E[\cos(\alpha+\Theta)\cos(\beta+\Theta)]=\tfrac12\cos(\alpha-\beta).\]
-\[Y(t)=\int_0^tX(u)du:\quad R_Y(s,t)=\int_0^s\int_0^t R_X(u,v)\,dv\,du.\]
-最后一式需要相应可积性以交换期望和积分；非平稳过程不能擅自把$R_X(u,v)$写成仅依赖时差。
-\pagehead{13\quad 来源、验证与局限}
-\key{材料位置（工作区相对路径）}
-\begin{bul}
-\item 教材：output/教材/SSA\_Textbook\_CH2\_zh.tex，书pp.37--62，习题2.1--2.21。
-\item 作业：output/作业/SSA\_Homework\_2\_English.tex及英文详解；必做与选做清单已逐题对应。
-\item 真题：试卷/下四份文件，文件尾缀分别为202212、202312、202412、202512\_1；学年和题号对应第3--6节审计表。
-\item 历史基准：output/试卷/SSA\_CH1\_Exam\_Frequency\_Report.tex，保留其第一章主归属。
-\item 方法：.dsh/skills/exam-frequency-report/SKILL.md及references/course-materials.md。
-\item 本章机器可读审计：同目录SSA\_CH2\_Exam\_Tagging.json。
-\end{bul}
-\key{核验方式}
-四套卷共16页全部渲染核对，题目页检查公式、上下标、分值和图中读数；文本抽取只作定位。
-统计由同一份逐小问数据生成，检验每卷100分、本章36分、第一章既有总数不变。
-配套题面、解答按同一题序生成；每题独立页；源码自包含；编译日志检查溢出和缺字，并检查PDF渲染。
-\key{边界与局限}
-\begin{bul}
-\item 只有4套卷；本报告给出样本内描述，不能推断下一次试卷的概率或保证。
-\item 归属是教学分类，不是官方阅卷细则；15分高斯四阶矩等边界已明示。如将来统一重分类，必须同步调整相邻章，不能单方面重复加分。
-\item 间接标签只列解题关键知识，不把每道算期望的题都泛标为第二章；表内零涉及不等于知识毫无关系。
-\item 原题条件不足或协方差奇异时，答案给出数学上成立的结论与条件式答案，不为了写出密度而默认增加条件。
-\end{bul}
-\vfill\textcolor{accentD}{编制日期：2026-10-13。三件套为自制学习材料。}
+Q3b & 10 & 5.4.3 & -- & 匹配滤波后的相关与谱\\
+Q3c & 5 & 5.3.2 & -- & 等效矩形带宽与时延\\
+Q4a & 10 & 6.3.2 & -- & 非中心载频的正交分量谱\\
+Q4b & 7 & 1.6 & 2.4.1, 2.4.2, 2.4.3 & 同一时刻二维高斯分布\\*
+Q4c & 8 & 1.4.2 & 2.4.1, 2.4.3 & 异时刻协方差决定联合密度\\\end{xltabular}
+}
+
+\par\medskip 本章核心：无（0分）。
+
+\section{作业覆盖、缺口与复习路线}
+
+第二次作业的10题全部保留：必做2.3、2.13、2.16、2.19；选做2.1、2.4、2.7、2.8、2.11、2.18。
+
+\begin{xltabular}{\textwidth}{@{}l L{4.0cm} X@{}}\toprule 作业题 & 覆盖小节 & 补充重点\\\midrule\endfirsthead\toprule 作业题 & 覆盖小节 & 补充重点\\\midrule\endhead\midrule\multicolumn{3}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+2.1、2.3 & 2.1.1/2.1.2 & 样本函数与瞬时分布\\*
+2.4、2.7、2.8 & 2.1.3/2.2.2/2.4.2 & 均值、方差、伯努利序列\\
+2.13 & 2.2.1/2.3.4 & 随机正弦与微分\\
+2.11 & 2.3.2/2.5 & 两两独立不足以因子分解\\*
+2.16、2.18、2.19 & 2.4.1--2.4.3 & 有限维高斯与奇异协方差\\\end{xltabular}
+
+
+新增旧卷带来的缺口：半随机0/1二进制信号的分段相关（2019 Q3），A+B cos(t)过程的二维奇异分布（2021/2022 Q1），独立回波加噪声的互相关（2022 Q2），随机符号幅度的正弦过程（2019 Q5）。这些题加入新版；平稳性扩展明确标为第3章工具。
+
+复习顺序：§2.2.1随机正弦与§2.4.3高斯过程优先，其次§2.3.2联合特性和§2.2.3半随机二进制。§2.4.1、§2.4.2和§2.5虽多作为前提，仍须熟练。微分积分和泊松过程按作业覆盖与基础练习安排。
+
+\section{关键公式与条件速查}
+
+\[E(X)=\int xf_X(x)\,dx,\quad C_{XY}=E(XY)-E(X)E(Y),\quad \rho_{XY}=\frac{C_{XY}}{\sqrt{D_XD_Y}}.\]
+
+\[\phi_{aX+b}(u)=e^{jub}\phi_X(au),\quad \phi_{\boldsymbol X}(u)=\exp(ju^T\mu-\tfrac12u^TCu).\]
+
+\[m_X(t)=E[X(t)],\quad R_X(s,t)=E[X(s)X(t)],\quad C_X(s,t)=R_X(s,t)-m_X(s)m_X(t).\]\[R_{A\cos(\omega t+\Theta)}(s,t)=\tfrac12 E(A^2)\cos\omega(s-t).\]后一式要求幅度与均匀相位独立、幅度在一次试验中不随时间变化且二阶矩有限。高斯过程必须任意有限维向量联合高斯；协方差正定才有普通联合PDF。
+
+\section{题面异常、来源与局限}
+
+\begin{warnbox}[title=不能静默补条件]2019 Q1的“Gaussian distribution in [0,1]”可能表示截断正态，也可能误用区间记号表示均值与方差。统计按其所考变换与特征函数归类，题集改编显式取$N(0,1)$并要求比较截断情形。2018 Q3将单独随机余弦分量称为stationary，与其随时间变化的方差不一致；题集要求检验这一断言。2018/2019随机幅度回波题未完整声明幅度与相位独立；题集写明假设。2021 Q2把连续理想白噪声描述为瞬时$N(0,1)$，普通随机变量方差与Dirac相关不应混用；题集不照搬这一缺少模型约定的谱题。2022 Q4原文$i(t)+\cos\omega_0t-q(t)\sin\omega_0t$疑似多出加号；该题分值仍按原题任务归类，不据此改写教材。\end{warnbox}
+
+最近四套已知例外也保留：2023--24 Q2只写white noise，不能自动给出精确高斯PDF；2025--26 Q2(c)原文$R_A$与均值/相关假设有冲突。题集对新增假设和扩展明确标注，解答区分“原条件可确定”与“额外条件下可确定”。
+
+八套跨越不同试卷结构（早期8道大题，后期4道），存在重复题型和不连续年份。总样本与最近四套分别展示，不把小样本频率解释为未来概率，也不把旧卷平均和新卷平均混称为趋势证明。核心归属是公开的方法选择，可通过逐小问表复核。
+
 \end{document}

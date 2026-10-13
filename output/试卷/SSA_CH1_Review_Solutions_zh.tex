@@ -1,155 +1,73 @@
-% !TEX program = xelatex
-% =====================================================================
-%  《随机信号分析》第一章复习习题集 —— 参考答案（中文）
-%  与 SSA_CH1_Review_Problem_Set.pdf 配套，共 21 题
-%  页面几何与 13 英寸 iPad Air (M2) 纵向屏幕一致
-%  编译：xelatex（两次）
-% =====================================================================
-\documentclass[11pt]{ctexart}
-
-\usepackage{amsmath}
-\usepackage{newtxmath}
-\usepackage[paperwidth=222.6413mm,paperheight=297mm,
-            left=1.9cm,right=1.9cm,top=2.1cm,bottom=1.7cm,headsep=0.5cm]{geometry}
+\documentclass[10.5pt,fontset=fandol]{ctexart}
+\usepackage[paperwidth=222.6413mm,paperheight=297mm,left=1.9cm,right=1.9cm,top=2.1cm,bottom=1.8cm,headsep=0.5cm]{geometry}
+\usepackage{amsmath,amssymb,mathrsfs}
 \usepackage[table]{xcolor}
-\usepackage{booktabs}
-\usepackage{tabularx}
-\usepackage{array}
-\usepackage{ragged2e}
-\usepackage{enumitem}
-\usepackage{tcolorbox}
+\usepackage{booktabs,tabularx,xltabular,needspace,array,ragged2e,enumitem,tcolorbox,tikz,fancyhdr}
 \tcbuselibrary{skins,breakable}
-\usepackage{fancyhdr}
-\usepackage{microtype}
 \usepackage[hidelinks]{hyperref}
-
-% ------------------------------ 配色 ------------------------------
-\definecolor{navy}{HTML}{1B3A5C}
-\definecolor{accentred}{HTML}{B23A48}
-\definecolor{accentgold}{HTML}{B7791F}
-\definecolor{accentgreen}{HTML}{2F6F4E}
-\definecolor{ink}{HTML}{1F2933}
-\definecolor{muted}{HTML}{5A6470}
-\definecolor{qbg}{HTML}{F4F6F8}
-\definecolor{linec}{HTML}{9AA3AD}
-
-% ------------------------------ 列表 ------------------------------
+\definecolor{deepblue}{HTML}{1B3A5C}\definecolor{navy}{HTML}{1B3A5C}\definecolor{accentred}{HTML}{B23A48}\definecolor{accentA}{HTML}{B23A48}
+\definecolor{muted}{HTML}{5A6470}\definecolor{qbg}{HTML}{F4F6F8}\definecolor{linec}{HTML}{9AA3AD}
 \newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
-\newlist{qp}{enumerate}{1}
-\setlist[qp]{label=(\alph*),leftmargin=1.6em,itemsep=2pt,topsep=2pt,parsep=0pt}
-\newlist{qn}{enumerate}{1}
-\setlist[qn]{label=(\arabic*),leftmargin=1.6em,itemsep=2pt,topsep=2pt,parsep=0pt}
-\newlist{bul}{itemize}{1}
-\setlist[bul]{label=\textbullet,leftmargin=1.6em,itemsep=1.5pt,topsep=2pt,parsep=0pt}
-
-% ------------------------------ 页眉 ------------------------------
-\pagestyle{fancy}
-\fancyhf{}
-\renewcommand{\headrulewidth}{0.4pt}
-\fancyhead[L]{\footnotesize\color{navy}随机信号分析 \textperiodcentered\ 第一章复习习题集 \textperiodcentered\ 参考答案}
-\fancyhead[R]{\footnotesize\color{navy}\thepage}
-
-% ------------------------------ 解答页 ------------------------------
-% \apage{<天/主题>}{<题号>}{<题源>}{<考点>}{<正文>}
-\newcommand{\apage}[5]{%
-  \clearpage
-  \begin{tcolorbox}[enhanced, colback=navy, colframe=navy, boxrule=0pt, arc=1.5pt,
-      left=10pt, right=10pt, top=7pt, bottom=7pt, width=\textwidth]
-    \textcolor{white}{\large\bfseries #2}\hfill\textcolor{white}{\small #1}%
-  \end{tcolorbox}
-  \vspace{2.2mm}
-  {\color{accentred}\bfseries (#3)}\hfill{\small\color{muted}考点：#4}\par
-  \vspace{2.6mm}
-  \begin{tcolorbox}[enhanced, breakable, colback=qbg, colframe=qbg,
-      boxrule=0pt, arc=1.5pt, left=10pt, right=10pt, top=8pt, bottom=8pt]
-    #5
-  \end{tcolorbox}
-}
-
-\newcommand{\key}[1]{\par\vspace{3pt}\noindent\textbf{\color{navy}#1}\par\vspace{1pt}}
-\newcommand{\dd}{\mathrm{d}}
-
+\newlist{qp}{enumerate}{1}\setlist[qp]{label=(\alph*),leftmargin=1.5em,itemsep=2pt}
+\newlist{qn}{enumerate}{1}\setlist[qn]{label=(\arabic*),leftmargin=1.5em,itemsep=2pt}
+\newlist{qparts}{enumerate}{1}\setlist[qparts]{label=(\alph*),leftmargin=1.5em,itemsep=2pt}
+\newlist{qnum}{enumerate}{1}\setlist[qnum]{label=(\arabic*),leftmargin=1.5em,itemsep=2pt}
+\newlist{bul}{itemize}{1}\setlist[bul]{label=\textbullet,leftmargin=1.5em,itemsep=2pt}
+\newcommand{\key}[1]{\par\vspace{4pt}\noindent\textbf{\color{navy}#1}\par\vspace{2pt}}
+\newcommand{\hint}[1]{\par\smallskip{\small\itshape Hint: #1}\par}
+\newcommand{\sect}[1]{{\small\color{muted}#1}}
+\newcommand{\dd}{\mathrm d}\newcommand{\Var}{\operatorname{Var}}\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\E}{\mathbb E}\newcommand{\ee}{\mathrm e}\newcommand{\jj}{\mathrm j}
+\newtcolorbox{workspace}{height fill,enhanced,colback=white,colframe=linec!55,boxrule=0.5pt,arc=1.5pt}
+\newcommand{\qtitle}[2]{\par\addvspace{1.2em}\Needspace{8\baselineskip}\begin{tcolorbox}[colback=navy,colframe=navy,arc=1.5pt,boxrule=0pt]\color{white}\large\bfseries #1\hfill\small #2\end{tcolorbox}}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\footnotesize\color{navy}SSA -- Chapter 1 -- Solutions}\fancyhead[R]{\footnotesize\thepage}
+\fancyfoot[C]{\scriptsize Eight-paper edition -- 2026-10-13}
 \begin{document}
 
-% =====================================================================
-%  封面
-% =====================================================================
-\thispagestyle{empty}
-\vspace*{0.5cm}
-
-\noindent{\color{navy}\rule{\textwidth}{1.4pt}}\\[0.45em]
-{\Huge\bfseries\color{navy} 第一章复习习题集\par}
-\vspace{0.25em}
-{\Huge\bfseries\color{navy} 参考答案\par}
-\vspace{0.4em}
-\noindent{\color{navy}\rule{\textwidth}{1.4pt}}
-
-\vspace{0.7em}
-{\large\color{accentred}\bfseries 21 题全解 \textperiodcentered\ 中文解答 \textperiodcentered\ 与习题集逐题对应\par}
-
-\vspace{0.9em}
-\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt,arc=1.5pt,
-  left=10pt,right=10pt,top=8pt,bottom=8pt]
-\textbf{\color{navy}使用说明}
-\begin{bul}
-  \item 每题一页（个别较长者顺延），题号、题源与考点标注和习题集完全一致，便于对照批改。
-  \item 解答给的是\textbf{关键步骤与结论}，略去了纯代数化简的中间过程，方便自查时快速定位错误。
-  \item 凡是需要用到的公式，先在解答里点明出处（如"由 §1.4.2 的 $D(X\pm Y)$ 公式"），便于回课本定位。
-  \item 计算题在给出解析式后附了数值，方便核对量级；数值保留 4 位有效数字。
-\end{bul}
-\end{tcolorbox}
-
-\vspace{0.7em}
-\begin{tcolorbox}[colback=white,colframe=accentred,boxrule=0.9pt,arc=1.5pt,
-  left=10pt,right=10pt,top=8pt,bottom=8pt]
-\textbf{\color{accentred}本套题的考点分布}\\[3pt]
-按四套真题（2022--23、2023--24、2024--25、2025--26）的考频统计，第一章平均占
-\textbf{33.8 分/套}，最高一套达 \textbf{49 分}。本解答按同样的优先级组织：
-S 级考点（§1.4.2 矩与联合矩、§1.6 典型分布）占 7 题，A 级考点
-（§1.5.1 特征函数、§1.2.1 多维随机变量、§1.4.3 无关与正交）占 10 题。
-\end{tcolorbox}
-
-\vspace{0.7em}
-\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt,arc=1.5pt,
-  left=10pt,right=10pt,top=8pt,bottom=8pt]
-\textbf{\color{navy}答案速查}\\[4pt]
-\renewcommand{\arraystretch}{1.22}
-\scriptsize
-\begin{tabularx}{\textwidth}{@{}c c L{4.5cm} X@{}}
-\toprule
-\textbf{题} & \textbf{考点} & \textbf{题源} & \textbf{主要结论} \\
-\midrule
-\rowcolor{white}
-1 & §1.4.1/§1.4.2 & 公式默写 & 七个数字特征定义；$D(aX{+}bY)=a^2DX+b^2DY+2ab\,\mathrm{Cov}$ \\
-2 & §1.4.2 & 教材 1.21 & $EU=6,\ EV=-5,\ DU=76,\ DV=52,\ \mathrm{Cov}(U,V)=-40$ \\
-3 & §1.4.1/§1.4.2 & 真题 2023--24 Q3(a)--(c) & $A=\tfrac12$；$EX=EY=\tfrac{\pi}{4}$；$DX=DY=\tfrac{\pi^2}{16}+\tfrac{\pi}{2}-2\approx0.1876$ \\
-4 & §1.4.2/§1.4.3 & 真题 2023--24 Q3(d) & $m_{XY}=\tfrac{\pi}{2}-1\approx0.5708$；$\rho_{XY}\approx-0.2454$；$X,Y$ \textbf{相关}、\textbf{不正交}、\textbf{不独立} \\
-5 & §1.4.3 & 教材 1.22 & \textbf{独立}且\textbf{不相关}，但\textbf{不正交}（$E[XY]=\tfrac83\neq0$） \\
-6 & §1.4.3/§1.2.3 & 真题 2024--25 Q1(b) & \textbf{正交}且\textbf{不相关}，但\textbf{不独立}（$X^2+Y^2\equiv1$） \\
-7 & §1.2.1/§1.3.2/§1.4.2 & 教材 1.14 & 边缘 $0.40/0.60$ 与 $0.15/0.50/0.35$；$P(Z{=}0){=}0.72$；$\rho_{XY}=0$ \\
-8 & §1.1.2/§1.2.1/§1.4.2 & 真题 2025--26 Q1(a)--(c) & 冲激型密度；$C_X(t_1,t_2)=\tfrac14(\sin2\pi t_1-t_1^2)(\sin2\pi t_2-t_2^2)$ \\
-9 & §1.2.1/§1.2.3 & 真题 2025--26 Q1(d) & 独立时二维密度为 4 项冲激之和 \\
-10 & §1.5.1 & 公式默写 & 定义、傅氏变换对、唯一性、性质 1--3 \\
-11 & §1.5.1 & 真题 2022--23 Q1(b) & $\phi_{X(t)}(v)=e^{jvt}\dfrac{e^{jv\pi}-1}{jv\pi}$ \\
-12 & §1.5.1 & 教材 1.29 & 见解答（含 $6.44$、$0.84$、$0.0625$、$\tfrac{25}{3}$） \\
-13 & §1.6 & 公式默写 & 六个典型分布的密度、特征函数、均值与方差 \\
-14 & §1.3.1 & 教材 1.17 & $f_Y(y)=f_X(y)u(y)+F_X(0)\delta(y)$ \\
-15 & §1.6/§1.4.2 & 真题 2023--24 Q2(c) & 高斯；$\sigma_Y^2=\tfrac{N_0}{2}(1-e^{-T})$ \\
-16 & §1.3.2/§1.2.3 & 教材 1.16 & $f_{UV}=\tfrac{1}{4\pi}e^{-(u^2+v^2)/4}$；$U,V$ 独立，均 $N(0,2)$ \\
-17 & §1.2.1/§1.6 & 公式默写 & 二维高斯密度；$\rho=0\Leftrightarrow$ 独立；二维密度由均值与自协方差唯一确定 \\
-18 & §1.4.2/§1.6/§1.2.1 & 真题 2025--26 Q4(b)--(c) & $\sigma^2=12$；$f_{iq}(i,q;t,t)=\tfrac{1}{24\pi}e^{-(i^2+q^2)/24}$；时延下 $\rho=\tfrac1\pi$ \\
-19 & §1.1.1 & 教材 1.6 & $P(D)=0.1625$；$P(B_2|D)=\tfrac{8}{13}\approx0.6154$ \\
-20 & §1.4.4 & 教材 1.24 & $E(Y|X)=\tfrac{X+a}{2}$；$EY=\tfrac{3a}{4}$ \\
-21 & §1.5.2 & 教材 1.33 & $X\sim\mathrm{Exp}(3)$；$Y\sim\mathrm{Exp}(2)$，$EY=\tfrac12$，$DY=\tfrac14$ \\
-\bottomrule
-\end{tabularx}
-\end{tcolorbox}
-
-% =====================================================================
-%  解答
-% =====================================================================
-\apage{第 1 天 \textperiodcentered\ 期望、方差与协方差}{第 1 题}{公式默写 \textemdash\ §1.4.1、§1.4.2}{数字特征的定义与 $D(aX{+}bY)$ 的推导}{%
-设 $X$ 的概率密度为 $f(x)$，二维情形为 $f(x,y)$；离散型把积分换成求和即可。
+\begin{titlepage}\centering\vspace*{1.5cm}
+{\Huge\bfseries 随机信号分析}\par\vspace{1cm}
+{\LARGE\bfseries 第1章复习习题集中文详解}\par\vspace{1cm}
+{\large 八套真题版 · 30题 · 10天 · 每天3题}\par\vspace{1cm}
+\begin{tcolorbox}[colback=qbg,colframe=navy]
+本章八套独占核心均值为27.500分/套；最近四套为33.75分/套。解答按配套英文题集编号，每题保留来源及教材小节。原题条件不足时明确写出可确定的结论与额外假设；奇异高斯分布不强套普通PDF。
+\end{tcolorbox}\vfill 2026-10-13\end{titlepage}
+\section*{题号与来源索引}
+{\small\renewcommand{\arraystretch}{1.15}\begin{xltabular}{\textwidth}{@{}r r L{7cm} X@{}}\toprule 题 & 天 & 题源 & 教材小节\\\midrule\endfirsthead\toprule 题 & 天 & 题源 & 教材小节\\\midrule\endhead\midrule\multicolumn{4}{r}{\small 索引续下页}\\\endfoot\bottomrule\endlastfoot
+1 & 1 & Formula recall \textemdash\ \S1.4.1 and \S1.4.2 & 1.4.1 / 1.4.2\\
+2 & 1 & Textbook 1.21 / Required & 1.4.2\\
+3 & 1 & 2023--24 Q3(a)--(c); same density as 2018--19 Q2 & 1.2.1 / 1.4.1 / 1.4.2\\
+4 & 2 & Final examination 2023--24, Q3(d) & 1.4.2 / 1.4.3\\
+5 & 2 & Textbook Exercise 1.22 & 1.4.3\\
+6 & 2 & Final examination 2024--25, Q1(b) & 1.4.3 / 1.2.3\\
+7 & 3 & Textbook 1.14 / Required & 1.2.1 / 1.4.2\\
+8 & 3 & Final examination 2025--26, Q1(a)--(c) & 1.2.1 / 1.4.2\\
+9 & 3 & Final examination 2025--26, Q1(d) & 1.2.1 / 1.2.3\\
+10 & 4 & Formula recall \textemdash\ \S1.5.1 & 1.5.1\\
+11 & 4 & Final examination 2022--23, Q1(b) & 1.5.1\\
+12 & 4 & Textbook 1.29 / Optional & 1.5.1\\
+13 & 5 & Formula recall \textperiodcentered\ \S1.6 & 1.6\\
+14 & 5 & Textbook Exercise 1.17 & 1.3.1\\
+15 & 5 & Adapted from 2023--24 Q2(c) & 1.6 / 1.4.2\\
+16 & 6 & Textbook 1.16 / Required & 1.3.2\\
+17 & 6 & Formula recall \textperiodcentered\ \S1.2.1 and \S1.6 & 1.2.1 / 1.6\\
+18 & 6 & Final examination 2025--26, Q4(b)--(c) & 1.6 / 1.4.2\\
+19 & 7 & Textbook 1.6 / Required & 1.1.1\\
+20 & 7 & Textbook 1.24 / Required & 1.4.4\\
+21 & 7 & Textbook 1.33 / Required & 1.5.2\\
+22 & 8 & 2018--19 Q1 (201812) & 1.3.1 / 1.6\\
+23 & 8 & Adapted from 2019--20 Q1 (201912) & 1.3.1 / 1.5.1 / 1.6\\
+24 & 8 & 2019--20 Q2 (201912) & 1.2.1\\
+25 & 9 & Adapted from 2020--21 Q4(b,c) (202104) & 1.6 / 2.4.3\\
+26 & 9 & 2021--22 Q1(c) (202112) & 1.5.2 / 1.4.2\\
+27 & 9 & Textbook 1.9 / Optional & 1.1.2\\
+28 & 10 & Textbook 1.11 / Optional & 1.1.2\\
+29 & 10 & Textbook 1.28 / Optional & 1.5.1\\
+30 & 10 & Textbook 1.30 / Optional & 1.5.1\\
+\end{xltabular}}\par\smallskip 习题与详解题号完全一致；Day标签用于安排，不表示题目在原卷中的顺序。\clearpage
+\qtitle{第 1 题}{Day 1}
+{\small\color{accentred}(Formula recall \textemdash\ \S1.4.1 and \S1.4.2)}\par\smallskip
+{\small\color{muted}教材小节：1.4.1 / 1.4.2}\par\medskip
+\noindent\textbf{数字特征的定义与 $D(aX{+}bY)$ 的推导}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]设 $X$ 的概率密度为 $f(x)$，二维情形为 $f(x,y)$；离散型把积分换成求和即可。
 
 \key{七个定义}
 \begin{qp}
@@ -178,10 +96,11 @@ D(U)=E\big[(U-EU)^2\big]
 \]
 当 $X,Y$ 不相关（$\mathrm{Cov}=0$）时退化为 $D(aX+bY)=a^2D(X)+b^2D(Y)$；
 当 $a=1,b=\pm1$ 时即为常用的 $D(X\pm Y)=D(X)+D(Y)\pm2\mathrm{Cov}(X,Y)$。
-}
-
-\apage{第 1 天 \textperiodcentered\ 期望、方差与协方差}{第 2 题}{教材习题 1.21}{线性组合的 $E$、$D$、$\mathrm{Cov}$}{%
-已知 $EX=1$，$EY=3$，$D(X)=4$，$D(Y)=16$，$\rho_{XY}=0.5$。
+\end{tcolorbox}
+\qtitle{第 2 题}{Day 1}
+{\small\color{accentred}(Textbook 1.21 / Required)}\par\smallskip
+{\small\color{muted}教材小节：1.4.2}\par\medskip
+\noindent\textbf{线性组合的 $E$、$D$、$\mathrm{Cov}$}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]已知 $EX=1$，$EY=3$，$D(X)=4$，$D(Y)=16$，$\rho_{XY}=0.5$。
 
 \key{先求协方差}
 由 $\rho_{XY}=\dfrac{\mathrm{Cov}(X,Y)}{\sigma_X\sigma_Y}$ 得
@@ -219,10 +138,11 @@ D(V)=D(X-2Y)=D(X)+4D(Y)+2\cdot1\cdot(-2)\cdot\mathrm{Cov}(X,Y)
 用 $E[UV]-EU\cdot EV$ 复核：$UV=(3X+Y)(X-2Y)=3X^2-5XY-2Y^2$，
 $E[X^2]=D(X)+(EX)^2=5$，$E[Y^2]=16+9=25$，$E[XY]=\mathrm{Cov}+EX\cdot EY=7$，故
 $E[UV]=15-35-50=-70$，$\mathrm{Cov}(U,V)=-70-6\times(-5)=-40$ \checkmark
-}
-
-\apage{第 1 天 \textperiodcentered\ 期望、方差与协方差}{第 3 题}{真题 2023--24, Q3(a)--(c)}{联合密度归一化、期望与方差}{%
-\[
+\end{tcolorbox}
+\qtitle{第 3 题}{Day 1}
+{\small\color{accentred}(2023--24 Q3(a)--(c); same density as 2018--19 Q2)}\par\smallskip
+{\small\color{muted}教材小节：1.2.1 / 1.4.1 / 1.4.2}\par\medskip
+\noindent\textbf{联合密度归一化、期望与方差}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\[
 f_{XY}(x,y)=A\sin(x+y),\qquad 0\le x\le \frac{\pi}{2},\qquad 0\le y\le\frac{\pi}{2}.
 \]
 
@@ -275,18 +195,20 @@ E(X^2)=\frac12\Big(\frac{\pi^2}{4}+\pi-4\Big)=\frac{\pi^2}{8}+\frac{\pi}{2}-2 .
 \boxed{D(X)=E(X^2)-(EX)^2=\frac{\pi^2}{16}+\frac{\pi}{2}-2\approx0.1876}
 \]
 同理 $D(Y)=D(X)$。
-}
-
-\apage{第 2 天 \textperiodcentered\ 联合矩、相关性与独立性}{第 4 题}{真题 2023--24, Q3(d)}{联合矩、相关系数与独立/不相关/正交的判定}{%
-沿用第 3 题的 $f_{XY}(x,y)=\dfrac12\sin(x+y)$，$0\le x,y\le\dfrac{\pi}{2}$。
+\end{tcolorbox}
+\qtitle{第 4 题}{Day 2}
+{\small\color{accentred}(Final examination 2023--24, Q3(d))}\par\smallskip
+{\small\color{muted}教材小节：1.4.2 / 1.4.3}\par\medskip
+\noindent\textbf{联合矩、相关系数与独立/不相关/正交的判定}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]沿用第 3 题的 $f_{XY}(x,y)=\dfrac12\sin(x+y)$，$0\le x,y\le\dfrac{\pi}{2}$。
 
 \key{(a) 联合矩 $m_{XY}=E(XY)$}
 利用 $\sin(x+y)=\sin x\cos y+\cos x\sin y$，被积函数可分离：
-\[
-E(XY)=\frac12\iint xy\sin(x+y)\dd x\dd y
-=\frac12\Big[\Big(\!\int_0^{\pi/2}\!\!x\sin x\dd x\Big)\Big(\!\int_0^{\pi/2}\!\!y\cos y\dd y\Big)
-+\Big(\!\int_0^{\pi/2}\!\!x\cos x\dd x\Big)\Big(\!\int_0^{\pi/2}\!\!y\sin y\dd y\Big)\Big].
-\]
+\[\begin{aligned}
+E(XY)&=\frac12\iint xy\sin(x+y)\,dx\,dy\\
+&=\frac12(I_sI_c+I_cI_s),\\
+I_s&=\int_0^{\pi/2}x\sin x\,dx,\qquad
+I_c=\int_0^{\pi/2}x\cos x\,dx.
+\end{aligned}\]
 代入第 3 题算过的 $\int_0^{\pi/2}x\sin x\dd x=1$、$\int_0^{\pi/2}x\cos x\dd x=\dfrac{\pi}{2}-1$：
 \[
 E(XY)=\frac12\Big[1\cdot\Big(\frac{\pi}{2}-1\Big)+\Big(\frac{\pi}{2}-1\Big)\cdot1\Big]
@@ -315,10 +237,11 @@ E(XY)=\frac12\Big[1\cdot\Big(\frac{\pi}{2}-1\Big)+\Big(\frac{\pi}{2}-1\Big)\cdot
         \]
         故不独立。（也可用"独立 $\Rightarrow$ 不相关"的逆否命题，由 $\rho\neq0$ 直接否定独立性。）
 \end{bul}
-}
-
-\apage{第 2 天 \textperiodcentered\ 联合矩、相关性与独立性}{第 5 题}{教材习题 1.22}{正交 / 不相关 / 独立：独立但不正交的例子}{%
-\[
+\end{tcolorbox}
+\qtitle{第 5 题}{Day 2}
+{\small\color{accentred}(Textbook Exercise 1.22)}\par\smallskip
+{\small\color{muted}教材小节：1.4.3}\par\medskip
+\noindent\textbf{正交 / 不相关 / 独立：独立但不正交的例子}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\[
 f_{XY}(x,y)=\frac{xy}{9},\qquad 0\le x<2,\quad 0\le y<3 .
 \]
 
@@ -365,10 +288,11 @@ E(XY)=\frac19\Big(\int_0^2x^2\dd x\Big)\Big(\int_0^3y^2\dd y\Big)=\frac19\cdot\f
 \text{独立}\;\Longrightarrow\;\text{不相关};\qquad
 \text{不相关}+(\text{至少一个均值为 }0)\;\Longleftrightarrow\;\text{正交}.
 \]
-}
-
-\apage{第 2 天 \textperiodcentered\ 联合矩、相关性与独立性}{第 6 题}{真题 2024--25, Q1(b)}{正交且不相关但不独立：最易考的三个概念辨析}{%
-\[
+\end{tcolorbox}
+\qtitle{第 6 题}{Day 2}
+{\small\color{accentred}(Final examination 2024--25, Q1(b))}\par\smallskip
+{\small\color{muted}教材小节：1.4.3 / 1.2.3}\par\medskip
+\noindent\textbf{正交且不相关但不独立：最易考的三个概念辨析}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\[
 X[n]=\sin(2\pi n+\phi),\qquad Y[n]=\cos(2\pi n+\phi),\qquad \phi\sim U(0,\pi).
 \]
 
@@ -414,10 +338,11 @@ E[XY]=\frac1\pi\int_0^\pi\sin\phi\cos\phi\dd\phi
 本题是"正交、不相关，但\textbf{不独立}"的标准反例。
 \textbf{只有在联合高斯分布下}，"不相关 $\Rightarrow$ 独立"才成立——
 这正是命题人想考的边界条件。
-}
-
-\apage{第 3 天 \textperiodcentered\ 多个随机变量的联合分布}{第 7 题}{教材习题 1.14}{联合（累积）分布、边缘分布律与 $Z=XY$ 的分布}{%
-联合分布律为 $p_{ij}=P(X=x_i,Y=y_j)$，全部 6 项之和 $=0.40+0.60=1$ \checkmark
+\end{tcolorbox}
+\qtitle{第 7 题}{Day 3}
+{\small\color{accentred}(Textbook 1.14 / Required)}\par\smallskip
+{\small\color{muted}教材小节：1.2.1 / 1.4.2}\par\medskip
+\noindent\textbf{联合（累积）分布、边缘分布律与 $Z=XY$ 的分布}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]联合分布律为 $p_{ij}=P(X=x_i,Y=y_j)$，全部 6 项之和 $=0.40+0.60=1$ \checkmark
 
 \key{(1) 联合分布函数与联合密度}
 用单位阶跃函数 $u(t)$（$t\ge0$ 时为 1，否则为 0）表示：
@@ -485,10 +410,11 @@ $\rho_{XY}=0$ 说明 $X,Y$ 不相关，但二者\textbf{并不独立}：例如
 P(X=0,Y=0)=0.18\neq0.40\times0.50=P(X=0)P(Y=0).
 \]
 这是又一个"不相关但不独立"的例子，与第 6 题互为印证。
-}
-
-\apage{第 3 天 \textperiodcentered\ 多个随机变量的联合分布}{第 8 题}{真题 2025--26, Q1(a)--(c)}{由随机试验定义的信号：一维/二维密度与协方差}{%
-\[
+\end{tcolorbox}
+\qtitle{第 8 题}{Day 3}
+{\small\color{accentred}(Final examination 2025--26, Q1(a)--(c))}\par\smallskip
+{\small\color{muted}教材小节：1.2.1 / 1.4.2}\par\medskip
+\noindent\textbf{由随机试验定义的信号：一维/二维密度与协方差}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\[
 X(t)=\begin{cases}\sin(2\pi t), & \text{正面}\\[2pt] t^2, & \text{反面}\end{cases}
 \qquad P(\text{正})=P(\text{反})=\tfrac12 .
 \]
@@ -534,10 +460,11 @@ $X(t)$ 是等概率两点分布，方差确为 $\big(\tfrac{a-b}{2}\big)^2$ \che
 取 $t_1=1,t_2=2$：$C_X(1,2)=\tfrac14(0-1)(0-4)=1$。
 直接验证：$E[X(1)X(2)]=\tfrac12(0)+\tfrac12(1\cdot4)=2$，$E[X(1)]=0.5$，$E[X(2)]=2$，
 $\mathrm{Cov}=2-0.5\times2=1$ \checkmark
-}
-
-\apage{第 3 天 \textperiodcentered\ 多个随机变量的联合分布}{第 9 题}{真题 2025--26, Q1(d)}{独立重复试验：二维密度可分解}{%
-\[
+\end{tcolorbox}
+\qtitle{第 9 题}{Day 3}
+{\small\color{accentred}(Final examination 2025--26, Q1(d))}\par\smallskip
+{\small\color{muted}教材小节：1.2.1 / 1.2.3}\par\medskip
+\noindent\textbf{独立重复试验：二维密度可分解}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\[
 Y[n]=\begin{cases}\sin(2\pi n), & \text{第 } n \text{ 次抛掷为正面}\\[2pt] n^2, & \text{第 } n \text{ 次抛掷为反面}\end{cases}
 \qquad\text{各次抛掷独立，}P=\tfrac12 .
 \]
@@ -575,10 +502,11 @@ n=2:\quad f_{Y_2}(y_2)=\tfrac12\delta(y_2)+\tfrac12\delta(y_2-4)
 \end{tabularx}
 \end{center}
 判断二维密度能否写成边缘之积，是区分"独立"与"不独立"最快的办法。
-}
-
-\apage{第 4 天 \textperiodcentered\ 特征函数}{第 10 题}{公式默写 \textemdash\ §1.5.1}{特征函数的定义、变换对、唯一性与三条性质}{%
-\key{(a) 定义}
+\end{tcolorbox}
+\qtitle{第 10 题}{Day 4}
+{\small\color{accentred}(Formula recall \textemdash\ \S1.5.1)}\par\smallskip
+{\small\color{muted}教材小节：1.5.1}\par\medskip
+\noindent\textbf{特征函数的定义、变换对、唯一性与三条性质}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{(a) 定义}
 特征函数是 $e^{jvX}$ 的数学期望：
 \[
 \phi_X(v)=E\big[e^{jvX}\big]=
@@ -617,10 +545,11 @@ f_X(x)=\frac{1}{2\pi}\int_{-\infty}^{+\infty}\phi_X(v)e^{-jvx}\dd v .
 \boxed{\,E\big[X^k\big]=j^{-k}\,\phi_X^{(k)}(0)\,}
 \]
 特别地 $E[X]=-j\,\phi_X'(0)$，$E[X^2]=-\phi_X''(0)$。
-}
-
-\apage{第 4 天 \textperiodcentered\ 特征函数}{第 11 题}{真题 2022--23, Q1(b)}{均匀分布的特征函数与线性变换性质}{%
-\[
+\end{tcolorbox}
+\qtitle{第 11 题}{Day 4}
+{\small\color{accentred}(Final examination 2022--23, Q1(b))}\par\smallskip
+{\small\color{muted}教材小节：1.5.1}\par\medskip
+\noindent\textbf{均匀分布的特征函数与线性变换性质}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\[
 X(t)=U+t,\qquad t\in[-2,2],\qquad U\sim U[0,\pi].
 \]
 
@@ -654,10 +583,11 @@ $X(t)=U+t$，即 $a=1$、$b=t$。由第 10 题性质 2 的 $\phi_{aX+b}(v)=e^{jv
 \key{校验}
 令 $v=0$ 应得 $\phi=1$。对原式用洛必达或直接展开：
 $\dfrac{e^{jv\pi}-1}{jv\pi}\to\dfrac{jv\pi}{jv\pi}=1$ \checkmark
-}
-
-\apage{第 4 天 \textperiodcentered\ 特征函数}{第 12 题}{教材习题 1.29}{由特征函数反求密度函数与各阶矩}{%
-\key{(1) $\phi(v)=0.2+0.3e^{j2v}+0.2e^{j4v}+0.2e^{-j2v}+0.1e^{-j4v}$}
+\end{tcolorbox}
+\qtitle{第 12 题}{Day 4}
+{\small\color{accentred}(Textbook 1.29 / Optional)}\par\smallskip
+{\small\color{muted}教材小节：1.5.1}\par\medskip
+\noindent\textbf{由特征函数反求密度函数与各阶矩}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{(1) $\phi(v)=0.2+0.3e^{j2v}+0.2e^{j4v}+0.2e^{-j2v}+0.1e^{-j4v}$}
 系数之和 $=0.2+0.3+0.2+0.2+0.1=1$，故为离散型，指数上的系数即为取值：
 \[
 f(x)=0.2\delta(x)+0.3\delta(x-2)+0.2\delta(x-4)+0.2\delta(x+2)+0.1\delta(x+4).
@@ -703,10 +633,11 @@ EX=0,\qquad
 EX^2=\frac{(b-a)^2}{12}=\frac{100}{12}=\boxed{\frac{25}{3}\approx8.333},\qquad
 D(X)=\frac{25}{3}
 \]
-}
-
-\apage{第 5 天 \textperiodcentered\ 典型分布与高斯变换}{第 13 题}{公式默写 \textperiodcentered\ §1.6}{六个典型分布一览（必背）}{%
-\begin{center}
+\end{tcolorbox}
+\qtitle{第 13 题}{Day 5}
+{\small\color{accentred}(Formula recall \textperiodcentered\ \S1.6)}\par\smallskip
+{\small\color{muted}教材小节：1.6}\par\medskip
+\noindent\textbf{六个典型分布一览（必背）}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\begin{center}
 \renewcommand{\arraystretch}{1.75}
 \scriptsize
 \begin{tabularx}{\textwidth}{@{}c L{2.5cm} X X X@{}}
@@ -745,10 +676,11 @@ D(X)=\frac{25}{3}
   \item 均值与方差可直接由定义记住：均匀取中点、指数是 $\lambda^{-1}$ 与 $\lambda^{-2}$、
         高斯是 $\mu$ 与 $\sigma^2$、二项是 $np$ 与 $npq$、泊松两者都是 $\lambda$。
 \end{bul}
-}
-
-\apage{第 5 天 \textperiodcentered\ 典型分布与高斯变换}{第 14 题}{教材习题 1.17}{非单调函数的密度：连续部分 $+$ 原点冲激}{%
-\[
+\end{tcolorbox}
+\qtitle{第 14 题}{Day 5}
+{\small\color{accentred}(Textbook Exercise 1.17)}\par\smallskip
+{\small\color{muted}教材小节：1.3.1}\par\medskip
+\noindent\textbf{非单调函数的密度：连续部分 $+$ 原点冲激}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\[
 Y=g(X)=\begin{cases}X, & X\ge0\\ 0, & X<0\end{cases}
 \]
 
@@ -786,50 +718,27 @@ f_Y(y)=\frac{\dd F_Y}{\dd y}=f_X(y)u(y)+F_X(y)\delta(y),
         其强度等于该事件的概率 $P(X\le0)=F_X(0)$。
 \end{bul}
 这就是"非单调变换会产生离散分量"的标准范例，也是 §1.3.1 的核心技巧。
-}
+\end{tcolorbox}
+\qtitle{第 15 题}{Day 5}
+{\small\color{accentred}(Adapted from 2023--24 Q2(c))}\par\smallskip
+{\small\color{muted}教材小节：1.6 / 1.4.2}\par\medskip
+\noindent\textbf{白噪声与高斯分布的条件辨析}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{(1) 只给白噪声，不能推出高斯}
+白噪声规定二阶谱为常数，没有规定全部有限维分布。线性系统保持已有高斯性，却不会把任何非高斯输入自动变成精确高斯。因此原条件只能确定$Y$的均值和方差，不能唯一给出其PDF。
+例如取高斯白噪声$G$及独立随机幅度$A$，令$P(A=0)=P(A=\sqrt2)=1/2$，$W=AG$。因$E(A^2)=1$，$W$仍具有相同白噪声谱；滤波差分输出却一半概率恒为0，是高斯尺度混合而非非退化高斯。这是按二阶白噪声定义的反例。
+\key{(2) 另加高斯假设，才能使用§2.4.3}
+滤波和延时差分都是线性操作，故$Y(t)$高斯，且$m_Y=0$。由相关展开，
+\[\begin{aligned}v_Y&=E[(X(t)-X(t-T))^2]\\&=2R_X(0)-2R_X(T)\\&=\boxed{\frac{N_0}{2}(1-e^{-T})}>0.\end{aligned}\]
+于是
+\[\boxed{f_Y(y;t)=\frac1{\sqrt{\pi N_0(1-e^{-T})}}\exp\!\left[-\frac{y^2}{N_0(1-e^{-T})}\right].}\]
+注意密度指数的分母是$2v_Y$，归一化系数为$1/\sqrt{2\pi v_Y}$。
+\key{(3) $T=0$}
+此时$Y(t)\equiv0$，分布是$\delta(y)$，无普通一维密度，不能把$T=0$硬代入上面的非退化公式。
 
-\apage{第 5 天 \textperiodcentered\ 典型分布与高斯变换}{第 15 题}{真题 2023--24, Q2(c)}{高斯性判定与一维概率密度}{%
-已知 $W(t)$ 为零均值白噪声，功率谱密度 $N_0/2$，经 $h(t)=e^{-t}u(t)$ 得 $X(t)$，
-再取 $Y(t)=X(t)-X(t-T)$；已知 $R_X(\tau)=\dfrac{N_0}{4}e^{-|\tau|}$。
-
-\key{高斯性判定：是}
-\begin{bul}
-  \item $W(t)$ 为零均值（高斯）白噪声，系统 $h(t)$ 是\textbf{线性时不变}系统，
-        线性系统对高斯输入的响应仍是高斯过程 $\Rightarrow$ $X(t)$ 是零均值高斯过程。
-  \item $Y(t)=X(t)-X(t-T)$ 是同一高斯过程在两个时刻取值的\textbf{线性组合}，
-        而高斯变量的线性组合仍服从高斯分布 $\Rightarrow$ $Y(t)$ \textbf{是零均值高斯过程}。
-\end{bul}
-
-\key{均值}
-\[
-E[Y(t)]=E[X(t)]-E[X(t-T)]=0-0=0 .
-\]
-
-\key{方差}
-\[
-\sigma_Y^2=R_Y(0)=E\big[(X(t)-X(t-T))^2\big]
-=E[X^2(t)]-2E[X(t)X(t-T)]+E[X^2(t-T)],
-\]
-即
-\[
-\sigma_Y^2=2R_X(0)-2R_X(T)=2\cdot\frac{N_0}{4}-2\cdot\frac{N_0}{4}e^{-T}
-=\frac{N_0}{2}\big(1-e^{-T}\big).
-\]
-
-\key{一维概率密度}
-\[
-\boxed{\,f_Y(y)=\frac{1}{\sqrt{2\pi\sigma_Y^2}}\exp\!\Big(-\frac{y^2}{2\sigma_Y^2}\Big)
-=\frac{1}{\sqrt{\pi N_0\big(1-e^{-T}\big)}}\exp\!\Big(-\frac{y^2}{N_0\big(1-e^{-T}\big)}\Big)\,}
-\]
-（化简：$2\pi\sigma_Y^2=\pi N_0(1-e^{-T})$，$2\sigma_Y^2=N_0(1-e^{-T})$。）
-
-\key{与 (b) 的呼应}
-由 $S_Y(\omega)=2S_X(\omega)(1-\cos\omega T)$ 也可得同一结论：
-$\sigma_Y^2=\dfrac{1}{2\pi}\int S_Y(\omega)\dd\omega$。两种路线结果一致。
-}
-
-\apage{第 6 天 \textperiodcentered\ 变换与二维高斯密度}{第 16 题}{教材习题 1.16}{线性变换求二维密度并用两种方法判独立}{%
-$X\sim N(0,1)$、$Y\sim N(0,1)$ 且相互独立，$U=X+Y$，$V=X-Y$。
+\end{tcolorbox}
+\qtitle{第 16 题}{Day 6}
+{\small\color{accentred}(Textbook 1.16 / Required)}\par\smallskip
+{\small\color{muted}教材小节：1.3.2}\par\medskip
+\noindent\textbf{线性变换求二维密度并用两种方法判独立}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]$X\sim N(0,1)$、$Y\sim N(0,1)$ 且相互独立，$U=X+Y$，$V=X-Y$。
 
 \key{(1) 联合密度——方法一：雅可比变换}
 反解：$X=\dfrac{U+V}{2}$，$Y=\dfrac{U-V}{2}$。雅可比行列式
@@ -866,10 +775,11 @@ $(U,V)$ 是独立高斯变量的线性变换，故服从\textbf{联合高斯}分
 联合高斯且协方差为零 $\Rightarrow$ 不相关 $\Rightarrow$ \textbf{独立}；
 且 $D(U)=D(X)+D(Y)=2$，$D(V)=2$。
 两种方法都指向 $U,V\overset{\text{i.i.d.}}{\sim}N(0,2)$。
-}
-
-\apage{第 6 天 \textperiodcentered\ 变换与二维高斯密度}{第 17 题}{公式默写 \textperiodcentered\ §1.2.1、§1.6}{二维高斯密度与"两时刻"联合密度}{%
-\key{(a) 一般二维高斯联合密度}
+\end{tcolorbox}
+\qtitle{第 17 题}{Day 6}
+{\small\color{accentred}(Formula recall \textperiodcentered\ \S1.2.1 and \S1.6)}\par\smallskip
+{\small\color{muted}教材小节：1.2.1 / 1.6}\par\medskip
+\noindent\textbf{二维高斯密度与"两时刻"联合密度}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{(a) 一般二维高斯联合密度}
 \[
 f_{XY}(x,y)=\frac{1}{2\pi\sigma_X\sigma_Y\sqrt{1-\rho^2}}
 \exp\Big\{-\frac{1}{2(1-\rho^2)}\Big[
@@ -917,10 +827,14 @@ K=\begin{pmatrix}\sigma_1^2 & C_X(t_1,t_2)\\ C_X(t_1,t_2) & \sigma_2^2\end{pmatr
 \textbf{平稳情形}：$m_X$ 为常数，$C_X(t_1,t_2)=C_X(\tau)$（$\tau=t_2-t_1$），
 $\sigma_1^2=\sigma_2^2=C_X(0)$，相关系数 $\rho_\tau=\dfrac{C_X(\tau)}{C_X(0)}$。
 第 18 题(c) 正是这个公式的直接应用。
-}
+\key{普通密度存在的条件}
+上面的普通二维密度要求两方差为正且$|\rho|<1$，等价于$K$正定。若$K$奇异，高斯分布仍可由均值和协方差确定，但集中在低维集合，没有普通二维PDF；此时不能使用$K^{-1}$或$1/\sqrt{\det K}$。
 
-\apage{第 6 天 \textperiodcentered\ 变换与二维高斯密度}{第 18 题}{真题 2025--26, Q4(b)--(c)}{窄带高斯同相/正交分量的联合密度}{%
-$X(t)=i(t)\cos\omega_0t-q(t)\sin\omega_0t$，$\omega_0=148\pi$，
+\end{tcolorbox}
+\qtitle{第 18 题}{Day 6}
+{\small\color{accentred}(Final examination 2025--26, Q4(b)--(c))}\par\smallskip
+{\small\color{muted}教材小节：1.6 / 1.4.2}\par\medskip
+\noindent\textbf{窄带高斯同相/正交分量的联合密度}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]$X(t)=i(t)\cos\omega_0t-q(t)\sin\omega_0t$，$\omega_0=148\pi$，
 $S_X(\omega)=1$（$144\pi\le|\omega|\le156\pi$），其余为 $0$。
 
 \key{预备：自相关与两个基本关系}
@@ -991,10 +905,11 @@ f_{iq}\approx0.01399\,\exp\!\Big\{-\frac{i^2-0.6366\,iq+q^2}{21.57}\Big\}
 \textbf{并不关于 $\omega_0$ 对称}，因此 $R_{iq}(\tau)\not\equiv0$，交叉项必须保留。
 $\tau=\tfrac1{12}$ 恰好让 $R_X(1/12)=0$、$\cos\omega_0\tau=\tfrac12$，
 使交叉项只由希尔伯特变换项贡献——数值如此"整齐"，正是命题人有意为之。
-}
-
-\apage{第 7 天 \textperiodcentered\ 其余考点}{第 19 题}{教材习题 1.6}{全概率公式与贝叶斯公式}{%
-设 $B_i$ 表示"取到第 $i$ 批"，$i=1,2,3,4$；$D$ 表示"取到次品"。
+\end{tcolorbox}
+\qtitle{第 19 题}{Day 7}
+{\small\color{accentred}(Textbook 1.6 / Required)}\par\smallskip
+{\small\color{muted}教材小节：1.1.1}\par\medskip
+\noindent\textbf{全概率公式与贝叶斯公式}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]设 $B_i$ 表示"取到第 $i$ 批"，$i=1,2,3,4$；$D$ 表示"取到次品"。
 \textbf{关键是"随机选一个批次"}，所以批次先验概率均等，与各批数量无关：
 \[
 P(B_1)=P(B_2)=P(B_3)=P(B_4)=\frac14 .
@@ -1023,10 +938,11 @@ P(B_2|D)=\frac{P(D|B_2)P(B_2)}{P(D)}
   \item 结论的合理性检查：次品率最高的第二批（$40\%$）应当占据大部分后验概率，
         $0.6154$ 大于其先验 $0.25$，符合贝叶斯更新方向。
 \end{bul}
-}
-
-\apage{第 7 天 \textperiodcentered\ 其余考点}{第 20 题}{教材习题 1.24}{条件数学期望与重期望公式}{%
-$X\sim U[0,a]$；给定 $X$ 后，$Y$ 在 $[X,a]$ 上均匀分布。
+\end{tcolorbox}
+\qtitle{第 20 题}{Day 7}
+{\small\color{accentred}(Textbook 1.24 / Required)}\par\smallskip
+{\small\color{muted}教材小节：1.4.4}\par\medskip
+\noindent\textbf{条件数学期望与重期望公式}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]$X\sim U[0,a]$；给定 $X$ 后，$Y$ 在 $[X,a]$ 上均匀分布。
 
 \key{(1) 条件期望 $E(Y|X)$}
 给定 $X$ 时，$Y$ 是区间 $[X,a]$ 上的均匀分布，取区间中点：
@@ -1051,10 +967,11 @@ f_Y(y)=\int_0^y\frac{\dd x}{a(a-x)}=\frac1a\ln\frac{a}{a-y}\quad(0<y<a).
 \]
 再算 $E[Y]=\displaystyle\int_0^a y\cdot\frac1a\ln\frac{a}{a-y}\dd y=\frac{3a}{4}$，与上面一致。
 \textbf{但显然重期望公式省力得多}——条件期望类题目应优先考虑它。
-}
-
-\apage{第 7 天 \textperiodcentered\ 其余考点}{第 21 题}{教材习题 1.33}{由联合特征函数求边缘特征函数与矩}{%
-\[
+\end{tcolorbox}
+\qtitle{第 21 题}{Day 7}
+{\small\color{accentred}(Textbook 1.33 / Required)}\par\smallskip
+{\small\color{muted}教材小节：1.5.2}\par\medskip
+\noindent\textbf{由联合特征函数求边缘特征函数与矩}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\[
 \phi_{XY}(u,v)=\frac{6}{6-2ju-3jv-uv}.
 \]
 
@@ -1095,6 +1012,128 @@ D(Y)=E[Y^2]-(E[Y])^2=\frac12-\frac14=\frac14\ \text{\checkmark}
 \key{方法要点}
 \textbf{求某个变量的边缘特征函数，就把联合特征函数中另一个变量置零}。
 这是 §1.5.2 最常考的一个动作。
-}
-
+\end{tcolorbox}
+\qtitle{第 22 题}{Day 8}
+{\small\color{accentred}(2018--19 Q1 (201812))}\par\smallskip
+{\small\color{muted}教材小节：1.3.1 / 1.6}\par\medskip
+\noindent\textbf{均匀变量的仿射变换}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{先确定支持域（§1.3.1）}
+$0\le X\le1$映射为$1\le Y\le6$，逆变换$x=(y-1)/5$，$|dx/dy|=1/5$。
+\[\boxed{f_Y(y)=\begin{cases}1/5,&1\le y\le6,\\0,&\text{其他}.\end{cases}}\]
+连续分布在端点上的密度取值不影响概率。
+\key{用CDF独立复核}
+$y<1$时$F_Y(y)=0$；$1\le y<6$时$F_Y(y)=P(X\le(y-1)/5)=(y-1)/5$；$y\ge6$时$F_Y(y)=1$。对中段求导仍为$1/5$。
+\key{归一化与矩}
+$\int_1^6dy/5=1$。作为附加检查，$E(Y)=5/2+1=7/2$，$\operatorname{Var}(Y)=25/12$。变换后的区间长度是5，密度不是原来的1。
+\end{tcolorbox}
+\qtitle{第 23 题}{Day 8}
+{\small\color{accentred}(Adapted from 2019--20 Q1 (201912))}\par\smallskip
+{\small\color{muted}教材小节：1.3.1 / 1.5.1 / 1.6}\par\medskip
+\noindent\textbf{标准正态与截断正态必须区分}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{明确标准正态假设下的答案}
+由§1.3.1，$Y\sim N(2,36)$，所以
+\[\boxed{f_Y(y)=\frac{1}{6\sqrt{2\pi}}e^{-(y-2)^2/72},\quad y\in\mathbb R.}\]
+由§1.5.1，$\phi_Y(v)=e^{j2v}\phi_X(6v)=\boxed{e^{j2v-18v^2}}$。在$v=0$为1，二阶累积量为36。
+\key{原题为什么不能直接写唯一答案}
+普通非退化正态变量没有有限区间支持。“in [0,1]”既可能想表达截断，也可能误把均值0、方差1写成区间；原文未澄清。上半题额外指定$N(0,1)$。
+\key{若明确指定截断标准正态}
+记标准正态密度$\varphi$与CDF$\Phi$，$Z=\Phi(1)-\Phi(0)>0$。条件密度为$\varphi(x)/Z$，$0\le x\le1$。
+\[f_Y(y)=\begin{cases}\dfrac{\varphi((y-2)/6)}{6Z},&2\le y\le8,\\0,&\text{其他},\end{cases}\]
+\[\phi_Y(v)=\frac{e^{j2v}}{Z}\int_0^1 e^{j6vx}\varphi(x)\,dx.\]
+此时不能用$e^{j2v-18v^2}$；代入$v=0$可核对条件密度归一化。
+\end{tcolorbox}
+\qtitle{第 24 题}{Day 8}
+{\small\color{accentred}(2019--20 Q2 (201912))}\par\smallskip
+{\small\color{muted}教材小节：1.2.1}\par\medskip
+\noindent\textbf{指数型联合密度的边缘化}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{边缘密度是积分，不是固定切片（§1.2.1）}
+对$x>0$，
+\[f_X(x)=\int_0^\infty xe^{-x(y+1)}dy=xe^{-x}\frac1x=\boxed{e^{-x}}.\]
+对$y\ge0$，利用$\int_0^\infty xe^{-cx}dx=1/c^2$，得
+\[\boxed{f_Y(y)=\frac1{(y+1)^2}}.\]
+区间外均为0。密度在$x=0$的单点取值不影响分布，不应因原式$x=0$为0而误删指数边缘。
+\key{归一化}
+$\int_0^\infty e^{-x}dx=1$，$\int_0^\infty (1+y)^{-2}dy=1$，故联合密度亦归一化。
+\key{独立性（§1.2.3）}
+$f_X(x)f_Y(y)=e^{-x}/(1+y)^2$与原联合密度一般不相等，故不独立。
+在$x>0$，$f_{Y|X}(y|x)=xe^{-xy}$，即给定$X=x$后$Y$为参数$x$的指数变量，清楚显示依赖。延伸：$E(Y)=\infty$，不能未经检查套用有限矩公式。
+\end{tcolorbox}
+\qtitle{第 25 题}{Day 9}
+{\small\color{accentred}(Adapted from 2020--21 Q4(b,c) (202104))}\par\smallskip
+{\small\color{muted}教材小节：1.6 / 2.4.3}\par\medskip
+\noindent\textbf{滤波输出的高斯密度与对称概率}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{先从相关函数提取方差}
+零均值输入经LTI仍零均值。于是
+\[v=R_Y(0)=\frac{\sigma_X^2(1-a/b)}{(b-a)(b+a)}=\boxed{\frac{\sigma_X^2}{b(a+b)}}>0.\]
+不要把指数相关中的$a$或滤波器中的$b$直接当作标准差。
+\key{高斯性与密度}
+线性滤波保持输入已给定的高斯性（§2.4.3）。仅知道二阶相关并不能证明高斯。本题明确给Gaussian，故由§1.6，
+\[\boxed{f_Y(y;t)=\frac{1}{\sqrt{2\pi v}}e^{-y^2/(2v)},\quad y\in\mathbb R.}\]
+均值为0且$v>0$，分布连续并关于原点对称，故$P(Y=0)=0$，
+\[\boxed{P\{Y(t)\ge0\}=\tfrac12}.\]
+若输入方差为0，则退化为恒0，概率为1；这就是非退化条件不可省略的原因。
+\end{tcolorbox}
+\qtitle{第 26 题}{Day 9}
+{\small\color{accentred}(2021--22 Q1(c) (202112))}\par\smallskip
+{\small\color{muted}教材小节：1.5.2 / 1.4.2}\par\medskip
+\noindent\textbf{两时刻高斯向量的联合特征函数}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{固定时刻后先写出随机变量}
+$Z_1=A+B$，$Z_2=A$，均值都为0。独立给$E(AB)=0$，所以由§1.4.2，
+\[\boxed{C=\begin{bmatrix}2&1\\1&1\end{bmatrix}}.\]
+$\det C=1>0$，向量非退化；$\operatorname{Cov}(Z_1,Z_2)=1$，两者不独立。
+\key{按定义与独立性导出（§1.5.2）}
+\[\begin{aligned}\phi_Z(u,v)&=E[e^{j(u(A+B)+vA)}]\\&=E[e^{j(u+v)A}]E[e^{juB}]\\&=\boxed{\exp[-\tfrac12((u+v)^2+u^2)]}.\end{aligned}\]
+指数二次型等于$-\tfrac12(2u^2+2uv+v^2)$，交叉项系数不能漏掉2。
+\key{三个核对}
+$\phi_Z(0,0)=1$；$\phi_Z(u,0)=e^{-u^2}$对应方差2；$\phi_Z(0,v)=e^{-v^2/2}$对应方差1。联合特征函数不分解为两边缘乘积。
+\end{tcolorbox}
+\qtitle{第 27 题}{Day 9}
+{\small\color{accentred}(Textbook 1.9 / Optional)}\par\smallskip
+{\small\color{muted}教材小节：1.1.2}\par\medskip
+\noindent\textbf{离散分布的冲激与右连续CDF}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{广义密度（§1.1.2）}
+离散变量没有普通密度，教材所称密度可用冲激表示：
+\[\boxed{f_X(x)=0.2\delta(x-1)+0.5\delta(x-2)+0.3\delta(x-3)}.\]
+冲激的权重是概率，三者之和为1；不是有限高度的柱形密度。
+\key{CDF逐点累积}
+\[\boxed{F_X(x)=\begin{cases}0,&x<1,\\0.2,&1\le x<2,\\0.7,&2\le x<3,\\1,&x\ge3.\end{cases}}\]
+CDF右连续，$F_X(2)=0.7$，不是0.2。
+\key{图形}
+\begin{center}\begin{tikzpicture}[x=1.2cm,y=2cm,>=stealth]
+\draw[->](0,0)--(3.8,0)node[right]{$x$};\draw[->](0,0)--(0,1.3)node[above]{$F_X$};
+\draw[thick](0,0)--(1,0);\draw[thick](1,.2)--(2,.2);\draw[thick](2,.7)--(3,.7);\draw[thick](3,1)--(3.7,1);
+\foreach \x/\a/\b in {1/0/.2,2/.2/.7,3/.7/1}{\draw[fill=white](\x,\a)circle(1.7pt);\fill(\x,\b)circle(1.7pt);\node[below]at(\x,0){$\x$};}
+\end{tikzpicture}\qquad\begin{tikzpicture}[x=1.2cm,y=3cm,>=stealth]
+\draw[->](0,0)--(3.8,0)node[right]{$x$};\foreach\x/\p in{1/.2,2/.5,3/.3}{\draw[->,thick](\x,0)--(\x,\p)node[above]{$\p$};\node[below]at(\x,0){$\x$};}
+\end{tikzpicture}\end{center}
+\end{tcolorbox}
+\qtitle{第 28 题}{Day 10}
+{\small\color{accentred}(Textbook 1.11 / Optional)}\par\smallskip
+{\small\color{muted}教材小节：1.1.2}\par\medskip
+\noindent\textbf{Laplace密度的归一化与CDF}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{归一化}
+\[1=a\int_{-\infty}^\infty e^{-|x|}dx=2a\int_0^\infty e^{-x}dx=2a,\quad\boxed{a=1/2}.\]
+\key{分段积分（§1.1.2）}
+$x<0$时积分区间内$|t|=-t$，所以$F(x)=\tfrac12\int_{-\infty}^xe^tdt=\tfrac12e^x$。
+$x\ge0$时，先积负半轴再积$[0,x]$：
+\[F(x)=\tfrac12+\tfrac12\int_0^xe^{-t}dt=1-\tfrac12e^{-x}.\]
+\[\boxed{F(x)=\begin{cases}\tfrac12e^x,&x<0,\\1-\tfrac12e^{-x},&x\ge0.\end{cases}}\]
+两段在0均为1/2，左端极限0、右端极限1，导数等于密度；不存在额外原点冲激。
+\end{tcolorbox}
+\qtitle{第 29 题}{Day 10}
+{\small\color{accentred}(Textbook 1.28 / Optional)}\par\smallskip
+{\small\color{muted}教材小节：1.5.1}\par\medskip
+\noindent\textbf{独立和的特征函数}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{从定义证明相乘规则（§1.5.1）}
+互相独立使复指数的期望因子分解：
+\[\phi_{b+\sum a_kX_k}(v)=E[e^{jvb}\prod e^{jva_kX_k}]=e^{jvb}\prod_k\phi_k(a_kv).\]
+零系数的因子是$\phi_k(0)=1$。四问依次为
+\[\boxed{\phi_1(v)\phi_2(v)},\quad\boxed{\phi_1(v)\phi_2(v)\phi_3(v)},\]
+\[\boxed{\phi_1(v)\phi_2(2v)\phi_3(3v)},\quad\boxed{e^{j10v}\phi_1(2v)\phi_2(v)\phi_3(4v)}.\]
+缩放改变自变量，平移产生相位因子；二者都不是直接乘以随机变量的系数。若只有两两独立，三因子一般不能如此分解。
+\end{tcolorbox}
+\qtitle{第 30 题}{Day 10}
+{\small\color{accentred}(Textbook 1.30 / Optional)}\par\smallskip
+{\small\color{muted}教材小节：1.5.1}\par\medskip
+\noindent\textbf{均匀分布的Fourier与特征函数约定}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{先写密度和符号约定}
+$X\sim U(a,b)$，$a<b$，$f_X=1/(b-a)$在$[a,b]$上。
+若$\mathcal F\{f\}(\omega)=\int f(x)e^{-j\omega x}dx$，则由§1.5.1，$\phi_X(v)=\mathcal F\{f_X\}(-v)$，不是同号代入。
+\key{直接积分}
+\[\begin{aligned}\phi_X(v)&=\frac1{b-a}\int_a^b e^{jvx}dx\\&=\frac{e^{jvb}-e^{jva}}{jv(b-a)}\\&=\boxed{e^{jv(a+b)/2}\frac{\sin(v(b-a)/2)}{v(b-a)/2}},\quad v\ne0.\end{aligned}\]
+在$v=0$由定义$\phi_X(0)=1$，也等于上式的连续极限。
+\key{常见特例}
+$U(-A,A)$得到$\sin(Av)/(Av)$；$U(0,A)$得到$e^{jAv/2}\sin(Av/2)/(Av/2)$。相位因子编码均值，不能随意删去。
+\end{tcolorbox}
 \end{document}

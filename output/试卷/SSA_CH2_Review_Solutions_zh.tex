@@ -1,194 +1,70 @@
-% =====================================================================
-%  exam-frequency-report / assets/report-preamble.tex
-%  Reusable preamble for an exam-frequency report.
-%
-%  Compile with XeLaTeX (twice).  Load-bearing choices, each of which
-%  fixes a real failure mode -- see the skill's Pitfalls table:
-%    * ctexart + xelatex          -> CJK actually renders
-%    * amsmath only, before newtxmath -> avoids the \Bbbk clash with amssymb
-%    * xcolor[table]              -> \rowcolor is defined
-%    * \noindent before \rule/\tabularx -> no 17pt \parindent overfull
-%  Adjust \setReportMeta and the geometry block per task.
-% =====================================================================
-\documentclass[11pt,fontset=fandol]{ctexart}
-
-% --- page geometry ---------------------------------------------------
-% Keep the long edge at a size you have already validated (A4 height
-% preserves the vertical layout).  To match a reading device, set
-%   paperwidth = paperheight * Wpx / Hpx
-% e.g. 13-inch iPad Air M2 portrait (2048x2732):
-%   paperheight=297mm, paperwidth=297*512/683=222.6413mm
-\usepackage[paperwidth=222.6413mm,paperheight=297mm,
-            left=1.9cm,right=1.9cm,top=2.1cm,bottom=1.7cm,headsep=0.5cm]{geometry}
-
-% --- math: order matters ---------------------------------------------
-% DO NOT load newtxtext in a CJK (ctex) document.
-% On macOS ctex falls back to the macold fontset, whose \ttfamily CJK slot
-% points at STFangsong -- absent from current macOS.  Any Chinese inside
-% \texttt (e.g. a path written as \code{试卷/教材}) then fails with
-%   ! Font TU/STFangsong ... not loadable
-% and those glyphs come out as mojibake.  Verified: newtxtext triggers it,
-% newtxmath is harmless, and \setCJKmonofont does NOT repair it.
-% Pure-ASCII (non-ctex) documents may load newtxtext normally.
-\usepackage{amsmath}
-\usepackage{newtxmath}
-
-% --- tables, colour, boxes -------------------------------------------
+\documentclass[10.5pt,fontset=fandol]{ctexart}
+\usepackage[paperwidth=222.6413mm,paperheight=297mm,left=1.9cm,right=1.9cm,top=2.1cm,bottom=1.8cm,headsep=0.5cm]{geometry}
+\usepackage{amsmath,amssymb,mathrsfs}
 \usepackage[table]{xcolor}
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{tabularx}
-\usepackage{array}
-\usepackage{multirow}
-\usepackage{makecell}
-\usepackage{ragged2e}
-\usepackage{enumitem}
-\usepackage{tcolorbox}
+\usepackage{booktabs,tabularx,xltabular,needspace,array,ragged2e,enumitem,tcolorbox,tikz,fancyhdr}
 \tcbuselibrary{skins,breakable}
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.18}
-\usetikzlibrary{patterns}
-\usepackage{titlesec}
-\usepackage{fancyhdr}
-\usepackage{caption}
-\usepackage[hidelinks,bookmarksnumbered]{hyperref}
-
-% --- palette ---------------------------------------------------------
-\definecolor{ink}{HTML}{1F2933}
-\definecolor{deepblue}{HTML}{1B3A5C}
-\definecolor{accentA}{HTML}{B23A48}   % S tier
-\definecolor{accentB}{HTML}{D97706}   % A tier
-\definecolor{accentC}{HTML}{2F6F4E}   % B tier
-\definecolor{accentD}{HTML}{6B7280}   % C tier
-\definecolor{tintA}{HTML}{FBE9EB}
-\definecolor{tintB}{HTML}{FDF2E3}
-\definecolor{tintC}{HTML}{E8F2EC}
-\definecolor{tintD}{HTML}{F0F1F3}
-\definecolor{rulegray}{HTML}{C9CED6}
-\definecolor{tabhead}{HTML}{1B3A5C}
-
-% --- headings --------------------------------------------------------
-\titleformat{\section}{\normalfont\Large\bfseries\color{deepblue}}{\thesection}{0.7em}{}
-\titleformat{\subsection}{\normalfont\large\bfseries\color{deepblue!85!black}}{\thesubsection}{0.6em}{}
-\titlespacing*{\section}{0pt}{1.6em}{0.7em}
-\titlespacing*{\subsection}{0pt}{1.2em}{0.5em}
-
-% --- running head ----------------------------------------------------
-\pagestyle{fancy}
-\fancyhf{}
-\renewcommand{\headrulewidth}{0.4pt}
-\fancyhead[L]{\footnotesize\color{deepblue}\ReportShortTitle}
-\fancyhead[R]{\footnotesize\color{deepblue}\thepage}
-\fancyfoot[C]{\scriptsize\color{accentD}\ReportSourceLine}
-\newcommand{\ReportShortTitle}{Exam-frequency report}
-\newcommand{\ReportSourceLine}{}
-
-% --- helpers ---------------------------------------------------------
-% Section-code tag.  Use the textbook's OWN numbering.
-\newcommand{\secode}[1]{\texttt{\color{deepblue}#1}}
-\newcommand{\tierS}{\textbf{\color{accentA}S}}
-\newcommand{\tierA}{\textbf{\color{accentB}A}}
-\newcommand{\tierB}{\textbf{\color{accentC}B}}
-\newcommand{\tierC}{\textbf{\color{accentD}C}}
-\newcommand{\hot}[1]{\textcolor{accentA}{\bfseries #1}}
-\newcommand{\code}[1]{\texttt{\small #1}}
-\newcommand{\thd}[1]{\textcolor{white}{\bfseries #1}}
+\usepackage[hidelinks]{hyperref}
+\definecolor{deepblue}{HTML}{1B3A5C}\definecolor{navy}{HTML}{1B3A5C}\definecolor{accentred}{HTML}{B23A48}\definecolor{accentA}{HTML}{B23A48}
+\definecolor{muted}{HTML}{5A6470}\definecolor{qbg}{HTML}{F4F6F8}\definecolor{linec}{HTML}{9AA3AD}
 \newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
-\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
-% NOTE: \newlist needs an explicit label= or enumitem raises "Undefined label".
-\newlist{qparts}{enumerate}{1}
-\setlist[qparts]{label=(\alph*),leftmargin=1.5em,itemsep=2.5pt,topsep=3pt,parsep=0pt}
-\newlist{qnum}{enumerate}{1}
-\setlist[qnum]{label=(\arabic*),leftmargin=1.5em,itemsep=2.5pt,topsep=3pt,parsep=0pt}
-\newlist{bul}{itemize}{1}
-\setlist[bul]{label=\textbullet,leftmargin=1.6em,itemsep=1.5pt,topsep=2pt,parsep=0pt}
-\captionsetup{font={small,color=deepblue},labelfont=bf,skip=5pt}
+\newlist{qp}{enumerate}{1}\setlist[qp]{label=(\alph*),leftmargin=1.5em,itemsep=2pt}
+\newlist{qn}{enumerate}{1}\setlist[qn]{label=(\arabic*),leftmargin=1.5em,itemsep=2pt}
+\newlist{qparts}{enumerate}{1}\setlist[qparts]{label=(\alph*),leftmargin=1.5em,itemsep=2pt}
+\newlist{qnum}{enumerate}{1}\setlist[qnum]{label=(\arabic*),leftmargin=1.5em,itemsep=2pt}
+\newlist{bul}{itemize}{1}\setlist[bul]{label=\textbullet,leftmargin=1.5em,itemsep=2pt}
+\newcommand{\key}[1]{\par\vspace{4pt}\noindent\textbf{\color{navy}#1}\par\vspace{2pt}}
+\newcommand{\hint}[1]{\par\smallskip{\small\itshape Hint: #1}\par}
+\newcommand{\sect}[1]{{\small\color{muted}#1}}
+\newcommand{\dd}{\mathrm d}\newcommand{\Var}{\operatorname{Var}}\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\E}{\mathbb E}\newcommand{\ee}{\mathrm e}\newcommand{\jj}{\mathrm j}
+\newtcolorbox{workspace}{height fill,enhanced,colback=white,colframe=linec!55,boxrule=0.5pt,arc=1.5pt}
+\newcommand{\qtitle}[2]{\par\addvspace{1.2em}\Needspace{8\baselineskip}\begin{tcolorbox}[colback=navy,colframe=navy,arc=1.5pt,boxrule=0pt]\color{white}\large\bfseries #1\hfill\small #2\end{tcolorbox}}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\footnotesize\color{navy}SSA -- Chapter 2 -- Solutions}\fancyhead[R]{\footnotesize\thepage}
+\fancyfoot[C]{\scriptsize Eight-paper edition -- 2026-10-13}
+\begin{document}
 
-% --- callout boxes ---------------------------------------------------
-\newtcolorbox{keybox}[1][]{colback=tintC,colframe=accentC,boxrule=0.7pt,arc=2pt,
-  left=8pt,right=8pt,top=6pt,bottom=6pt,fonttitle=\bfseries\color{white},
-  coltitle=white,colbacktitle=accentC,breakable,#1}
-\newtcolorbox{warnbox}[1][]{colback=tintA,colframe=accentA,boxrule=0.7pt,arc=2pt,
-  left=8pt,right=8pt,top=6pt,bottom=6pt,fonttitle=\bfseries\color{white},
-  coltitle=white,colbacktitle=accentA,breakable,#1}
-\newtcolorbox{infobox}[1][]{colback=tintB,colframe=accentB,boxrule=0.7pt,arc=2pt,
-  left=8pt,right=8pt,top=6pt,bottom=6pt,fonttitle=\bfseries\color{white},
-  coltitle=white,colbacktitle=accentB,breakable,#1}
-
-% --- one-item-per-page layout (review sets) --------------------------
-% tcolorbox `height fill` absorbs the remaining page height.
-% Do NOT combine with `breakable`.
-\newtcolorbox{workspace}{height fill,enhanced,colback=white,colframe=gray!45,
-  boxrule=0.5pt,arc=1.5pt,left=9pt,right=9pt,top=6pt,bottom=6pt}
-
-% --- pgfplots reference lines on a symbolic axis ---------------------
-% A numeric line on `symbolic x coords` fails with
-%   "the input coordinate '...' has not been defined".
-% Draw it in axis-description coordinates instead, e.g. y=33.75 of ymax=60:
-%   \draw[accentA,dashed,thick]
-%     (axis description cs:0,0.5625) -- (axis description cs:1,0.5625);
-%   \node[anchor=south west,font=\scriptsize,color=accentA]
-%     at (axis description cs:0.02,0.578) {four-year mean};
-
-
-\setlength{\parindent}{0pt}\setlength{\parskip}{4pt}\setlength{\headheight}{14pt}
-\setlist[enumerate]{label=(\arabic*),leftmargin=1.8em,itemsep=4pt}
-\newcommand{\E}{\mathbb E}\newcommand{\Var}{\operatorname{Var}}\newcommand{\Cov}{\operatorname{Cov}}
-\newcommand{\key}[1]{\par\vspace{3pt}\textbf{\color{deepblue}#1}\par}
-\newcommand{\qtitle}[3]{\clearpage
-\begin{tcolorbox}[colback=deepblue,colframe=deepblue,coltext=white,boxrule=0pt,arc=2pt]
-{\Large\bfseries #1}\hfill {Day #2}\end{tcolorbox}
-{\large\bfseries #3}\par\vspace{2mm}}
-
-\renewcommand{\ReportShortTitle}{第二章复习题集 · 中文详解}\renewcommand{\ReportSourceLine}{SSA · Chapter 2 · 21 problems · 2026-10-13}\begin{document}\thispagestyle{empty}\vspace*{15mm}
-{\Huge\bfseries\color{deepblue}第二章复习题集 · 中文详解\par}\vspace{8mm}
-{\Large 21题逐题对应 · 一题一页 · 七天复习\par}\vspace{10mm}
-\begin{keybox}[title=使用说明]
-本册对应英文题集的题号、题源与教材小节。先独立解题，再核对条件、推导与结果。
-“真题改编”包含补充条件或考点提取，不是原试卷全文；教材作业题面与既有英文版一致。
-\end{keybox}
-\begin{warnbox}[title=三项必须检查]
-两两独立不等于相互独立；协方差奇异时普通多维PDF不存在；白噪声不自动具有高斯分布。
-本册将这些问题明确列出，不用未经给定的条件补齐答案。
-\end{warnbox}
-\vspace{8mm}统计依据：第二章核心分29/0/7/0；高斯与独立性四套均涉及。复习先后也兼顾间接考点与本次作业，而非只按核心分从高到低。
-\vfill 教材：李晓峰等《随机信号分析（第5版）》，第二章。\\自制学习材料，非官方解答。\clearpage
-\section*{题目索引与七天路线}
-
-\small\begin{tabularx}{\textwidth}{@{}c l X@{}}\toprule Day & Problems & Focus\\\midrule
-1&1--3&Gaussian tools: Gaussian checklist; 2.19; 2.17\\
-2&4--6&Gaussian applications: Square-law device; 2.16; 2.18\\
-3&7--9&Phase and cross-correlation: Uniform phase; sampled sin/cos; 2.11\\
-4&10--12&Correlation and independence: Identities; random line; signal independence\\
-5&13--15&Finite-dimensional laws: 2.3; coin-toss exam; 2.1\\
-6&16--18&Sequences and linear combinations: 2.4; 2.8; 2.7\\
-7&19--21&Operations and assumptions: 2.13; 2.14; white-noise caveat\\
-\bottomrule\end{tabularx}\vspace{5mm}\par\begin{tabularx}{\textwidth}{@{}r L{7cm} X@{}}\toprule No. & Source & Textbook section\\\midrule
-1 & Recall / extension & 2.4.1--2.4.3\\
-2 & Textbook 2.19 / Required & 2.4.1\\
-3 & Textbook 2.17 / translated & 2.4.1 / 2.4.3\\
-4 & Adapted from 2022--23 Q3 & 2.4.3\\
-5 & Textbook 2.16 / Required & 2.4.1 / 2.4.3\\
-6 & Textbook 2.18 / Optional & 2.4.1 / 2.4.3\\
-7 & Adapted from 2022--23 Q2(a,b) & 2.2.1 / 2.5\\
-8 & Adapted from 2024--25 Q1 & 2.3.2 / 2.5\\
-9 & Textbook 2.11 / Optional & 2.3.2 / 2.5\\
-10 & Recall / extension & 2.1.3 / 2.3.3\\
-11 & Adapted from 2022--23 Q1 & 2.1.1--2.1.3\\
-12 & Recall / extension & 2.3.1 / 2.5\\
-13 & Textbook 2.3 / Required & 2.1.2 / 2.3.1\\
-14 & Adapted from 2025--26 Q1 & 2.1.2 / 2.3.1 / 2.5\\
-15 & Textbook 2.1 / Optional & 2.1.1 / 2.2.1\\
-16 & Textbook 2.4 / Optional & 2.2.2\\
-17 & Textbook 2.8 / Optional & 2.2.2 / 2.1.3\\
-18 & Textbook 2.7 / Optional & 2.4.2 / 2.1.3\\
-19 & Textbook 2.13 / Required & 2.2.1 / 2.3.4\\
-20 & Textbook 2.14 / translated & 2.3.4\\
-21 & Adapted from 2023--24 Q2(c) & 2.4.3\\
-\bottomrule\end{tabularx}\normalsize
-\qtitle{第 1 题}{1}{Gaussian checklist}
-{\small\color{accentA}(Recall / extension)}\par{\small\color{accentD}Textbook section: 2.4.1--2.4.3}\par\vspace{2mm}
-\key{定义与两个不同条件}
+\begin{titlepage}\centering\vspace*{1.5cm}
+{\Huge\bfseries 随机信号分析}\par\vspace{1cm}
+{\LARGE\bfseries 第2章复习习题集中文详解}\par\vspace{1cm}
+{\large 八套真题版 · 27题 · 9天 · 每天3题}\par\vspace{1cm}
+\begin{tcolorbox}[colback=qbg,colframe=navy]
+本章八套独占核心均值为15.625分/套；最近四套为9.00分/套。解答按配套英文题集编号，每题保留来源及教材小节。原题条件不足时明确写出可确定的结论与额外假设；奇异高斯分布不强套普通PDF。
+\end{tcolorbox}\vfill 2026-10-13\end{titlepage}
+\section*{题号与来源索引}
+{\small\renewcommand{\arraystretch}{1.15}\begin{xltabular}{\textwidth}{@{}r r L{7cm} X@{}}\toprule 题 & 天 & 题源 & 教材小节\\\midrule\endfirsthead\toprule 题 & 天 & 题源 & 教材小节\\\midrule\endhead\midrule\multicolumn{4}{r}{\small 索引续下页}\\\endfoot\bottomrule\endlastfoot
+1 & 1 & Recall / extension & 2.4.1--2.4.3\\
+2 & 1 & Textbook 2.19 / Required & 2.4.1\\
+3 & 1 & Textbook 2.17 / translated & 2.4.1 / 2.4.3\\
+4 & 2 & Adapted from 2022--23 Q3 & 2.4.3\\
+5 & 2 & Textbook 2.16 / Required & 2.4.1 / 2.4.3\\
+6 & 2 & Textbook 2.18 / Optional & 2.4.1 / 2.4.3\\
+7 & 3 & Adapted from 2022--23 Q2(a,b) & 2.2.1 / 2.5\\
+8 & 3 & Adapted from 2024--25 Q1 & 2.3.2 / 2.5\\
+9 & 3 & Textbook 2.11 / Optional & 2.3.2 / 2.5\\
+10 & 4 & Recall / extension & 2.1.3 / 2.3.3\\
+11 & 4 & Adapted from 2022--23 Q1 & 2.1.1--2.1.3\\
+12 & 4 & Recall / extension & 2.3.1 / 2.5\\
+13 & 5 & Textbook 2.3 / Required & 2.1.2 / 2.3.1\\
+14 & 5 & Adapted from 2025--26 Q1 & 2.1.2 / 2.3.1 / 2.5\\
+15 & 5 & Textbook 2.1 / Optional & 2.1.1 / 2.2.1\\
+16 & 6 & Textbook 2.4 / Optional & 2.2.2\\
+17 & 6 & Textbook 2.8 / Optional & 2.2.2 / 2.1.3\\
+18 & 6 & Textbook 2.7 / Optional & 2.4.2 / 2.1.3\\
+19 & 7 & Textbook 2.13 / Required & 2.2.1 / 2.3.4\\
+20 & 7 & Textbook 2.14 / translated & 2.3.4\\
+21 & 7 & Adapted from 2023--24 Q2(c) & 2.4.3\\
+22 & 8 & Adapted from 2018--19 Q3 (201812) & 2.2.1 / 2.4.2 / 2.4.3\\
+23 & 8 & 2020--21 / 2021--22 Q1; extended (202104/202112) & 2.4.1 / 2.4.3 / 2.1.3\\
+24 & 8 & Adapted from 2019--20 Q3 (201912) & 2.2.3 / 2.1.3\\
+25 & 9 & Adapted from 2018--19 Q4 / 2019--20 Q4 & 2.2.1 / 2.5; extension 4.1\\
+26 & 9 & Adapted from 2019--20 Q5 (201912) & 2.2.1 / 2.4.3; extension 4.1\\
+27 & 9 & 2021--22 Q2(a,b); extensions (202112) & 2.3.2 / 2.5; extension 3.1\\
+\end{xltabular}}\par\smallskip 习题与详解题号完全一致；Day标签用于安排，不表示题目在原卷中的顺序。\clearpage
+\qtitle{第 1 题}{Day 1}
+{\small\color{accentred}(Recall / extension)}\par\smallskip
+{\small\color{muted}教材小节：2.4.1--2.4.3}\par\medskip
+\noindent\textbf{Gaussian checklist}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{定义与两个不同条件}
 由§2.4.3，任意有限个时刻的采样向量都联合高斯，才称为高斯过程。仅每个$X(t)$各自高斯不够。
 由§2.4.1，对$C\succeq0$，包括奇异情形，均有
 \[\phi_{\boldsymbol X}(u)=\exp(ju^T\mu-\tfrac12u^TCu).\]
@@ -201,9 +77,11 @@
 取$Z\sim N(0,1)$，$S$为独立等概正负号，令$X=Z,Y=SZ$。两者边缘都为标准正态，且$E(XY)=E(S)E(Z^2)=0$，但$X^2=Y^2$，故不独立，也不联合高斯。
 若\textbf{已经联合高斯}，互不相关才等价于独立：$C$对角时特征函数分解为各边缘特征函数的乘积。这一证明也适用于退化分量。
 
-\qtitle{第 2 题}{1}{Joint Gaussian PDF and CF}
-{\small\color{accentA}(Textbook 2.19 / Required)}\par{\small\color{accentD}Textbook section: 2.4.1}\par\vspace{2mm}
-\key{先验算协方差矩阵}
+\end{tcolorbox}
+\qtitle{第 2 题}{Day 1}
+{\small\color{accentred}(Textbook 2.19 / Required)}\par\smallskip
+{\small\color{muted}教材小节：2.4.1}\par\medskip
+\noindent\textbf{Joint Gaussian PDF and CF}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{先验算协方差矩阵}
 由§2.4.1，$\det C=2\cdot5-3^2=1$，顺序主子式为$2,1$，均为正，因此普通二维密度存在。
 \[C^{-1}=\begin{bmatrix}5&-3\\-3&2\end{bmatrix}.\]
 令$z_1=x-2,z_2=y-2$。二次型为
@@ -218,9 +96,11 @@
 \key{核对}
 $\phi(0,0)=1$；$\phi(u,0)=e^{j2u-u^2}$对应$N(2,2)$；$\phi(0,v)=e^{j2v-5v^2/2}$对应$N(2,5)$。交叉协方差为3，因此$X,Y$不独立。
 
-\qtitle{第 3 题}{1}{Fourth-order Gaussian moment}
-{\small\color{accentA}(Textbook 2.17 / translated)}\par{\small\color{accentD}Textbook section: 2.4.1 / 2.4.3}\par\vspace{2mm}
-\key{用§2.4.1的高斯特征函数导出矩母函数}
+\end{tcolorbox}
+\qtitle{第 3 题}{Day 1}
+{\small\color{accentred}(Textbook 2.17 / translated)}\par\smallskip
+{\small\color{muted}教材小节：2.4.1 / 2.4.3}\par\medskip
+\noindent\textbf{Fourth-order Gaussian moment}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{用§2.4.1的高斯特征函数导出矩母函数}
 记$C_{ij}=E(X_iX_j)$，零均值联合高斯向量的矩母函数为
 \[M(s)=E[e^{s^TX}]=\exp\!\left(\frac12s^TCs\right).\]
 高斯矩母函数在原点邻域可微，故$E(X_1X_2X_3X_4)$等于$M(s)$中$s_1s_2s_3s_4$的系数（各变量次数均为1）。
@@ -236,9 +116,11 @@ $Q$是二次多项式，只有$Q^2/2$能贡献四次项。四个不同的指标�
 \[E[X^2(s)X^2(t)]=E[X^2(s)]E[X^2(t)]+2R_X(s,t)^2.\]
 若四个时刻全相同，则$E[X^4(t)]=3\sigma^4(t)$。\textbf{零均值}是上述直接写法的前提；有均值时须先中心化。
 
-\qtitle{第 4 题}{2}{Gaussian signal through a square-law device}
-{\small\color{accentA}(Adapted from 2022--23 Q3)}\par{\small\color{accentD}Textbook section: 2.4.3}\par\vspace{2mm}
-\key{(1) 先得到滤波输出的二阶量（第五章工具）}
+\end{tcolorbox}
+\qtitle{第 4 题}{Day 2}
+{\small\color{accentred}(Adapted from 2022--23 Q3)}\par\smallskip
+{\small\color{muted}教材小节：2.4.3}\par\medskip
+\noindent\textbf{Gaussian signal through a square-law device}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{(1) 先得到滤波输出的二阶量（第五章工具）}
 \[S_X(\omega)=\frac{N_0/2}{1+(\omega RC)^2}.\]
 用$e^{-b|\tau|}\leftrightarrow2b/(b^2+\omega^2)$，令$T_c=RC$，得
 \[R_X(\tau)=\frac{N_0}{4T_c}e^{-|\tau|/T_c},\qquad v:=\Var X=\frac{N_0}{4T_c}.\]
@@ -255,9 +137,11 @@ R_Y(\tau)&=a^2E[X^2(t)X^2(t+\tau)]\\
 \key{(3) 非线性变换不保持高斯}
 $a>0$时$Y\ge0$，$a<0$时$Y\le0$，且均不是常数；非退化正态变量的支持为全实轴，所以$Y$不是高斯。$a=0$时为退化高斯常数0。
 
-\qtitle{第 5 题}{2}{Gaussian sinusoid}
-{\small\color{accentA}(Textbook 2.16 / Required)}\par{\small\color{accentD}Textbook section: 2.4.1 / 2.4.3}\par\vspace{2mm}
-\key{由§2.4.2先证明联合高斯}
+\end{tcolorbox}
+\qtitle{第 5 题}{Day 2}
+{\small\color{accentred}(Textbook 2.16 / Required)}\par\smallskip
+{\small\color{muted}教材小节：2.4.1 / 2.4.3}\par\medskip
+\noindent\textbf{Gaussian sinusoid}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{由§2.4.2先证明联合高斯}
 任意多个$X(t_i)$都是独立高斯向量$(A,B)$的线性变换，故联合高斯。$E(AB)=0$，于是
 \[m_X(t)=0,\quad C_X(s,t)=\sigma^2[\cos\omega s\cos\omega t+\sin\omega s\sin\omega t]=\sigma^2\cos\omega(s-t).\]
 \key{一维密度}
@@ -272,9 +156,11 @@ $a>0$时$Y\ge0$，$a<0$时$Y\le0$，且均不是常数；非退化正态变量�
 \[f(x_1,x_2)=f_X(x_1;t_1)\delta(x_2-\rho x_1).\]
 若$\sigma^2=0$，整个过程为0，边缘分布是$\delta(x)$。若$\rho=0$且方差非零，两时刻样本独立；这是\textbf{联合高斯加零协方差}的结论。
 
-\qtitle{第 6 题}{2}{Singular three-dimensional Gaussian law}
-{\small\color{accentA}(Textbook 2.18 / Optional)}\par{\small\color{accentD}Textbook section: 2.4.1 / 2.4.3}\par\vspace{2mm}
-\key{列均值与协方差}
+\end{tcolorbox}
+\qtitle{第 6 题}{Day 2}
+{\small\color{accentred}(Textbook 2.18 / Optional)}\par\smallskip
+{\small\color{muted}教材小节：2.4.1 / 2.4.3}\par\medskip
+\noindent\textbf{Singular three-dimensional Gaussian law}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{列均值与协方差}
 设$Z_i=X(t_i)-2$，$c=\cos(0.5)$、$s=\sin(0.5)$。由§2.4.3，
 \[\mu=(2,2,2)^T,\quad C=8\begin{bmatrix}1&c&\cos1\\c&1&c\\\cos1&c&1\end{bmatrix}.\]
 令$a=(1,c,\cos1)^T$、$b=(0,s,\sin1)^T$，则$C=8(aa^T+bb^T)$。
@@ -290,9 +176,11 @@ $a,b$线性无关，所以$\operatorname{rank}C=2$，$\det C=0$。
 \delta(z_3-2cz_2+z_1),\quad z_i=x_i-2.}\]
 这是\textbf{广义密度}，不是普通三维函数。对$x_3$积分，冲激项积分为1，得到正规的二维高斯密度；再对其余两维积分等于1。题面要求普通PDF时，正确回答应先说明不存在及原因。
 
-\qtitle{第 7 题}{3}{Uniform random phase}
-{\small\color{accentA}(Adapted from 2022--23 Q2(a,b))}\par{\small\color{accentD}Textbook section: 2.2.1 / 2.5}\par\vspace{2mm}
-\key{均值：独立性允许分解期望}
+\end{tcolorbox}
+\qtitle{第 7 题}{Day 3}
+{\small\color{accentred}(Adapted from 2022--23 Q2(a,b))}\par\smallskip
+{\small\color{muted}教材小节：2.2.1 / 2.5}\par\medskip
+\noindent\textbf{Uniform random phase}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{均值：独立性允许分解期望}
 由§2.2.1的均匀随机相位平均，
 \[E\cos(\omega_0t+\Theta)=\frac1{2\pi}\int_0^{2\pi}\cos(\omega_0t+\theta)d\theta=0.\]
 因此$m_\eta(t)=m_\xi E\cos(\omega_0t+\Theta)=0$。不要求$m_\xi=0$。
@@ -308,9 +196,11 @@ $a,b$线性无关，所以$\operatorname{rank}C=2$，$\det C=0$。
 \key{平稳判断（衔接§3.1.1）}
 均值为常数0；相关仅依赖时差；二阶矩有限。因此$\eta$广义平稳，且$C_\eta=R_\eta$。不能仅凭二阶结果宣布严格平稳。
 
-\qtitle{第 8 题}{3}{Orthogonal but dependent signals}
-{\small\color{accentA}(Adapted from 2024--25 Q1)}\par{\small\color{accentD}Textbook section: 2.3.2 / 2.5}\par\vspace{2mm}
-\key{先化简离散时间表达式}
+\end{tcolorbox}
+\qtitle{第 8 题}{Day 3}
+{\small\color{accentred}(Adapted from 2024--25 Q1)}\par\smallskip
+{\small\color{muted}教材小节：2.3.2 / 2.5}\par\medskip
+\noindent\textbf{Orthogonal but dependent signals}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{先化简离散时间表达式}
 整数$n$使$X[n]=\sin\Phi$、$Y[n]=\cos\Phi$。每次试验生成两条常值序列，不是随$n$重新抽相位。
 \[m_X=\frac1\pi\int_0^\pi\sin\phi\,d\phi=\frac2\pi,\qquad m_Y=\frac1\pi\int_0^\pi\cos\phi\,d\phi=0.\]
 由§2.3.2定义，对任意$m,n$，
@@ -324,9 +214,11 @@ $a,b$线性无关，所以$\operatorname{rank}C=2$，$\det C=0$。
 任意整数平移都不改变任何样本值，故任意联合有限维分布保持不变，实际为联合严格平稳。二阶矩有限，因而也联合广义平稳。
 \[R_X(m,n)=R_Y(m,n)=\tfrac12,\quad C_X=\tfrac12-\tfrac4{\pi^2},\quad C_Y=\tfrac12.\]
 
-\qtitle{第 9 题}{3}{Pairwise versus mutual independence}
-{\small\color{accentA}(Textbook 2.11 / Optional)}\par{\small\color{accentD}Textbook section: 2.3.2 / 2.5}\par\vspace{2mm}
-\key{原条件下不能唯一确定互相关}
+\end{tcolorbox}
+\qtitle{第 9 题}{Day 3}
+{\small\color{accentred}(Textbook 2.11 / Optional)}\par\smallskip
+{\small\color{muted}教材小节：2.3.2 / 2.5}\par\medskip
+\noindent\textbf{Pairwise versus mutual independence}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{原条件下不能唯一确定互相关}
 假定所需二阶矩有限，记$\alpha=\omega t_1,\beta=\omega t_2$。由积化和差，
 \[R_{XY}=\tfrac12E[A]E[B]\sin(\alpha-\beta)+\tfrac12E[AB\sin(\alpha+\beta+2\Theta)].\]
 第一项可用$A,B$独立分解；第二项不能由“两两独立”分解，因为它是三个变量的联合期望。
@@ -341,9 +233,11 @@ $a,b$线性无关，所以$\operatorname{rank}C=2$，$\det C=0$。
 $\omega\ne0$且时间域容许所有时差时，正交及无关等价于$E[A]E[B]=0$；$\omega=0$时此式恒零。
 即使相互独立的等概符号振幅给出$R_{XY}\equiv0$，仍有$X^2(t)+Y^2(t)=1$，一般不独立。原条件下正交/无关取决于未知交叉项，统计独立性也不能统一确定。
 
-\qtitle{第 10 题}{4}{Correlation identities}
-{\small\color{accentA}(Recall / extension)}\par{\small\color{accentD}Textbook section: 2.1.3 / 2.3.3}\par\vspace{2mm}
-\key{定义（§2.1.3）}
+\end{tcolorbox}
+\qtitle{第 10 题}{Day 4}
+{\small\color{accentred}(Recall / extension)}\par\smallskip
+{\small\color{muted}教材小节：2.1.3 / 2.3.3}\par\medskip
+\noindent\textbf{Correlation identities}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{定义（§2.1.3）}
 \[m_X(t)=E[X(t)],\quad R_X(s,t)=E[X(s)X(t)],\quad C_X(s,t)=R_X(s,t)-m_X(s)m_X(t).\]
 \[R_X(t,t)=E[X^2(t)]=\Var X(t)+m_X(t)^2.\]
 只有零均值时，均方值才等于方差。另有$\int f_X(x;t)dx=1$，而$\int xf_X(x;t)dx=m_X(t)$。
@@ -358,9 +252,11 @@ $\omega\ne0$且时间域容许所有时差时，正交及无关等价于$E[A]E[B
 \[\boxed{\begin{aligned}R_Y(s,t)={}&R_X(s+a,t+a)-R_X(s+a,t)\\&-R_X(s,t+a)+R_X(s,t).\end{aligned}}\]
 若再给WSS，才可化为$R_Y(\tau)=2R_X(\tau)-R_X(\tau-a)-R_X(\tau+a)$。非平稳时不能用这一简式。
 
-\qtitle{第 11 题}{4}{A random straight line}
-{\small\color{accentA}(Adapted from 2022--23 Q1)}\par{\small\color{accentD}Textbook section: 2.1.1--2.1.3}\par\vspace{2mm}
-\key{样本函数：固定一次$U$的结果}
+\end{tcolorbox}
+\qtitle{第 11 题}{Day 4}
+{\small\color{accentred}(Adapted from 2022--23 Q1)}\par\smallskip
+{\small\color{muted}教材小节：2.1.1--2.1.3}\par\medskip
+\noindent\textbf{A random straight line}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{样本函数：固定一次$U$的结果}
 可选$U=\pi/4$与$3\pi/4$，得到两条平行直线。
 \begin{center}\begin{tikzpicture}[x=1.1cm,y=.65cm,>=stealth]
 \draw[->](-2.3,0)--(2.6,0)node[right]{$t$};\draw[->](0,-1.5)--(0,4.8)node[above]{$x(t)$};
@@ -376,9 +272,11 @@ $v$是特征函数的参数，不是过程的随机值；$v=0$处按连续延拓
 因为$X(t)-m_X(t)=U-\pi/2$对所有时刻相同。
 $X(t)-X(s)=t-s$为确定常数，且协方差非零，所以不同时间的样本\textbf{不独立}。均值随$t$变化，也不是WSS。
 
-\qtitle{第 12 题}{4}{Independence at the process level}
-{\small\color{accentA}(Recall / extension)}\par{\small\color{accentD}Textbook section: 2.3.1 / 2.5}\par\vspace{2mm}
-\key{过程独立必须覆盖任意多个时刻}
+\end{tcolorbox}
+\qtitle{第 12 题}{Day 4}
+{\small\color{accentred}(Recall / extension)}\par\smallskip
+{\small\color{muted}教材小节：2.3.1 / 2.5}\par\medskip
+\noindent\textbf{Independence at the process level}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{过程独立必须覆盖任意多个时刻}
 由§2.5，两过程独立指对任意有限时刻$s_1,\ldots,s_m$与$t_1,\ldots,t_n$，向量
 $(X(s_1),\ldots,X(s_m))$与$(Y(t_1),\ldots,Y(t_n))$独立，即联合分布分解为两组各自分布的乘积。
 对每对单时刻都独立，在一般非高斯情形也未必足以保证上述向量独立；只检查相同时刻更不够。
@@ -393,9 +291,11 @@ $(X(s_1),\ldots,X(s_m))$与$(Y(t_1),\ldots,Y(t_n))$独立，即联合分布分�
 \[\boxed{C_{XY}(s,t)=0\quad\text{对所有 }s,t.}\]
 理由：任意两组采样的联合协方差矩阵交叉块为零，联合高斯特征函数因此按两组分解。非零均值时不能把判据误写成$R_{XY}=0$；应为$R_{XY}(s,t)=m_X(s)m_Y(t)$。
 
-\qtitle{第 13 题}{5}{One toss, two observation times}
-{\small\color{accentA}(Textbook 2.3 / Required)}\par{\small\color{accentD}Textbook section: 2.1.2 / 2.3.1}\par\vspace{2mm}
-一次投币决定整条样本函数，所以
+\end{tcolorbox}
+\qtitle{第 13 题}{Day 5}
+{\small\color{accentred}(Textbook 2.3 / Required)}\par\smallskip
+{\small\color{muted}教材小节：2.1.2 / 2.3.1}\par\medskip
+\noindent\textbf{One toss, two observation times}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]一次投币决定整条样本函数，所以
 \[(X(1/2),X(1))=\begin{cases}(0,-1),&P=1/2,\\(1,2),&P=1/2.\end{cases}\]
 由§2.1.2，分布函数取$P(X\le x)$，必须右连续：
 \[F_X(x,1/2)=\begin{cases}0,&x<0,\\1/2,&0\le x<1,\\1,&x\ge1,\end{cases}\quad
@@ -425,9 +325,11 @@ F_X(x,1)=\begin{cases}0,&x<-1,\\1/2,&-1\le x<2,\\1,&x\ge2.\end{cases}\]
 \draw[->](3.1,0)--(3.6,0)node[right]{$x_1$};\draw[->](0,3.1)--(0,3.6)node[above]{$x_2$};
 \end{tikzpicture}
 \end{center}外侧区域向无穷延伸；阈值线属于右侧或上侧区域。联合CDF不是两个边缘CDF的乘积，因为两时刻共享同一次投币。
-\qtitle{第 14 题}{5}{One toss versus fresh tosses}
-{\small\color{accentA}(Adapted from 2025--26 Q1)}\par{\small\color{accentD}Textbook section: 2.1.2 / 2.3.1 / 2.5}\par\vspace{2mm}
-\key{(1) 一维分布}
+\end{tcolorbox}
+\qtitle{第 14 题}{Day 5}
+{\small\color{accentred}(Adapted from 2025--26 Q1)}\par\smallskip
+{\small\color{muted}教材小节：2.1.2 / 2.3.1 / 2.5}\par\medskip
+\noindent\textbf{One toss versus fresh tosses}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{(1) 一维分布}
 $X(2)$取0或4，概率各$1/2$，故
 \[\boxed{f_{X(2)}(x)=\tfrac12\delta(x)+\tfrac12\delta(x-4).}\]
 这是离散分布的广义密度，不是普通连续密度。
@@ -444,9 +346,11 @@ $Y[1]$取0或1，$Y[2]$取0或4，两个选择相互独立：
 [\delta(y_2)+\delta(y_2-4)].}\]
 四项概率均为$1/4$。由此可见，单时刻边缘分布相同不意味着过程的联合分布相同。
 
-\qtitle{第 15 题}{5}{Random amplitude and a degenerate time}
-{\small\color{accentA}(Textbook 2.1 / Optional)}\par{\small\color{accentD}Textbook section: 2.1.1 / 2.2.1}\par\vspace{2mm}
-\key{(1) 样本函数（题给非负时刻隐含$\omega>0$）}
+\end{tcolorbox}
+\qtitle{第 15 题}{Day 5}
+{\small\color{accentred}(Textbook 2.1 / Optional)}\par\smallskip
+{\small\color{muted}教材小节：2.1.1 / 2.2.1}\par\medskip
+\noindent\textbf{Random amplitude and a degenerate time}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{(1) 样本函数（题给非负时刻隐含$\omega>0$）}
 固定$V=v$得到$x(t)=v\cos\omega t$，例如$v=1/4,3/4$：
 \begin{center}\begin{tikzpicture}[x=.8cm,y=1.1cm,>=stealth]
 \draw[->](0,0)--(7,0)node[right]{$\omega t$};\draw[->](0,-1)--(0,1)node[above]{$x(t)$};
@@ -465,9 +369,11 @@ $\pi/\omega$&$-1$&$1,\quad[-1,0]$\\\bottomrule\end{tabular}\end{center}
 \key{(3) 退化时刻}
 $t_0=\pi/(2\omega)$使$c=0$，所有样本都等于0，所以$P(X(t_0)=0)=1$。广义密度为$\boxed{\delta(x)}$，不能代入含$1/|c|$的公式。
 
-\qtitle{第 16 题}{6}{Bernoulli words}
-{\small\color{accentA}(Textbook 2.4 / Optional)}\par{\small\color{accentD}Textbook section: 2.2.2}\par\vspace{2mm}
-\key{伯努利序列的前提}
+\end{tcolorbox}
+\qtitle{第 16 题}{Day 6}
+{\small\color{accentred}(Textbook 2.4 / Optional)}\par\smallskip
+{\small\color{muted}教材小节：2.2.2}\par\medskip
+\noindent\textbf{Bernoulli words}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{伯努利序列的前提}
 由§2.2.2，各比特相互独立且同分布，$p=P(B=1)=0.8$、$q=0.2$。
 \key{(1) 指定字串1011}
 按顺序相乘：
@@ -484,9 +390,11 @@ $t_0=\pi/(2\omega)$使$c=0$，所有样本都等于0，所以$P(X(t_0)=0)=1$。�
 \[\boxed{1111,\qquad P(1111)=0.8^4=0.4096.}\]
 核对所有16个字串的概率和为$(p+q)^4=1$。
 
-\qtitle{第 17 题}{6}{A fair-sign sequence}
-{\small\color{accentA}(Textbook 2.8 / Optional)}\par{\small\color{accentD}Textbook section: 2.2.2 / 2.1.3}\par\vspace{2mm}
-\key{一维分布}
+\end{tcolorbox}
+\qtitle{第 17 题}{Day 6}
+{\small\color{accentred}(Textbook 2.8 / Optional)}\par\smallskip
+{\small\color{muted}教材小节：2.2.2 / 2.1.3}\par\medskip
+\noindent\textbf{A fair-sign sequence}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{一维分布}
 由§2.2.2的伯努利序列含独立性，且每项等概取$-1,+1$，其广义密度为
 \[\boxed{f_{I_n}(x)=\tfrac12\delta(x+1)+\tfrac12\delta(x-1).}\]
 两个冲激的权重之和为1。不能把离散的概率质量误写成某个区间内的常数密度。
@@ -499,9 +407,11 @@ $t_0=\pi/(2\omega)$使$c=0$，所有样本都等于0，所以$P(X(t_0)=0)=1$。�
 \key{核对独立性的作用}
 若只给“每一项边缘等概正负1”，尚不能得到非对角协方差为0，例如所有$I_n$共用同一个符号时，$C_I(m,n)=1$。本题“伯努利序列”使独立性成立。
 
-\qtitle{第 18 题}{6}{Gaussian straight-line process}
-{\small\color{accentA}(Textbook 2.7 / Optional)}\par{\small\color{accentD}Textbook section: 2.4.2 / 2.1.3}\par\vspace{2mm}
-\key{确定高斯性}
+\end{tcolorbox}
+\qtitle{第 18 题}{Day 6}
+{\small\color{accentred}(Textbook 2.7 / Optional)}\par\smallskip
+{\small\color{muted}教材小节：2.4.2 / 2.1.3}\par\medskip
+\noindent\textbf{Gaussian straight-line process}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{确定高斯性}
 这里$N(\mu,\sigma^2)$的第二个参数是方差。因为$V,X_0$是独立高斯变量，它们联合高斯。由§2.4.2，固定$t$后的线性组合$X(t)=tV+X_0$仍为高斯。
 \key{均值}
 期望线性性给出
@@ -517,9 +427,11 @@ $t_0=\pi/(2\omega)$使$c=0$，所有样本都等于0，所以$P(X(t_0)=0)=1$。�
 \key{延伸核对}
 $C_X(s,t)=st+2$，故$C_X(t,t)=t^2+2$与上述一致。均值和方差均随时间变化，过程不广义平稳；这不妨碍其是高斯过程。
 
-\qtitle{第 19 题}{7}{Random voltage across a parallel RC circuit}
-{\small\color{accentA}(Textbook 2.13 / Required)}\par{\small\color{accentD}Textbook section: 2.2.1 / 2.3.4}\par\vspace{2mm}
-\key{总电流：沿同一样本函数对时间微分}
+\end{tcolorbox}
+\qtitle{第 19 题}{Day 7}
+{\small\color{accentred}(Textbook 2.13 / Required)}\par\smallskip
+{\small\color{muted}教材小节：2.2.1 / 2.3.4}\par\medskip
+\noindent\textbf{Random voltage across a parallel RC circuit}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{总电流：沿同一样本函数对时间微分}
 按被动符号约定，电阻电流$I_R=X/R$，电容电流$I_C=C\,dX/dt$。每次试验中$A,\Theta$相对于时间固定，因此
 \[\frac{dX}{dt}=-A\omega\sin(\omega t+\Theta).\]
 总电流为
@@ -534,9 +446,11 @@ $C_X(s,t)=st+2$，故$C_X(t,t)=t^2+2$与上述一致。均值和方差均随时�
 &=\boxed{\frac16\left(R^{-2}+\omega^2C^2\right)}.\end{aligned}\]
 幅度与相位独立才能这样分解。$E[I]=0$，所以此题均方值也等于方差；一般情况下两者相差均值平方。
 
-\qtitle{第 20 题}{7}{Integration of a random signal}
-{\small\color{accentA}(Textbook 2.14 / translated)}\par{\small\color{accentD}Textbook section: 2.3.4}\par\vspace{2mm}
-\key{充分条件}
+\end{tcolorbox}
+\qtitle{第 20 题}{Day 7}
+{\small\color{accentred}(Textbook 2.14 / translated)}\par\smallskip
+{\small\color{muted}教材小节：2.3.4}\par\medskip
+\noindent\textbf{Integration of a random signal}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{充分条件}
 例如$X(u)$联合可测，且在任意有限区间$[0,T]$满足
 $\int_0^T E[X^2(u)]du<\infty$。由Cauchy--Schwarz，这保证均值积分及所需双重积分绝对可积，可用Fubini交换期望与积分，也可按均方积分理解。
 \key{均值（§2.3.4）}
@@ -554,9 +468,11 @@ $\int_0^T E[X^2(u)]du<\infty$。由Cauchy--Schwarz，这保证均值积分及所
 \[E[Y^2(t)]=2\int_0^t(t-\tau)R_X(\tau)d\tau.\]
 后一形式用于普通有限二阶矩过程；理想白噪声等广义过程需要分布意义下另行解释。
 
-\qtitle{第 21 题}{7}{White noise is not a Gaussian assumption}
-{\small\color{accentA}(Adapted from 2023--24 Q2(c))}\par{\small\color{accentD}Textbook section: 2.4.3}\par\vspace{2mm}
-\key{(1) 只给白噪声，不能推出高斯}
+\end{tcolorbox}
+\qtitle{第 21 题}{Day 7}
+{\small\color{accentred}(Adapted from 2023--24 Q2(c))}\par\smallskip
+{\small\color{muted}教材小节：2.4.3}\par\medskip
+\noindent\textbf{White noise is not a Gaussian assumption}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{(1) 只给白噪声，不能推出高斯}
 白噪声规定二阶谱为常数，没有规定全部有限维分布。线性系统保持已有高斯性，却不会把任何非高斯输入自动变成精确高斯。因此原条件只能确定$Y$的均值和方差，不能唯一给出其PDF。
 例如取高斯白噪声$G$及独立随机幅度$A$，令$P(A=0)=P(A=\sqrt2)=1/2$，$W=AG$。因$E(A^2)=1$，$W$仍具有相同白噪声谱；滤波差分输出却一半概率恒为0，是高斯尺度混合而非非退化高斯。这是按二阶白噪声定义的反例。
 \key{(2) 另加高斯假设，才能使用§2.4.3}
@@ -568,4 +484,97 @@ $\int_0^T E[X^2(u)]du<\infty$。由Cauchy--Schwarz，这保证均值积分及所
 \key{(3) $T=0$}
 此时$Y(t)\equiv0$，分布是$\delta(y)$，无普通一维密度，不能把$T=0$硬代入上面的非退化公式。
 
+\end{tcolorbox}
+\qtitle{第 22 题}{Day 8}
+{\small\color{accentred}(Adapted from 2018--19 Q3 (201812))}\par\smallskip
+{\small\color{muted}教材小节：2.2.1 / 2.4.2 / 2.4.3}\par\medskip
+\noindent\textbf{Gaussian sine and cosine coefficients}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{均值与相关（§2.2.1）}
+$E(A)=E(B)=0$给$m_X(t)=0$。独立使$E(AB)=0$，展开乘积得
+\[\begin{aligned}R_X(s,t)&=\sigma^2\cos\omega s\cos\omega t+\sigma^2\sin\omega s\sin\omega t\\&=\boxed{\sigma^2\cos\omega(s-t)}.\end{aligned}\]
+因此$C_X=R_X$，方差恒为$\sigma^2$。
+\key{高斯性与广义平稳}
+任何有限个采样值都是联合高斯向量$(A,B)$的线性变换，所以过程高斯（§2.4.2--§2.4.3）。均值恒定、相关只依赖时差，故WSS（§3.1.1）。高斯过程的均值和协方差决定全部有限维分布，故这里也严格平稳。
+\key{单独的分量并不WSS}
+$W(t)=A\cos\omega t$的方差是$\sigma^2\cos^2\omega t$，$Z(t)=B\sin\omega t$的方差是$\sigma^2\sin^2\omega t$，均随时间变化，因此两者单独都不WSS。原题中的stationary措辞与给定表达式不一致，不能把它当作推导前提。
+\key{为何系数方差必须相等}
+若分别为$v_A,v_B$，相关含$\tfrac12(v_A-v_B)\cos\omega(s+t)$，仅在相等时这个非平稳项消失。
+\end{tcolorbox}
+\qtitle{第 23 题}{Day 8}
+{\small\color{accentred}(2020--21 / 2021--22 Q1; extended (202104/202112))}\par\smallskip
+{\small\color{muted}教材小节：2.4.1 / 2.4.3 / 2.1.3}\par\medskip
+\noindent\textbf{Gaussian offset plus cosine}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{单时刻（§2.4.3）}
+有限维向量为$(A,B)$的线性变换，故过程高斯。令$c_s=\cos s,c_t=\cos t$。
+\[m_X(t)=0,\quad R_X(s,t)=1+c_sc_t,\quad v_t=1+c_t^2>0.\]
+\[\boxed{f_X(x;t)=\frac{e^{-x^2/(2v_t)}}{\sqrt{2\pi v_t}}}.\]
+\key{协方差与普通二维密度（§2.4.1）}
+\[C=\begin{bmatrix}1+c_s^2&1+c_sc_t\\1+c_sc_t&1+c_t^2\end{bmatrix},\quad D=\det C=(c_s-c_t)^2.\]
+当$c_s\ne c_t$，$D>0$，普通密度为
+\[f(x_1,x_2)=\frac1{2\pi\sqrt D}\exp\!\left[-\frac{(1+c_t^2)x_1^2-2(1+c_sc_t)x_1x_2+(1+c_s^2)x_2^2}{2D}\right].\]
+当$c_s=c_t$，两采样值相同，概率集中在$x_2=x_1$；没有普通二维PDF。可用$ f_X(x_1;s)\delta(x_2-x_1)$表达，联合特征函数仍有效。
+\key{指定时刻与平稳性扩展}
+$(X(0),X(\pi/2))=(A+B,A)$，
+\[C=\begin{bmatrix}2&1\\1&1\end{bmatrix},\qquad\phi(u,v)=e^{-[(u+v)^2+u^2]/2}.\]
+一般$t$的方差$1+\cos^2t$不恒定，所以不WSS；高斯性不等于平稳性。
+\end{tcolorbox}
+\qtitle{第 24 题}{Day 8}
+{\small\color{accentred}(Adapted from 2019--20 Q3 (201912))}\par\smallskip
+{\small\color{muted}教材小节：2.2.3 / 2.1.3}\par\medskip
+\noindent\textbf{Semi-random binary transmission}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{均值与同一时隙（§2.2.3）}
+$B_k^2=B_k$，故$E(B_k)=E(B_k^2)=1/2$。令$n_1=\lfloor t/T_0\rfloor$，$n_2=\lfloor(t+\tau)/T_0\rfloor$。
+\[\boxed{m_X(t)=\tfrac12,\quad R_X(t,t+\tau)=\begin{cases}\tfrac12,&n_1=n_2,\\\tfrac14,&n_1\ne n_2.\end{cases}}\]
+不同区间独立才使$E(B_{n_1}B_{n_2})=E(B_{n_1})E(B_{n_2})=1/4$。因此$C_X$同区间为1/4，不同区间为0。
+\key{固定边界使相关依赖绝对时刻}
+同取$\tau=T_0/2$，$t=0$时两个点同区间，$t=3T_0/4$时跨边界，相关分别1/2与1/4。故不WSS，即使均值和瞬时方差都恒定。
+\key{随机滑动后的扩展}
+独立均匀时钟滑动使两点落在同一时隙的概率为$p_s=(1-|\tau|/T_0)_+$，其中$(x)_+=\max(x,0)$。按同隙/异隙分解，
+\[\boxed{R_Y(\tau)=\tfrac14+\tfrac14(1-|\tau|/T_0)_+},\quad C_Y(\tau)=\tfrac14(1-|\tau|/T_0)_+.\]
+$R_Y(0)=1/2$，远时差趋于$1/4=m_Y^2$。原卷是0/1符号，不能直接照搬教材等概正负1的均值0、相关1/0。
+\end{tcolorbox}
+\qtitle{第 25 题}{Day 9}
+{\small\color{accentred}(Adapted from 2018--19 Q4 / 2019--20 Q4)}\par\smallskip
+{\small\color{muted}教材小节：2.2.1 / 2.5; extension 4.1}\par\medskip
+\noindent\textbf{Random amplitude and uniform phase}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{集合平均（§2.2.1、§2.5）}
+由均匀相位，$E_\Theta\cos(\omega t+\Theta)=0$，所以$m_X(t)=0$。利用$2\cos u\cos v=\cos(u-v)+\cos(u+v)$，完整相位周期使和频项平均为0：
+\[\boxed{R_X(s,t)=\tfrac12E(A^2)\cos\omega(s-t)}.\]
+独立才能把$A^2$和相位项的期望分开。幅度若是任意确定时间函数，不能直接套这个时差形式。
+\key{时间平均（第四章扩展）}
+固定样本的幅度$a$和相位$\theta$后，正弦积分除以观测长度趋于0，故$\overline X=0$。对乘积用同一三角恒等式，
+\[\boxed{\overline R_X(\tau)=\tfrac12A^2\cos\omega\tau}.\]
+由于$\omega\ne0$，和频时间平均也为0。
+\key{两个各态历经条件不同}
+时间均值对每个有限幅度样本等于集合均值0，故均值各态历经。
+相关时间平均要几乎必然等于集合相关，令$\tau=0$可知必要条件$A^2=E(A^2)$几乎必然；该条件代入上式也充分。
+\[\boxed{\text{相关各态历经}\ \Longleftrightarrow\ A^2\text{几乎必然为常数}}.\]
+幅度可有随机正负号，不必$A$本身恒定；随机变化的幅度大小通常使相关不各态历经。
+\end{tcolorbox}
+\qtitle{第 26 题}{Day 9}
+{\small\color{accentred}(Adapted from 2019--20 Q5 (201912))}\par\smallskip
+{\small\color{muted}教材小节：2.2.1 / 2.4.3; extension 4.1}\par\medskip
+\noindent\textbf{A Gaussian coefficient inside a sign function}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{先看实际进入过程的随机幅度}
+记$S=\operatorname{sgn}(A)$。连续正态给$P(A=0)=0$，$S=\pm1$等概，且$S^2=1$几乎必然。
+由相位均匀与独立，
+\[\boxed{m_X=0,\quad R_X(s,t)=\tfrac12\cos\omega_0(s-t)}.\]
+$A$是高斯，不代表非线性函数$S$高斯。
+\key{边缘是反正弦分布}
+乘以$-1$相当于给均匀相位加$\pi$，所以$X(t)$的边缘与$\cos U$相同，$U\sim U(0,2\pi)$。对$-1<x<1$有两个逆分支，每个$|dx/dU|=\sqrt{1-x^2}$，故
+\[\boxed{f_X(x;t)=\frac1{\pi\sqrt{1-x^2}},\quad -1<x<1},\]
+区间外为0。这是有界非退化变量，因此不是正态，也不是高斯过程。密度端点可积，$\int_{-1}^1dx/(\pi\sqrt{1-x^2})=1$。
+\key{广义各态历经扩展}
+每个样本的幅度平方恒为1，时间均值0，时间自相关$\tfrac12\cos\omega_0\tau$，恰好等于集合量。所以均值与相关各态历经都成立。这一例同时说明WSS、各态历经与高斯是不同概念。
+\end{tcolorbox}
+\qtitle{第 27 题}{Day 9}
+{\small\color{accentred}(2021--22 Q2(a,b); extensions (202112))}\par\smallskip
+{\small\color{muted}教材小节：2.3.2 / 2.5; extension 3.1}\par\medskip
+\noindent\textbf{Delayed radar echo plus independent noise}\par\smallskip\begin{tcolorbox}[breakable,colback=qbg,colframe=qbg,boxrule=0pt]\key{和信号的二阶量（§2.3.2、§2.5）}
+期望线性性给$m_Y=0$。展开$Y(t)Y(t+\tau)$，两个交叉项因独立与零均值为0：
+\[\boxed{R_Y(\tau)=\alpha^2R_X(\tau)+R_N(\tau)}.\]
+同一支路的两时刻都减$d$，因此它的自相关时差仍为$\tau$，不是$\tau-d$。
+\key{互相关要固定约定}
+\[\begin{aligned}R_{XY}(\tau)&=E[X(t)(\alpha X(t+\tau-d)+N(t+\tau))]\\&=\boxed{\alpha R_X(\tau-d)},\\
+R_{YX}(\tau)&=E[(\alpha X(t-d)+N(t))X(t+\tau)]\\&=\boxed{\alpha R_X(\tau+d)}.\end{aligned}\]
+实值WSS的$R_X$是偶函数，故$R_{YX}(\tau)=R_{XY}(-\tau)$。前后次序交换会改变时延符号；自相关和互相关不可混用。
+\key{平稳性与高斯性分别判断}
+$Y$均值恒定、自相关只依赖时差，故WSS；两过程各自WSS且两个互相关只依赖时差，故联合WSS（§3.1）。
+这些条件仅规定二阶结构，不推出Gaussian。若另加$X,N$为独立高斯过程，则采样向量的线性组合仍联合高斯，才可断言$Y$高斯。
+\end{tcolorbox}
 \end{document}

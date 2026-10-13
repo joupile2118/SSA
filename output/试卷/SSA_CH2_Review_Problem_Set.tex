@@ -1,227 +1,108 @@
-% =====================================================================
-%  exam-frequency-report / assets/report-preamble.tex
-%  Reusable preamble for an exam-frequency report.
-%
-%  Compile with XeLaTeX (twice).  Load-bearing choices, each of which
-%  fixes a real failure mode -- see the skill's Pitfalls table:
-%    * ctexart + xelatex          -> CJK actually renders
-%    * amsmath only, before newtxmath -> avoids the \Bbbk clash with amssymb
-%    * xcolor[table]              -> \rowcolor is defined
-%    * \noindent before \rule/\tabularx -> no 17pt \parindent overfull
-%  Adjust \setReportMeta and the geometry block per task.
-% =====================================================================
 \documentclass[11pt]{article}
-
-% --- page geometry ---------------------------------------------------
-% Keep the long edge at a size you have already validated (A4 height
-% preserves the vertical layout).  To match a reading device, set
-%   paperwidth = paperheight * Wpx / Hpx
-% e.g. 13-inch iPad Air M2 portrait (2048x2732):
-%   paperheight=297mm, paperwidth=297*512/683=222.6413mm
-\usepackage[paperwidth=222.6413mm,paperheight=297mm,
-            left=1.9cm,right=1.9cm,top=2.1cm,bottom=1.7cm,headsep=0.5cm]{geometry}
-
-% --- math: order matters ---------------------------------------------
-% DO NOT load newtxtext in a CJK (ctex) document.
-% On macOS ctex falls back to the macold fontset, whose \ttfamily CJK slot
-% points at STFangsong -- absent from current macOS.  Any Chinese inside
-% \texttt (e.g. a path written as \code{试卷/教材}) then fails with
-%   ! Font TU/STFangsong ... not loadable
-% and those glyphs come out as mojibake.  Verified: newtxtext triggers it,
-% newtxmath is harmless, and \setCJKmonofont does NOT repair it.
-% Pure-ASCII (non-ctex) documents may load newtxtext normally.
-\usepackage{amsmath}
-\usepackage{newtxmath}
-
-% --- tables, colour, boxes -------------------------------------------
+\usepackage[paperwidth=222.6413mm,paperheight=297mm,left=1.9cm,right=1.9cm,top=2.1cm,bottom=1.8cm,headsep=0.5cm]{geometry}
+\usepackage{amsmath,amssymb,mathrsfs}
 \usepackage[table]{xcolor}
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{tabularx}
-\usepackage{array}
-\usepackage{multirow}
-\usepackage{makecell}
-\usepackage{ragged2e}
-\usepackage{enumitem}
-\usepackage{tcolorbox}
+\usepackage{booktabs,tabularx,array,ragged2e,enumitem,tcolorbox,tikz,fancyhdr}
 \tcbuselibrary{skins,breakable}
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.18}
-\usetikzlibrary{patterns}
-\usepackage{titlesec}
-\usepackage{fancyhdr}
-\usepackage{caption}
-\usepackage[hidelinks,bookmarksnumbered]{hyperref}
-
-% --- palette ---------------------------------------------------------
-\definecolor{ink}{HTML}{1F2933}
-\definecolor{deepblue}{HTML}{1B3A5C}
-\definecolor{accentA}{HTML}{B23A48}   % S tier
-\definecolor{accentB}{HTML}{D97706}   % A tier
-\definecolor{accentC}{HTML}{2F6F4E}   % B tier
-\definecolor{accentD}{HTML}{6B7280}   % C tier
-\definecolor{tintA}{HTML}{FBE9EB}
-\definecolor{tintB}{HTML}{FDF2E3}
-\definecolor{tintC}{HTML}{E8F2EC}
-\definecolor{tintD}{HTML}{F0F1F3}
-\definecolor{rulegray}{HTML}{C9CED6}
-\definecolor{tabhead}{HTML}{1B3A5C}
-
-% --- headings --------------------------------------------------------
-\titleformat{\section}{\normalfont\Large\bfseries\color{deepblue}}{\thesection}{0.7em}{}
-\titleformat{\subsection}{\normalfont\large\bfseries\color{deepblue!85!black}}{\thesubsection}{0.6em}{}
-\titlespacing*{\section}{0pt}{1.6em}{0.7em}
-\titlespacing*{\subsection}{0pt}{1.2em}{0.5em}
-
-% --- running head ----------------------------------------------------
-\pagestyle{fancy}
-\fancyhf{}
-\renewcommand{\headrulewidth}{0.4pt}
-\fancyhead[L]{\footnotesize\color{deepblue}\ReportShortTitle}
-\fancyhead[R]{\footnotesize\color{deepblue}\thepage}
-\fancyfoot[C]{\scriptsize\color{accentD}\ReportSourceLine}
-\newcommand{\ReportShortTitle}{Exam-frequency report}
-\newcommand{\ReportSourceLine}{}
-
-% --- helpers ---------------------------------------------------------
-% Section-code tag.  Use the textbook's OWN numbering.
-\newcommand{\secode}[1]{\texttt{\color{deepblue}#1}}
-\newcommand{\tierS}{\textbf{\color{accentA}S}}
-\newcommand{\tierA}{\textbf{\color{accentB}A}}
-\newcommand{\tierB}{\textbf{\color{accentC}B}}
-\newcommand{\tierC}{\textbf{\color{accentD}C}}
-\newcommand{\hot}[1]{\textcolor{accentA}{\bfseries #1}}
-\newcommand{\code}[1]{\texttt{\small #1}}
-\newcommand{\thd}[1]{\textcolor{white}{\bfseries #1}}
+\usepackage[hidelinks]{hyperref}
+\definecolor{navy}{HTML}{1B3A5C}\definecolor{accentred}{HTML}{B23A48}
+\definecolor{muted}{HTML}{5A6470}\definecolor{qbg}{HTML}{F4F6F8}\definecolor{linec}{HTML}{9AA3AD}
 \newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
-\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
-% NOTE: \newlist needs an explicit label= or enumitem raises "Undefined label".
-\newlist{qparts}{enumerate}{1}
-\setlist[qparts]{label=(\alph*),leftmargin=1.5em,itemsep=2.5pt,topsep=3pt,parsep=0pt}
-\newlist{qnum}{enumerate}{1}
-\setlist[qnum]{label=(\arabic*),leftmargin=1.5em,itemsep=2.5pt,topsep=3pt,parsep=0pt}
-\newlist{bul}{itemize}{1}
-\setlist[bul]{label=\textbullet,leftmargin=1.6em,itemsep=1.5pt,topsep=2pt,parsep=0pt}
-\captionsetup{font={small,color=deepblue},labelfont=bf,skip=5pt}
+\newlist{qp}{enumerate}{1}\setlist[qp]{label=(\alph*),leftmargin=1.5em,itemsep=2pt}
+\newlist{qn}{enumerate}{1}\setlist[qn]{label=(\arabic*),leftmargin=1.5em,itemsep=2pt}
+\newlist{qparts}{enumerate}{1}\setlist[qparts]{label=(\alph*),leftmargin=1.5em,itemsep=2pt}
+\newlist{qnum}{enumerate}{1}\setlist[qnum]{label=(\arabic*),leftmargin=1.5em,itemsep=2pt}
+\newlist{bul}{itemize}{1}\setlist[bul]{label=\textbullet,leftmargin=1.5em,itemsep=2pt}
+\newcommand{\key}[1]{\par\vspace{4pt}\noindent\textbf{\color{navy}#1}\par\vspace{2pt}}
+\newcommand{\hint}[1]{\par\smallskip{\small\itshape Hint: #1}\par}
+\newcommand{\sect}[1]{{\small\color{muted}#1}}
+\newcommand{\dd}{\mathrm d}\newcommand{\Var}{\operatorname{Var}}\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\E}{\mathbb E}\newcommand{\ee}{\mathrm e}\newcommand{\jj}{\mathrm j}
+\newtcolorbox{workspace}{height fill,enhanced,colback=white,colframe=linec!55,boxrule=0.5pt,arc=1.5pt}
+\newcommand{\qtitle}[2]{\clearpage\begin{tcolorbox}[colback=navy,colframe=navy,arc=1.5pt,boxrule=0pt]\color{white}\large\bfseries #1\hfill\small #2\end{tcolorbox}}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\footnotesize\color{navy}SSA -- Chapter 2 -- Review Problems}\fancyhead[R]{\footnotesize\thepage}
+\fancyfoot[C]{\scriptsize Eight-paper edition -- 2026-10-13}
+\begin{document}
 
-% --- callout boxes ---------------------------------------------------
-\newtcolorbox{keybox}[1][]{colback=tintC,colframe=accentC,boxrule=0.7pt,arc=2pt,
-  left=8pt,right=8pt,top=6pt,bottom=6pt,fonttitle=\bfseries\color{white},
-  coltitle=white,colbacktitle=accentC,breakable,#1}
-\newtcolorbox{warnbox}[1][]{colback=tintA,colframe=accentA,boxrule=0.7pt,arc=2pt,
-  left=8pt,right=8pt,top=6pt,bottom=6pt,fonttitle=\bfseries\color{white},
-  coltitle=white,colbacktitle=accentA,breakable,#1}
-\newtcolorbox{infobox}[1][]{colback=tintB,colframe=accentB,boxrule=0.7pt,arc=2pt,
-  left=8pt,right=8pt,top=6pt,bottom=6pt,fonttitle=\bfseries\color{white},
-  coltitle=white,colbacktitle=accentB,breakable,#1}
-
-% --- one-item-per-page layout (review sets) --------------------------
-% tcolorbox `height fill` absorbs the remaining page height.
-% Do NOT combine with `breakable`.
-\newtcolorbox{workspace}{height fill,enhanced,colback=white,colframe=gray!45,
-  boxrule=0.5pt,arc=1.5pt,left=9pt,right=9pt,top=6pt,bottom=6pt}
-
-% --- pgfplots reference lines on a symbolic axis ---------------------
-% A numeric line on `symbolic x coords` fails with
-%   "the input coordinate '...' has not been defined".
-% Draw it in axis-description coordinates instead, e.g. y=33.75 of ymax=60:
-%   \draw[accentA,dashed,thick]
-%     (axis description cs:0,0.5625) -- (axis description cs:1,0.5625);
-%   \node[anchor=south west,font=\scriptsize,color=accentA]
-%     at (axis description cs:0.02,0.578) {four-year mean};
-
-
-\setlength{\parindent}{0pt}\setlength{\parskip}{4pt}\setlength{\headheight}{14pt}
-\setlist[enumerate]{label=(\arabic*),leftmargin=1.8em,itemsep=4pt}
-\newcommand{\E}{\mathbb E}\newcommand{\Var}{\operatorname{Var}}\newcommand{\Cov}{\operatorname{Cov}}
-\newcommand{\key}[1]{\par\vspace{3pt}\textbf{\color{deepblue}#1}\par}
-\newcommand{\qtitle}[3]{\clearpage
-\begin{tcolorbox}[colback=deepblue,colframe=deepblue,coltext=white,boxrule=0pt,arc=2pt]
-{\Large\bfseries #1}\hfill {Day #2}\end{tcolorbox}
-{\large\bfseries #3}\par\vspace{2mm}}
-
-\renewcommand{\ReportShortTitle}{Chapter 2 Review Problem Set}\renewcommand{\ReportSourceLine}{SSA · Chapter 2 · 21 problems · 2026-10-13}\begin{document}\thispagestyle{empty}\vspace*{15mm}
-{\Huge\bfseries\color{deepblue}Chapter 2 Review Problem Set\par}\vspace{8mm}
-{\Large 21 problems · 7 days · 3 problems per day\par}\vspace{10mm}
-\begin{keybox}[title=Scope]
-All ten Homework 2 exercises are included. Additional questions target Gaussian moments, correlation identities, finite-dimensional independence, and assumptions that matter in past papers.
-Each problem has its own page and handwriting space. A matched Chinese solution key uses the same numbering.
-\end{keybox}
-\begin{infobox}[title=Source labels]
-Textbook problems from Homework 2 retain the existing English translation of the Chinese textbook. This is not an official translation.
-Questions labelled ``Adapted from'' restate or extend selected exam tasks; extra assumptions are explicit. Recall questions are newly written.
-\end{infobox}
-\vspace{8mm}Required homework: 2.3, 2.13, 2.16, 2.19.\\
-Optional homework: 2.1, 2.4, 2.7, 2.8, 2.11, 2.18.\\
-Homework issued: 13 October 2026. Due: 27 October 2026.\\
-This seven-day revision schedule does not change the homework deadline.
-\vfill Stochastic Signal Analysis · Chapter 2: Random Signals\\
-Based on the fifth-edition Chinese textbook and four local past papers.
-\clearpage\section*{Seven-day plan and problem index}
-
-
-\small\begin{tabularx}{\textwidth}{@{}c l X@{}}\toprule Day & Problems & Focus\\\midrule
-1&1--3&Gaussian tools: Gaussian checklist; 2.19; 2.17\\
-2&4--6&Gaussian applications: Square-law device; 2.16; 2.18\\
-3&7--9&Phase and cross-correlation: Uniform phase; sampled sin/cos; 2.11\\
-4&10--12&Correlation and independence: Identities; random line; signal independence\\
-5&13--15&Finite-dimensional laws: 2.3; coin-toss exam; 2.1\\
-6&16--18&Sequences and linear combinations: 2.4; 2.8; 2.7\\
-7&19--21&Operations and assumptions: 2.13; 2.14; white-noise caveat\\
-\bottomrule\end{tabularx}\vspace{5mm}\par\begin{tabularx}{\textwidth}{@{}r L{7cm} X@{}}\toprule No. & Source & Textbook section\\\midrule
-1 & Recall / extension & 2.4.1--2.4.3\\
-2 & Textbook 2.19 / Required & 2.4.1\\
-3 & Textbook 2.17 / translated & 2.4.1 / 2.4.3\\
-4 & Adapted from 2022--23 Q3 & 2.4.3\\
-5 & Textbook 2.16 / Required & 2.4.1 / 2.4.3\\
-6 & Textbook 2.18 / Optional & 2.4.1 / 2.4.3\\
-7 & Adapted from 2022--23 Q2(a,b) & 2.2.1 / 2.5\\
-8 & Adapted from 2024--25 Q1 & 2.3.2 / 2.5\\
-9 & Textbook 2.11 / Optional & 2.3.2 / 2.5\\
-10 & Recall / extension & 2.1.3 / 2.3.3\\
-11 & Adapted from 2022--23 Q1 & 2.1.1--2.1.3\\
-12 & Recall / extension & 2.3.1 / 2.5\\
-13 & Textbook 2.3 / Required & 2.1.2 / 2.3.1\\
-14 & Adapted from 2025--26 Q1 & 2.1.2 / 2.3.1 / 2.5\\
-15 & Textbook 2.1 / Optional & 2.1.1 / 2.2.1\\
-16 & Textbook 2.4 / Optional & 2.2.2\\
-17 & Textbook 2.8 / Optional & 2.2.2 / 2.1.3\\
-18 & Textbook 2.7 / Optional & 2.4.2 / 2.1.3\\
-19 & Textbook 2.13 / Required & 2.2.1 / 2.3.4\\
-20 & Textbook 2.14 / translated & 2.3.4\\
-21 & Adapted from 2023--24 Q2(c) & 2.4.3\\
-\bottomrule\end{tabularx}\normalsize
-\qtitle{Problem 1}{1}{Gaussian checklist}
-{\small\color{accentA}(Recall / extension)}\par{\small\color{accentD}Textbook section: 2.4.1--2.4.3}\par\vspace{2mm}
-Define a Gaussian process using its finite-dimensional distributions. For a Gaussian vector with mean $\boldsymbol\mu$ and covariance $C$, state its characteristic function, its ordinary PDF (including the condition for its existence), and the law of $G\boldsymbol X+\boldsymbol b$.
+\begin{titlepage}\centering\vspace*{1.5cm}
+{\Huge\bfseries Stochastic Signal Analysis}\par\vspace{1cm}
+{\LARGE\bfseries Chapter 2 Review Problem Set}\par\vspace{1cm}
+{\large Eight-paper edition -- 27 problems -- 9 days -- 3 problems/day}\par\vspace{1cm}
+\begin{tcolorbox}[colback=qbg,colframe=navy]
+This set is based on eight verified past papers (file codes 201812, 201912, 202104, 202112, 202212, 202312, 202412, 202512). Chapter 2 carries 15.625 primary marks per paper in this sample; the recent-four mean is 9.00.
+All current homework questions are included. Added older-paper questions fill topic gaps. Adaptations explicitly state extra assumptions and extensions. Complete one page at a time, leaving the blank space for your derivation.
+\end{tcolorbox}\vfill 2026-10-13\end{titlepage}
+\section*{Problem and Source Index}
+{\small\renewcommand{\arraystretch}{1.23}\noindent\begin{tabularx}{\textwidth}{@{}r r L{6.3cm} X@{}}\toprule Q & Day & Source & Sections\\\midrule
+1 & 1 & Recall / extension & 2.4.1--2.4.3\\
+2 & 1 & Textbook 2.19 / Required & 2.4.1\\
+3 & 1 & Textbook 2.17 / translated & 2.4.1 / 2.4.3\\
+4 & 2 & Adapted from 2022--23 Q3 & 2.4.3\\
+5 & 2 & Textbook 2.16 / Required & 2.4.1 / 2.4.3\\
+6 & 2 & Textbook 2.18 / Optional & 2.4.1 / 2.4.3\\
+7 & 3 & Adapted from 2022--23 Q2(a,b) & 2.2.1 / 2.5\\
+8 & 3 & Adapted from 2024--25 Q1 & 2.3.2 / 2.5\\
+9 & 3 & Textbook 2.11 / Optional & 2.3.2 / 2.5\\
+10 & 4 & Recall / extension & 2.1.3 / 2.3.3\\
+11 & 4 & Adapted from 2022--23 Q1 & 2.1.1--2.1.3\\
+12 & 4 & Recall / extension & 2.3.1 / 2.5\\
+13 & 5 & Textbook 2.3 / Required & 2.1.2 / 2.3.1\\
+14 & 5 & Adapted from 2025--26 Q1 & 2.1.2 / 2.3.1 / 2.5\\
+15 & 5 & Textbook 2.1 / Optional & 2.1.1 / 2.2.1\\
+\bottomrule\end{tabularx}}
+\par\medskip Source tags distinguish verbatim homework, original exam excerpts, adaptations, and recall exercises. Day labels are a study schedule, not the order of the original exams.
+\clearpage
+\section*{Problem and Source Index}
+{\small\renewcommand{\arraystretch}{1.23}\noindent\begin{tabularx}{\textwidth}{@{}r r L{6.3cm} X@{}}\toprule Q & Day & Source & Sections\\\midrule
+16 & 6 & Textbook 2.4 / Optional & 2.2.2\\
+17 & 6 & Textbook 2.8 / Optional & 2.2.2 / 2.1.3\\
+18 & 6 & Textbook 2.7 / Optional & 2.4.2 / 2.1.3\\
+19 & 7 & Textbook 2.13 / Required & 2.2.1 / 2.3.4\\
+20 & 7 & Textbook 2.14 / translated & 2.3.4\\
+21 & 7 & Adapted from 2023--24 Q2(c) & 2.4.3\\
+22 & 8 & Adapted from 2018--19 Q3 (201812) & 2.2.1 / 2.4.2 / 2.4.3\\
+23 & 8 & 2020--21 / 2021--22 Q1; extended (202104/202112) & 2.4.1 / 2.4.3 / 2.1.3\\
+24 & 8 & Adapted from 2019--20 Q3 (201912) & 2.2.3 / 2.1.3\\
+25 & 9 & Adapted from 2018--19 Q4 / 2019--20 Q4 & 2.2.1 / 2.5; extension 4.1\\
+26 & 9 & Adapted from 2019--20 Q5 (201912) & 2.2.1 / 2.4.3; extension 4.1\\
+27 & 9 & 2021--22 Q2(a,b); extensions (202112) & 2.3.2 / 2.5; extension 3.1\\
+\bottomrule\end{tabularx}}
+\qtitle{Problem 1}{Day 1}
+{\small\color{accentred}(Recall / extension)}\par\smallskip
+{\small\color{muted}Textbook sections: 2.4.1--2.4.3}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Define a Gaussian process using its finite-dimensional distributions. For a Gaussian vector with mean $\boldsymbol\mu$ and covariance $C$, state its characteristic function, its ordinary PDF (including the condition for its existence), and the law of $G\boldsymbol X+\boldsymbol b$.
 
 Is marginal Gaussianity sufficient for joint Gaussianity? Give a counterexample. State when uncorrelatedness implies independence.
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
-\qtitle{Problem 2}{1}{Joint Gaussian PDF and CF}
-{\small\color{accentA}(Textbook 2.19 / Required)}\par{\small\color{accentD}Textbook section: 2.4.1}\par\vspace{2mm}
-Let the random vector $(X,Y)\sim N(\boldsymbol{\mu},\boldsymbol{C})$, where
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 2}{Day 1}
+{\small\color{accentred}(Textbook 2.19 / Required)}\par\smallskip
+{\small\color{muted}Textbook sections: 2.4.1}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Let the random vector $(X,Y)\sim N(\boldsymbol{\mu},\boldsymbol{C})$, where
 \[
 \boldsymbol{\mu}=\begin{bmatrix}2\\2\end{bmatrix},\qquad
 \boldsymbol{C}=\begin{bmatrix}2&3\\3&5\end{bmatrix}.
 \]
 Find the joint probability density function of $(X,Y)$ and its characteristic function $\phi_{XY}(u,v)$.
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
-\qtitle{Problem 3}{1}{Fourth-order Gaussian moment}
-{\small\color{accentA}(Textbook 2.17 / translated)}\par{\small\color{accentD}Textbook section: 2.4.1 / 2.4.3}\par\vspace{2mm}
-Let $X(t)$ be a zero-mean Gaussian signal and put $X_k=X(t_k)$ for $k=1,2,3,4$. Prove that
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 3}{Day 1}
+{\small\color{accentred}(Textbook 2.17 / translated)}\par\smallskip
+{\small\color{muted}Textbook sections: 2.4.1 / 2.4.3}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Let $X(t)$ be a zero-mean Gaussian signal and put $X_k=X(t_k)$ for $k=1,2,3,4$. Prove that
 \[\begin{aligned}E[X_1X_2X_3X_4]={}&E[X_1X_2]E[X_3X_4]\\&+E[X_1X_3]E[X_2X_4]+E[X_1X_4]E[X_2X_3].\end{aligned}\]
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
-\qtitle{Problem 4}{2}{Gaussian signal through a square-law device}
-{\small\color{accentA}(Adapted from 2022--23 Q3)}\par{\small\color{accentD}Textbook section: 2.4.3}\par\vspace{2mm}
-A zero-mean stationary Gaussian white noise $N(t)$ has PSD $N_0/2$, where $N_0>0$. It passes through an RC low-pass filter
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 4}{Day 2}
+{\small\color{accentred}(Adapted from 2022--23 Q3)}\par\smallskip
+{\small\color{muted}Textbook sections: 2.4.3}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]A zero-mean stationary Gaussian white noise $N(t)$ has PSD $N_0/2$, where $N_0>0$. It passes through an RC low-pass filter
 \[H(j\omega)=\frac1{1+j\omega RC},\qquad R,C>0,\]
 whose output is $X(t)$. A second device produces $Y(t)=aX^2(t)$, where $a$ is real.
 \begin{enumerate}\item Find $R_X(\tau)$.\item Find $E[Y(t)]$, $R_Y(\tau)$ and $C_Y(\tau)$.\item Is $Y(t)$ Gaussian when $a\ne0$?\end{enumerate}
 The transfer function is supplied in place of the original circuit figure; the covariance and Gaussianity questions are extensions.
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
-\qtitle{Problem 5}{2}{Gaussian sinusoid}
-{\small\color{accentA}(Textbook 2.16 / Required)}\par{\small\color{accentD}Textbook section: 2.4.1 / 2.4.3}\par\vspace{2mm}
-Let the random process be
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 5}{Day 2}
+{\small\color{accentred}(Textbook 2.16 / Required)}\par\smallskip
+{\small\color{muted}Textbook sections: 2.4.1 / 2.4.3}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Let the random process be
 \[
 X(t)=A\cos\omega t+B\sin\omega t,
 \]
@@ -230,10 +111,11 @@ where $\omega$ is a constant and $A$ and $B$ are independent Gaussian random var
 E[A]=E[B]=0,\qquad E[A^2]=E[B^2]=\sigma^2,
 \]
 find the one-dimensional and two-dimensional probability density functions of $X(t)$.
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
-\qtitle{Problem 6}{2}{Singular three-dimensional Gaussian law}
-{\small\color{accentA}(Textbook 2.18 / Optional)}\par{\small\color{accentD}Textbook section: 2.4.1 / 2.4.3}\par\vspace{2mm}
-A Gaussian signal has mean and covariance function
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 6}{Day 2}
+{\small\color{accentred}(Textbook 2.18 / Optional)}\par\smallskip
+{\small\color{muted}Textbook sections: 2.4.1 / 2.4.3}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]A Gaussian signal has mean and covariance function
 \[
 m_X(t)=2,\qquad C_X(t_1,t_2)=8\cos(t_1-t_2).
 \]
@@ -242,22 +124,25 @@ Write down its three-dimensional probability density function at the times
 t_1=0,\qquad t_2=0.5,\qquad t_3=1.
 \]
 % Preserve the textbook question. A later solution must address the singular covariance matrix.
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
-\qtitle{Problem 7}{3}{Uniform random phase}
-{\small\color{accentA}(Adapted from 2022--23 Q2(a,b))}\par{\small\color{accentD}Textbook section: 2.2.1 / 2.5}\par\vspace{2mm}
-Let $\eta(t)=\xi(t)\cos(\omega_0t+\Theta)$, where $\xi(t)$ is a real WSS process with finite second moment and $\Theta\sim U[0,2\pi]$ is independent of the entire process.
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 7}{Day 3}
+{\small\color{accentred}(Adapted from 2022--23 Q2(a,b))}\par\smallskip
+{\small\color{muted}Textbook sections: 2.2.1 / 2.5}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Let $\eta(t)=\xi(t)\cos(\omega_0t+\Theta)$, where $\xi(t)$ is a real WSS process with finite second moment and $\Theta\sim U[0,2\pi]$ is independent of the entire process.
 Find the mean and autocorrelation of $\eta(t)$, and determine whether it is WSS. Show the phase averages explicitly. No PSD calculation is required.
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
-\qtitle{Problem 8}{3}{Orthogonal but dependent signals}
-{\small\color{accentA}(Adapted from 2024--25 Q1)}\par{\small\color{accentD}Textbook section: 2.3.2 / 2.5}\par\vspace{2mm}
-Let
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 8}{Day 3}
+{\small\color{accentred}(Adapted from 2024--25 Q1)}\par\smallskip
+{\small\color{muted}Textbook sections: 2.3.2 / 2.5}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Let
 \[X[n]=\sin(2\pi n+\Phi),\qquad Y[n]=\cos(2\pi n+\Phi),\qquad n\in\mathbb Z,\]
 where $\Phi\sim U(0,\pi)$.
 \begin{enumerate}\item Find $R_{XY}(m,n)$ and the two means.\item Are the signals orthogonal, uncorrelated, or statistically independent? Justify each answer.\item Are they jointly stationary?\end{enumerate}
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
-\qtitle{Problem 9}{3}{Pairwise versus mutual independence}
-{\small\color{accentA}(Textbook 2.11 / Optional)}\par{\small\color{accentD}Textbook section: 2.3.2 / 2.5}\par\vspace{2mm}
-Consider the two random signals
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 9}{Day 3}
+{\small\color{accentred}(Textbook 2.11 / Optional)}\par\smallskip
+{\small\color{muted}Textbook sections: 2.3.2 / 2.5}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Consider the two random signals
 \[
 X(t)=A\sin(\omega t+\Theta),\qquad
 Y(t)=B\cos(\omega t+\Theta),
@@ -268,25 +153,29 @@ where $A$ and $B$ are random variables with unspecified distributions, $\Theta$ 
 \item Find the cross-correlation function $R_{XY}(t_1,t_2)$ of the two random signals.
 \item Discuss their orthogonality, uncorrelatedness, and statistical independence.
 \end{enumerate}
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
-\qtitle{Problem 10}{4}{Correlation identities}
-{\small\color{accentA}(Recall / extension)}\par{\small\color{accentD}Textbook section: 2.1.3 / 2.3.3}\par\vspace{2mm}
-For a real process $X(t)$ with finite second moments:
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 10}{Day 4}
+{\small\color{accentred}(Recall / extension)}\par\smallskip
+{\small\color{muted}Textbook sections: 2.1.3 / 2.3.3}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]For a real process $X(t)$ with finite second moments:
 \begin{enumerate}\item Define $m_X$, $R_X$ and $C_X$, and relate $R_X(t,t)$ to variance.\item Prove that every sampled covariance matrix is positive semidefinite, and that $|C_X(s,t)|^2\le C_X(s,s)C_X(t,t)$.\item For $Y(t)=X(t+a)-X(t)$, expand $R_Y(s,t)$ without assuming stationarity.\end{enumerate}
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
-\qtitle{Problem 11}{4}{A random straight line}
-{\small\color{accentA}(Adapted from 2022--23 Q1)}\par{\small\color{accentD}Textbook section: 2.1.1--2.1.3}\par\vspace{2mm}
-Let $X(t)=U+t$ for $-2\le t\le2$, where $U\sim U[0,\pi]$.
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 11}{Day 4}
+{\small\color{accentred}(Adapted from 2022--23 Q1)}\par\smallskip
+{\small\color{muted}Textbook sections: 2.1.1--2.1.3}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Let $X(t)=U+t$ for $-2\le t\le2$, where $U\sim U[0,\pi]$.
 Sketch two sample functions, find the characteristic function of $X(t)$, and compute its mean and autocovariance. Explain whether samples at distinct times are independent.
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
-\qtitle{Problem 12}{4}{Independence at the process level}
-{\small\color{accentA}(Recall / extension)}\par{\small\color{accentD}Textbook section: 2.3.1 / 2.5}\par\vspace{2mm}
-State the finite-dimensional definition of independence of two random signals. Does independence of $X(t)$ and $Y(t)$ at every equal time imply independence of the two signals?
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 12}{Day 4}
+{\small\color{accentred}(Recall / extension)}\par\smallskip
+{\small\color{muted}Textbook sections: 2.3.1 / 2.5}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]State the finite-dimensional definition of independence of two random signals. Does independence of $X(t)$ and $Y(t)$ at every equal time imply independence of the two signals?
 Use an iid sequence $\{Z_n\}$ of fair signs and $X_n=Z_n$, $Y_n=Z_{n-1}$ to answer. Also state the criterion for two jointly Gaussian signals to be independent.
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
-\qtitle{Problem 13}{5}{One toss, two observation times}
-{\small\color{accentA}(Textbook 2.3 / Required)}\par{\small\color{accentD}Textbook section: 2.1.2 / 2.3.1}\par\vspace{2mm}
-A coin is tossed, and a random process is defined by
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 13}{Day 5}
+{\small\color{accentred}(Textbook 2.3 / Required)}\par\smallskip
+{\small\color{muted}Textbook sections: 2.1.2 / 2.3.1}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]A coin is tossed, and a random process is defined by
 \[
 X(t)=\begin{cases}
 \cos\pi t,&\text{if heads occurs},\\
@@ -299,15 +188,17 @@ Heads and tails are equally likely. Find:
 \item The two-dimensional distribution function $F_X(x_1,x_2;1/2,1)$ of $X(t)$;
 \item Sketch the graphs of the above distribution functions.
 \end{enumerate}
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
-\qtitle{Problem 14}{5}{One toss versus fresh tosses}
-{\small\color{accentA}(Adapted from 2025--26 Q1)}\par{\small\color{accentD}Textbook section: 2.1.2 / 2.3.1 / 2.5}\par\vspace{2mm}
-A fair coin is tossed once. Define $X(t)=\sin(2\pi t)$ for heads and $X(t)=t^2$ for tails.
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 14}{Day 5}
+{\small\color{accentred}(Adapted from 2025--26 Q1)}\par\smallskip
+{\small\color{muted}Textbook sections: 2.1.2 / 2.3.1 / 2.5}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]A fair coin is tossed once. Define $X(t)=\sin(2\pi t)$ for heads and $X(t)=t^2$ for tails.
 \begin{enumerate}\item Find the generalized PDF of $X(2)$.\item Find the joint generalized PDF of $(X(1),X(2))$.\item Find $C_X(s,t)$.\item Now define $Y[n]=\sin(2\pi n)$ or $n^2$ by a fresh independent fair toss at each integer $n$. Find the joint generalized PDF of $(Y[1],Y[2])$.\end{enumerate}
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
-\qtitle{Problem 15}{5}{Random amplitude and a degenerate time}
-{\small\color{accentA}(Textbook 2.1 / Optional)}\par{\small\color{accentD}Textbook section: 2.1.1 / 2.2.1}\par\vspace{2mm}
-Consider the sinusoidal random signal $X(t)=V\cos\omega t$, where $0\le t<\infty$, $\omega$ is a constant, and $V$ is uniformly distributed on $[0,1]$.
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 15}{Day 5}
+{\small\color{accentred}(Textbook 2.1 / Optional)}\par\smallskip
+{\small\color{muted}Textbook sections: 2.1.1 / 2.2.1}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Consider the sinusoidal random signal $X(t)=V\cos\omega t$, where $0\le t<\infty$, $\omega$ is a constant, and $V$ is uniformly distributed on $[0,1]$.
 \begin{enumerate}
 \item Sketch two sample functions of this process.
 \item Determine the probability density function of the random variable $X(t_i)$ at each of the times
@@ -316,10 +207,11 @@ t_i=0,\quad\frac{\pi}{4\omega},\quad\frac{3\pi}{4\omega},\quad\frac{\pi}{\omega}
 \]
 \item Find the probability density function of $X(t_0)$ when $t_0=\pi/(2\omega)$.
 \end{enumerate}
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
-\qtitle{Problem 16}{6}{Bernoulli words}
-{\small\color{accentA}(Textbook 2.4 / Optional)}\par{\small\color{accentD}Textbook section: 2.2.2}\par\vspace{2mm}
-Suppose that the binary data sequence $\{B(n),n=1,2,3,\ldots\}$ is a Bernoulli random sequence. Each bit corresponds to a random variable $B(n)$, with
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 16}{Day 6}
+{\small\color{accentred}(Textbook 2.4 / Optional)}\par\smallskip
+{\small\color{muted}Textbook sections: 2.2.2}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Suppose that the binary data sequence $\{B(n),n=1,2,3,\ldots\}$ is a Bernoulli random sequence. Each bit corresponds to a random variable $B(n)$, with
 \[
 P[B(n)=0]=0.2,\qquad P[B(n)=1]=0.8.
 \]
@@ -328,44 +220,93 @@ P[B(n)=0]=0.2,\qquad P[B(n)=1]=0.8.
 \item What is the mean word formed by four consecutive bits?
 \item Which word formed by four consecutive bits has the highest probability?
 \end{enumerate}
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
-\qtitle{Problem 17}{6}{A fair-sign sequence}
-{\small\color{accentA}(Textbook 2.8 / Optional)}\par{\small\color{accentD}Textbook section: 2.2.2 / 2.1.3}\par\vspace{2mm}
-Suppose that the Bernoulli sequence $\{I_n,n=1,2,\ldots\}$ takes the values $-1$ and $+1$ with equal probabilities.
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 17}{Day 6}
+{\small\color{accentred}(Textbook 2.8 / Optional)}\par\smallskip
+{\small\color{muted}Textbook sections: 2.2.2 / 2.1.3}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Suppose that the Bernoulli sequence $\{I_n,n=1,2,\ldots\}$ takes the values $-1$ and $+1$ with equal probabilities.
 
 Find its one-dimensional probability density function, mean, and covariance function.
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
-\qtitle{Problem 18}{6}{Gaussian straight-line process}
-{\small\color{accentA}(Textbook 2.7 / Optional)}\par{\small\color{accentD}Textbook section: 2.4.2 / 2.1.3}\par\vspace{2mm}
-The position of a moving particle is described by the straight-line process
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 18}{Day 6}
+{\small\color{accentred}(Textbook 2.7 / Optional)}\par\smallskip
+{\small\color{muted}Textbook sections: 2.4.2 / 2.1.3}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]The position of a moving particle is described by the straight-line process
 \[
 X(t)=Vt+X_0,
 \]
 where $V\sim N(1,1)$ and $X_0\sim N(0,2)$ are independent.
 
 Find the one-dimensional probability density function, mean, and variance of the random variable $X(t)$ at time $t$.
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
-\qtitle{Problem 19}{7}{Random voltage across a parallel RC circuit}
-{\small\color{accentA}(Textbook 2.13 / Required)}\par{\small\color{accentD}Textbook section: 2.2.1 / 2.3.4}\par\vspace{2mm}
-Consider the sinusoidal voltage signal
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 19}{Day 7}
+{\small\color{accentred}(Textbook 2.13 / Required)}\par\smallskip
+{\small\color{muted}Textbook sections: 2.2.1 / 2.3.4}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Consider the sinusoidal voltage signal
 \[
 X(t)=A\cos(\omega t+\Theta),
 \]
 where $\omega$ is a constant, $A\sim U(-1,+1)$, and $\Theta\sim U(-\pi,+\pi)$. The random variables $A$ and $\Theta$ are independent.
 
 If this voltage is applied across a parallel RC circuit, find the total current signal and its mean-square value.
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
-\qtitle{Problem 20}{7}{Integration of a random signal}
-{\small\color{accentA}(Textbook 2.14 / translated)}\par{\small\color{accentD}Textbook section: 2.3.4}\par\vspace{2mm}
-For the integral of a random signal,
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 20}{Day 7}
+{\small\color{accentred}(Textbook 2.14 / translated)}\par\smallskip
+{\small\color{muted}Textbook sections: 2.3.4}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]For the integral of a random signal,
 \[Y(t)=\int_0^t X(u)\,du,\qquad t\ge0,\]
 find expressions for its mean and autocorrelation function. State sufficient conditions that justify interchanging integration and expectation.
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
-\qtitle{Problem 21}{7}{White noise is not a Gaussian assumption}
-{\small\color{accentA}(Adapted from 2023--24 Q2(c))}\par{\small\color{accentD}Textbook section: 2.4.3}\par\vspace{2mm}
-A zero-mean white noise $W(t)$ with PSD $N_0/2$ passes through $h(t)=e^{-t}u(t)$ to produce $X(t)$. Let $Y(t)=X(t)-X(t-T)$, with $T>0$ and $N_0>0$.
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 21}{Day 7}
+{\small\color{accentred}(Adapted from 2023--24 Q2(c))}\par\smallskip
+{\small\color{muted}Textbook sections: 2.4.3}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]A zero-mean white noise $W(t)$ with PSD $N_0/2$ passes through $h(t)=e^{-t}u(t)$ to produce $X(t)$. Let $Y(t)=X(t)-X(t-T)$, with $T>0$ and $N_0>0$.
 You may use $R_X(\tau)=N_0e^{-|\tau|}/4$.
 \begin{enumerate}\item Do the stated assumptions imply that $Y(t)$ is Gaussian?\item Under the additional assumption that $W$ is Gaussian white noise, find the one-dimensional PDF of $Y(t)$.\item Describe the case $T=0$.\end{enumerate}
 The extra Gaussian assumption in (2) is explicit; it was not stated in the original exam stem.
-\par\vspace{3mm}\begin{workspace}\textcolor{gray}{Working / Answer}\end{workspace}
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 22}{Day 8}
+{\small\color{accentred}(Adapted from 2018--19 Q3 (201812))}\par\smallskip
+{\small\color{muted}Textbook sections: 2.2.1 / 2.4.2 / 2.4.3}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Let $X(t)=A\cos(\omega t)+B\sin(\omega t)$, with independent $A,B\sim N(0,\sigma^2)$, $\sigma^2>0$ and $\omega\ne0$.
+\begin{enumerate}\item Find $m_X(t)$ and $R_X(s,t)$.\item Prove that $X$ is Gaussian and WSS (Chapter 3 extension).\item Are the component processes $A\cos(\omega t)$ and $B\sin(\omega t)$ individually WSS?\end{enumerate}
+The original paper calls the first component stationary. This adaptation asks you to check that claim rather than assume it.
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 23}{Day 8}
+{\small\color{accentred}(2020--21 / 2021--22 Q1; extended (202104/202112))}\par\smallskip
+{\small\color{muted}Textbook sections: 2.4.1 / 2.4.3 / 2.1.3}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Let $X(t)=A+B\cos t$, where $A,B$ are independent $N(0,1)$ variables.
+\begin{enumerate}\item Find its mean, autocorrelation and one-dimensional PDF.\item For fixed $s,t$, find the covariance matrix and joint PDF of $(X(s),X(t))$ whenever an ordinary PDF exists. Describe the singular case.\item Evaluate the matrix and joint CF at $s=0,t=\pi/2$. Is the process WSS?\end{enumerate}
+Singular times and WSS are explicit extensions of the exam questions.
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 24}{Day 8}
+{\small\color{accentred}(Adapted from 2019--20 Q3 (201912))}\par\smallskip
+{\small\color{muted}Textbook sections: 2.2.3 / 2.1.3}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Let $B_k$, $k\in\mathbb Z$, be independent Bernoulli variables with $P(B_k=0)=P(B_k=1)=1/2$. For $T_0>0$, define the fixed-clock binary signal
+\[X(t)=B_{\lfloor t/T_0\rfloor}.\]
+\begin{enumerate}\item Find $m_X(t)$ and $R_X(t,t+\tau)$.\item Is $X$ WSS? Show the role of symbol boundaries.\item As an extension, let $D\sim U(0,T_0)$ be independent and set $Y(t)=X(t-D)$. Find $R_Y(\tau)$.\end{enumerate}
+The fixed-clock convention is explicit; randomizing the clock is a separate extension.
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 25}{Day 9}
+{\small\color{accentred}(Adapted from 2018--19 Q4 / 2019--20 Q4)}\par\smallskip
+{\small\color{muted}Textbook sections: 2.2.1 / 2.5; extension 4.1}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Let $X(t)=A\cos(\omega t+\Theta)$, $\omega\ne0$, with $\Theta\sim U(0,2\pi)$, independent of a real random amplitude $A$. The amplitude is fixed during each realization and $E(A^2)<\infty$.
+\begin{enumerate}\item Find its mean and autocorrelation.\item Find the time mean and time autocorrelation of a realization.\item Under what condition is it correlation ergodic? Does mean ergodicity require the same condition?\end{enumerate}
+Independence, constant-in-time amplitude, and finite second moment are explicit assumptions; the original allowed several amplitude models.
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 26}{Day 9}
+{\small\color{accentred}(Adapted from 2019--20 Q5 (201912))}\par\smallskip
+{\small\color{muted}Textbook sections: 2.2.1 / 2.4.3; extension 4.1}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Let $X(t)=\operatorname{sgn}(A)\cos(\omega_0t+\Theta)$, with independent $A\sim N(0,1)$ and $\Theta\sim U(0,2\pi)$, $\omega_0\ne0$.
+\begin{enumerate}\item Find $m_X(t)$ and $R_X(s,t)$.\item Is $X(t)$ Gaussian? Derive its one-dimensional PDF.\item Compare its time and ensemble mean and autocorrelation (Chapter 4 extension).\end{enumerate}
+The PDF and Gaussianity questions are extensions.
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 27}{Day 9}
+{\small\color{accentred}(2021--22 Q2(a,b); extensions (202112))}\par\smallskip
+{\small\color{muted}Textbook sections: 2.3.2 / 2.5; extension 3.1}\par\medskip
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Let $X$ and $N$ be independent real zero-mean WSS processes with finite second moments. A radar receiver observes
+\[Y(t)=\alpha X(t-d)+N(t),\qquad d>0,\quad\alpha\in\mathbb R.\]
+\begin{enumerate}\item Find $m_Y(t)$ and $R_Y(\tau)$.\item With $R_{XY}(\tau)=E[X(t)Y(t+\tau)]$, find $R_{XY}(\tau)$ and $R_{YX}(\tau)$.\item Are $Y$ WSS and $X,Y$ jointly WSS? Is $Y$ necessarily Gaussian?\end{enumerate}
+The time delay is renamed $d$ to distinguish it from the correlation lag; Gaussianity is an extension.
+\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
 \end{document}

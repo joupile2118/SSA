@@ -1,0 +1,27 @@
+% Copy this preamble into a self-contained final file; adjust chapter, title and dates.
+% Self-contained source. Compile twice with XeLaTeX into tmp/.
+% Exercise wording is translated from the Chinese textbook, not an official English edition.
+\documentclass[12pt]{article}
+\usepackage[paperwidth=222.6413mm,paperheight=297mm,margin=22mm,headheight=16pt,headsep=8mm,footskip=12mm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,enumitem,fancyhdr,xcolor,lastpage}
+\usepackage[unicode,hidelinks]{hyperref}
+\hypersetup{pdftitle={Stochastic Signal Analysis - Homework 2},pdfauthor={}}
+\definecolor{muted}{gray}{0.38}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small Stochastic Signal Analysis}
+\fancyhead[R]{\small Homework 2}
+\fancyfoot[L]{\scriptsize\color{muted}English translation from the Chinese textbook (5th ed.)}
+\fancyfoot[R]{\small Page \thepage\ of \pageref*{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\parindent}{0pt}\setlength{\parskip}{0.5em}
+\linespread{1.18}
+\setlist[enumerate]{label=(\arabic*),leftmargin=2.3em,labelsep=0.4em,itemsep=0.35em,topsep=0.4em}
+\newcommand{\problem}[3]{%
+ {\small\color{muted}Chapter 2\enspace /\enspace Random Signals}\par
+ {\small Issued: 13 October 2026\hfill Due: \textbf{27 October 2026}}\par
+ \vspace{2mm}
+ {\small Name: \underline{\hspace{35mm}}\hfill Student ID: \underline{\hspace{38mm}}}\par
+ \vspace{4mm}
+ {\LARGE\bfseries Exercise #1}\hfill{\normalsize\bfseries #2}\par
+ {\small\color{muted}Textbook p.\ #3}\par\vspace{3mm}}
+\newcommand{\answer}{\par\vspace{6mm}{\small\color{muted}Answer / Working}\par\vspace{1mm}{\color{muted}\hrule height 0.3pt}\vfill}

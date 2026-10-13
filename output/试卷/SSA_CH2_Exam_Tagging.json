@@ -1,0 +1,1190 @@
+{
+  "method": "Each subquestion has one primary owner; support adds no marks. Existing recent-four primary assignments retained; both chapters share this full corpus.",
+  "papers": [
+    {
+      "id": "201812",
+      "year": "2018--19",
+      "exam_date": "2019-01-04",
+      "path": "试卷/UESTC3024_1_Stochastic_Signal_Analysis_201812.pdf",
+      "sha256": "ec267ab386c53b40c98790a4c304920882cd6ad8a89b07234d1152cee676e42e",
+      "total_marks": 100,
+      "questions": 8
+    },
+    {
+      "id": "201912",
+      "year": "2019--20",
+      "exam_date": "2019-12-29",
+      "path": "试卷/UESTC3024_1_Stochastic_Signal_Analysis_201912.pdf",
+      "sha256": "c69ad5a3d69bf522b78f699b73f68fe3f0a1e53bbfcd2ed38730735801d31a66",
+      "total_marks": 100,
+      "questions": 8
+    },
+    {
+      "id": "202104",
+      "year": "2020--21",
+      "exam_date": "2021-01-11",
+      "path": "试卷/UESTC3024_1_Stochastic_Signal_Analysis_202104.pdf",
+      "sha256": "d694cdc95a048621a88996314bc7c8bd0222c02745ce4c43f235978ed17245ef",
+      "total_marks": 100,
+      "questions": 4
+    },
+    {
+      "id": "202112",
+      "year": "2021--22",
+      "exam_date": "2022-01-04",
+      "path": "试卷/UESTC3024_1_Stochastic_Signal_Analysis_202112.pdf",
+      "sha256": "09b3aee5c58c456734ba4d75ff55007ac224db32a838a898a7e110b2de1c3b37",
+      "total_marks": 100,
+      "questions": 4
+    },
+    {
+      "id": "202212",
+      "year": "2022--23",
+      "exam_date": "2023-02-28",
+      "path": "试卷/UESTC3024_1_Stochastic Signal Analysis_202212.pdf",
+      "sha256": "b09a8bba7f518786e6be44e2f8af61342f60c1fcfee4fffb4132555f5c133cd8",
+      "total_marks": 100,
+      "questions": 4
+    },
+    {
+      "id": "202312",
+      "year": "2023--24",
+      "exam_date": "2023-12-28",
+      "path": "试卷/UESTC3024_1_Stochastic Signal Analysis_202312.pdf",
+      "sha256": "0a59602973a0d0d11256e213dbde611780d83aabec230a194095530f2643347d",
+      "total_marks": 100,
+      "questions": 4
+    },
+    {
+      "id": "202412",
+      "year": "2024--25",
+      "exam_date": "2024-12",
+      "path": "试卷/UESTC3024-UESTCHN3016_1_Stochastic Signal Analysis_202412.pdf",
+      "sha256": "17ab21a2e9194ece203f86d0daa012aa18713109c7a7df0e186cc60bc9b529b9",
+      "total_marks": 100,
+      "questions": 4
+    },
+    {
+      "id": "202512",
+      "year": "2025--26",
+      "exam_date": "2026-01-04",
+      "path": "试卷/UESTC3024_UESTCHN3016_Stochastic Signal Analysis_202512_1.pdf",
+      "sha256": "49b3e74bae0a2f7e5cfbf3b93a17506109714b4abb74a654a97a6730f25faa92",
+      "total_marks": 100,
+      "questions": 4
+    }
+  ],
+  "rows": [
+    {
+      "year": "2018--19",
+      "q": "Q1",
+      "marks": 10,
+      "primary": "1.3.1",
+      "support": [
+        "1.6"
+      ],
+      "note": "均匀变量的仿射变换 Y=5X+1"
+    },
+    {
+      "year": "2018--19",
+      "q": "Q2a",
+      "marks": 4,
+      "primary": "1.2.1",
+      "support": [],
+      "note": "联合密度 A sin(x+y) 的归一化"
+    },
+    {
+      "year": "2018--19",
+      "q": "Q2b",
+      "marks": 6,
+      "primary": "1.4.1",
+      "support": [
+        "1.2.1"
+      ],
+      "note": "由联合密度求两个均值"
+    },
+    {
+      "year": "2018--19",
+      "q": "Q3",
+      "marks": 10,
+      "primary": "2.2.1",
+      "support": [
+        "1.2.3",
+        "1.4.2",
+        "2.4.2",
+        "2.3.2"
+      ],
+      "note": "独立高斯系数正余弦的均值与相关"
+    },
+    {
+      "year": "2018--19",
+      "q": "Q4a",
+      "marks": 5,
+      "primary": "2.2.1",
+      "support": [
+        "1.2.3",
+        "1.4.2"
+      ],
+      "note": "随机相位回波的均值与相关；幅度条件须说明"
+    },
+    {
+      "year": "2018--19",
+      "q": "Q4b",
+      "marks": 5,
+      "primary": "4.1.1",
+      "support": [
+        "2.2.1"
+      ],
+      "note": "正弦回波的时间均值"
+    },
+    {
+      "year": "2018--19",
+      "q": "Q4c",
+      "marks": 6,
+      "primary": "4.1.2",
+      "support": [
+        "2.2.1"
+      ],
+      "note": "随机幅度下的各态历经条件"
+    },
+    {
+      "year": "2018--19",
+      "q": "Q5",
+      "marks": 7,
+      "primary": "5.1.2",
+      "support": [
+        "2.3.2"
+      ],
+      "note": "级联系统中两输出的互相关"
+    },
+    {
+      "year": "2018--19",
+      "q": "Q6a",
+      "marks": 8,
+      "primary": "5.1.2",
+      "support": [
+        "1.4.2"
+      ],
+      "note": "已知谱经一阶滤波后的均值与功率"
+    },
+    {
+      "year": "2018--19",
+      "q": "Q6b",
+      "marks": 5,
+      "primary": "5.2.3",
+      "support": [],
+      "note": "等效噪声带宽"
+    },
+    {
+      "year": "2018--19",
+      "q": "Q6c",
+      "marks": 3,
+      "primary": "5.3.2",
+      "support": [],
+      "note": "输出的等效矩形带宽"
+    },
+    {
+      "year": "2018--19",
+      "q": "Q7a",
+      "marks": 10,
+      "primary": "6.3.2",
+      "support": [],
+      "note": "三角形带通谱的正交分量相关"
+    },
+    {
+      "year": "2018--19",
+      "q": "Q7b",
+      "marks": 6,
+      "primary": "6.4.1",
+      "support": [
+        "1.6",
+        "2.4.1",
+        "2.4.3"
+      ],
+      "note": "窄带高斯正交分量的联合密度"
+    },
+    {
+      "year": "2018--19",
+      "q": "Q8",
+      "marks": 15,
+      "primary": "5.1.2",
+      "support": [
+        "2.2.1"
+      ],
+      "note": "随机相位单频输入的一阶滤波输出相关"
+    },
+    {
+      "year": "2019--20",
+      "q": "Q1a",
+      "marks": 6,
+      "primary": "1.3.1",
+      "support": [
+        "1.6"
+      ],
+      "note": "Y=6X+2 的密度；Gaussian in [0,1] 有歧义"
+    },
+    {
+      "year": "2019--20",
+      "q": "Q1b",
+      "marks": 4,
+      "primary": "1.5.1",
+      "support": [
+        "1.3.1"
+      ],
+      "note": "仿射变换特征函数；分布参数须澄清"
+    },
+    {
+      "year": "2019--20",
+      "q": "Q2",
+      "marks": 8,
+      "primary": "1.2.1",
+      "support": [
+        "1.4.1"
+      ],
+      "note": "联合密度 x exp[-x(y+1)] 的边缘密度"
+    },
+    {
+      "year": "2019--20",
+      "q": "Q3a",
+      "marks": 4,
+      "primary": "2.2.3",
+      "support": [],
+      "note": "半随机 0/1 二进制信号均值"
+    },
+    {
+      "year": "2019--20",
+      "q": "Q3b",
+      "marks": 6,
+      "primary": "2.2.3",
+      "support": [
+        "1.2.3",
+        "2.1.3"
+      ],
+      "note": "同一符号区间与不同区间的相关"
+    },
+    {
+      "year": "2019--20",
+      "q": "Q4a",
+      "marks": 4,
+      "primary": "2.2.1",
+      "support": [
+        "1.2.3"
+      ],
+      "note": "随机相位正弦回波均值与相关"
+    },
+    {
+      "year": "2019--20",
+      "q": "Q4b",
+      "marks": 4,
+      "primary": "4.1.1",
+      "support": [
+        "2.2.1"
+      ],
+      "note": "回波信号的时间均值"
+    },
+    {
+      "year": "2019--20",
+      "q": "Q4c",
+      "marks": 6,
+      "primary": "4.1.2",
+      "support": [
+        "2.2.1"
+      ],
+      "note": "随机幅度与相关各态历经"
+    },
+    {
+      "year": "2019--20",
+      "q": "Q5a",
+      "marks": 3,
+      "primary": "2.2.1",
+      "support": [
+        "1.6",
+        "1.2.3"
+      ],
+      "note": "sgn(A) 随机相位正弦的二阶量"
+    },
+    {
+      "year": "2019--20",
+      "q": "Q5b",
+      "marks": 7,
+      "primary": "4.1.2",
+      "support": [
+        "2.2.1"
+      ],
+      "note": "符号随机幅度的广义各态历经"
+    },
+    {
+      "year": "2019--20",
+      "q": "Q6a",
+      "marks": 8,
+      "primary": "5.1.2",
+      "support": [
+        "1.4.2"
+      ],
+      "note": "一阶滤波后的均值与功率"
+    },
+    {
+      "year": "2019--20",
+      "q": "Q6b",
+      "marks": 5,
+      "primary": "5.2.3",
+      "support": [],
+      "note": "等效噪声带宽"
+    },
+    {
+      "year": "2019--20",
+      "q": "Q6c",
+      "marks": 3,
+      "primary": "5.3.2",
+      "support": [],
+      "note": "等效矩形带宽"
+    },
+    {
+      "year": "2019--20",
+      "q": "Q7a",
+      "marks": 8,
+      "primary": "6.3.2",
+      "support": [],
+      "note": "正交分量谱与相关"
+    },
+    {
+      "year": "2019--20",
+      "q": "Q7b",
+      "marks": 6,
+      "primary": "6.4.1",
+      "support": [
+        "1.6",
+        "2.4.1",
+        "2.4.3"
+      ],
+      "note": "窄带高斯联合密度"
+    },
+    {
+      "year": "2019--20",
+      "q": "Q8a",
+      "marks": 4,
+      "primary": "2.2.1",
+      "support": [
+        "1.4.2"
+      ],
+      "note": "同步检波本振的均值与相关"
+    },
+    {
+      "year": "2019--20",
+      "q": "Q8b",
+      "marks": 6,
+      "primary": "6.3.2",
+      "support": [
+        "2.3.2",
+        "2.5"
+      ],
+      "note": "独立相乘信号的均值与相关"
+    },
+    {
+      "year": "2019--20",
+      "q": "Q8c",
+      "marks": 4,
+      "primary": "6.3.2",
+      "support": [],
+      "note": "混频及低通后的功率谱"
+    },
+    {
+      "year": "2019--20",
+      "q": "Q8d",
+      "marks": 4,
+      "primary": "6.3.2",
+      "support": [],
+      "note": "低通输出相关与平均功率"
+    },
+    {
+      "year": "2020--21",
+      "q": "Q1a",
+      "marks": 15,
+      "primary": "2.4.3",
+      "support": [
+        "2.4.1",
+        "2.4.2",
+        "1.2.3",
+        "1.6"
+      ],
+      "note": "A+B cos(t) 的一维与二维高斯分布"
+    },
+    {
+      "year": "2020--21",
+      "q": "Q1b",
+      "marks": 10,
+      "primary": "1.4.2",
+      "support": [
+        "2.1.3",
+        "2.4.1"
+      ],
+      "note": "两时刻采样向量的协方差矩阵"
+    },
+    {
+      "year": "2020--21",
+      "q": "Q2a",
+      "marks": 8,
+      "primary": "2.2.1",
+      "support": [
+        "2.5",
+        "1.2.3"
+      ],
+      "note": "随机相位正弦加独立噪声的均值"
+    },
+    {
+      "year": "2020--21",
+      "q": "Q2b",
+      "marks": 8,
+      "primary": "2.2.1",
+      "support": [
+        "2.3.2",
+        "2.5",
+        "3.5"
+      ],
+      "note": "正弦与白噪声之和的相关；连续白噪声须谨慎"
+    },
+    {
+      "year": "2020--21",
+      "q": "Q2c",
+      "marks": 2,
+      "primary": "3.1.1",
+      "support": [
+        "2.2.1"
+      ],
+      "note": "判断广义平稳"
+    },
+    {
+      "year": "2020--21",
+      "q": "Q2d",
+      "marks": 7,
+      "primary": "3.4.2",
+      "support": [
+        "2.2.1"
+      ],
+      "note": "正弦线谱与白噪声谱叠加"
+    },
+    {
+      "year": "2020--21",
+      "q": "Q3a",
+      "marks": 10,
+      "primary": "5.1.2",
+      "support": [],
+      "note": "三角相关输入经RC后的功率谱"
+    },
+    {
+      "year": "2020--21",
+      "q": "Q3b",
+      "marks": 15,
+      "primary": "5.1.2",
+      "support": [
+        "2.3.2"
+      ],
+      "note": "输出减输入的功率谱"
+    },
+    {
+      "year": "2020--21",
+      "q": "Q4a",
+      "marks": 8,
+      "primary": "5.1.2",
+      "support": [],
+      "note": "指数相关高斯输入经指数冲激响应"
+    },
+    {
+      "year": "2020--21",
+      "q": "Q4b",
+      "marks": 10,
+      "primary": "1.6",
+      "support": [
+        "2.4.3"
+      ],
+      "note": "滤波高斯输出的一维密度"
+    },
+    {
+      "year": "2020--21",
+      "q": "Q4c",
+      "marks": 7,
+      "primary": "1.6",
+      "support": [
+        "1.1.2",
+        "2.4.3"
+      ],
+      "note": "零均值非退化高斯变量为正的概率"
+    },
+    {
+      "year": "2021--22",
+      "q": "Q1a",
+      "marks": 5,
+      "primary": "1.4.2",
+      "support": [
+        "2.1.3"
+      ],
+      "note": "A+B cos(t) 的均值与自相关"
+    },
+    {
+      "year": "2021--22",
+      "q": "Q1b",
+      "marks": 10,
+      "primary": "2.4.3",
+      "support": [
+        "2.4.1",
+        "2.4.2",
+        "1.2.3",
+        "1.6"
+      ],
+      "note": "一维与二维高斯密度及奇异时刻"
+    },
+    {
+      "year": "2021--22",
+      "q": "Q1c",
+      "marks": 10,
+      "primary": "1.5.2",
+      "support": [
+        "1.4.2",
+        "2.4.1"
+      ],
+      "note": "X(0),X(pi/2) 的联合特征函数与协方差"
+    },
+    {
+      "year": "2021--22",
+      "q": "Q2a",
+      "marks": 7,
+      "primary": "2.3.2",
+      "support": [
+        "2.5",
+        "1.2.3"
+      ],
+      "note": "独立回波与噪声之和的均值、相关"
+    },
+    {
+      "year": "2021--22",
+      "q": "Q2b",
+      "marks": 5,
+      "primary": "2.3.2",
+      "support": [
+        "2.5",
+        "1.2.3"
+      ],
+      "note": "发射信号与带时延回波的互相关"
+    },
+    {
+      "year": "2021--22",
+      "q": "Q2c",
+      "marks": 5,
+      "primary": "3.1.1",
+      "support": [
+        "2.3.2"
+      ],
+      "note": "回波加噪声的广义平稳性"
+    },
+    {
+      "year": "2021--22",
+      "q": "Q2d",
+      "marks": 8,
+      "primary": "3.1.2",
+      "support": [
+        "2.3.2"
+      ],
+      "note": "输入与回波的联合广义平稳"
+    },
+    {
+      "year": "2021--22",
+      "q": "Q3a",
+      "marks": 5,
+      "primary": "5.1.2",
+      "support": [],
+      "note": "RC/RL频响及输出差分的谱"
+    },
+    {
+      "year": "2021--22",
+      "q": "Q3b",
+      "marks": 7,
+      "primary": "5.1.2",
+      "support": [
+        "2.3.2"
+      ],
+      "note": "RC/RL频响及输出差分的谱"
+    },
+    {
+      "year": "2021--22",
+      "q": "Q3c",
+      "marks": 5,
+      "primary": "5.1.2",
+      "support": [],
+      "note": "RC/RL频响及输出差分的谱"
+    },
+    {
+      "year": "2021--22",
+      "q": "Q3d",
+      "marks": 8,
+      "primary": "5.1.2",
+      "support": [
+        "2.3.2"
+      ],
+      "note": "RC/RL频响及输出差分的谱"
+    },
+    {
+      "year": "2021--22",
+      "q": "Q4a",
+      "marks": 6,
+      "primary": "3.4.2",
+      "support": [],
+      "note": "带通余弦谱积分求功率"
+    },
+    {
+      "year": "2021--22",
+      "q": "Q4b",
+      "marks": 7,
+      "primary": "6.3.2",
+      "support": [],
+      "note": "正交分量功率谱"
+    },
+    {
+      "year": "2021--22",
+      "q": "Q4c",
+      "marks": 7,
+      "primary": "6.3.2",
+      "support": [
+        "2.3.2"
+      ],
+      "note": "同相与正交分量互谱及互相关"
+    },
+    {
+      "year": "2021--22",
+      "q": "Q4d",
+      "marks": 5,
+      "primary": "1.4.3",
+      "support": [
+        "2.3.2",
+        "6.3.3"
+      ],
+      "note": "由零互相关和零均值判断正交、无关"
+    },
+    {
+      "year": "2022--23",
+      "q": "Q1a",
+      "marks": 6,
+      "primary": "2.1.1",
+      "support": [],
+      "note": "固定随机参数画样本函数"
+    },
+    {
+      "year": "2022--23",
+      "q": "Q1b",
+      "marks": 9,
+      "primary": "1.5.1",
+      "support": [
+        "2.1.2"
+      ],
+      "note": "平移均匀变量的特征函数"
+    },
+    {
+      "year": "2022--23",
+      "q": "Q1c",
+      "marks": 10,
+      "primary": "1.4.2",
+      "support": [
+        "2.1.3"
+      ],
+      "note": "随机直线的均值与协方差"
+    },
+    {
+      "year": "2022--23",
+      "q": "Q2a",
+      "marks": 8,
+      "primary": "2.2.1",
+      "support": [
+        "1.2.3",
+        "2.5"
+      ],
+      "note": "均匀随机相位平均为零"
+    },
+    {
+      "year": "2022--23",
+      "q": "Q2b",
+      "marks": 8,
+      "primary": "3.1.1",
+      "support": [
+        "1.2.3",
+        "1.4.2",
+        "2.2.1",
+        "2.5"
+      ],
+      "note": "计算相关后判断广义平稳"
+    },
+    {
+      "year": "2022--23",
+      "q": "Q2c",
+      "marks": 9,
+      "primary": "3.4.2",
+      "support": [],
+      "note": "由相关函数变换得到调制谱"
+    },
+    {
+      "year": "2022--23",
+      "q": "Q3a",
+      "marks": 10,
+      "primary": "5.2.1",
+      "support": [],
+      "note": "白噪声通过RC低通"
+    },
+    {
+      "year": "2022--23",
+      "q": "Q3b",
+      "marks": 15,
+      "primary": "2.4.3",
+      "support": [
+        "1.6",
+        "2.4.2"
+      ],
+      "note": "承接(a)，平方器输出需高斯四阶矩"
+    },
+    {
+      "year": "2022--23",
+      "q": "Q4a",
+      "marks": 15,
+      "primary": "5.1.2",
+      "support": [],
+      "note": "LTI输出均值、谱和相关"
+    },
+    {
+      "year": "2022--23",
+      "q": "Q4b",
+      "marks": 10,
+      "primary": "1.3.1",
+      "support": [
+        "1.6",
+        "2.4.1",
+        "2.4.3"
+      ],
+      "note": "高斯输入经线性系统保持高斯"
+    },
+    {
+      "year": "2023--24",
+      "q": "Q1a",
+      "marks": 12,
+      "primary": "3.1.2",
+      "support": [
+        "1.2.3",
+        "1.4.2",
+        "2.3.2",
+        "2.5"
+      ],
+      "note": "和差信号的联合平稳性"
+    },
+    {
+      "year": "2023--24",
+      "q": "Q1b",
+      "marks": 6,
+      "primary": "3.4.2",
+      "support": [],
+      "note": "和信号的功率谱"
+    },
+    {
+      "year": "2023--24",
+      "q": "Q1c",
+      "marks": 7,
+      "primary": "3.4.2",
+      "support": [
+        "2.3.2"
+      ],
+      "note": "由已知谱反变换并组合互相关"
+    },
+    {
+      "year": "2023--24",
+      "q": "Q2a",
+      "marks": 10,
+      "primary": "5.2.1",
+      "support": [],
+      "note": "白噪声滤波后的相关函数"
+    },
+    {
+      "year": "2023--24",
+      "q": "Q2b",
+      "marks": 7,
+      "primary": "5.1.2",
+      "support": [
+        "2.3.3"
+      ],
+      "note": "延时差分的输出谱"
+    },
+    {
+      "year": "2023--24",
+      "q": "Q2c",
+      "marks": 8,
+      "primary": "1.6",
+      "support": [
+        "2.4.3"
+      ],
+      "note": "白噪声未明说高斯，结论需条件"
+    },
+    {
+      "year": "2023--24",
+      "q": "Q3a",
+      "marks": 4,
+      "primary": "1.2.1",
+      "support": [],
+      "note": "联合密度归一化"
+    },
+    {
+      "year": "2023--24",
+      "q": "Q3b",
+      "marks": 8,
+      "primary": "1.4.1",
+      "support": [],
+      "note": "由密度求均值"
+    },
+    {
+      "year": "2023--24",
+      "q": "Q3c",
+      "marks": 6,
+      "primary": "1.4.2",
+      "support": [],
+      "note": "由密度求方差"
+    },
+    {
+      "year": "2023--24",
+      "q": "Q3d",
+      "marks": 7,
+      "primary": "1.4.2",
+      "support": [
+        "1.4.3"
+      ],
+      "note": "联合矩与相关系数"
+    },
+    {
+      "year": "2023--24",
+      "q": "Q4a",
+      "marks": 4,
+      "primary": "6.3.1",
+      "support": [],
+      "note": "希尔伯特变换与正交分量"
+    },
+    {
+      "year": "2023--24",
+      "q": "Q4b",
+      "marks": 15,
+      "primary": "6.3.2",
+      "support": [],
+      "note": "正交分量功率谱与互谱"
+    },
+    {
+      "year": "2023--24",
+      "q": "Q4c",
+      "marks": 6,
+      "primary": "6.3.2",
+      "support": [],
+      "note": "载频位置改变互谱"
+    },
+    {
+      "year": "2024--25",
+      "q": "Q1a",
+      "marks": 7,
+      "primary": "2.3.2",
+      "support": [
+        "2.2.1"
+      ],
+      "note": "离散正弦和余弦的互相关"
+    },
+    {
+      "year": "2024--25",
+      "q": "Q1b",
+      "marks": 9,
+      "primary": "1.4.3",
+      "support": [
+        "1.2.3",
+        "2.3.2",
+        "2.5"
+      ],
+      "note": "正交、无关与独立性区别"
+    },
+    {
+      "year": "2024--25",
+      "q": "Q1c",
+      "marks": 9,
+      "primary": "3.1.2",
+      "support": [
+        "2.3.2"
+      ],
+      "note": "联合平稳性判断"
+    },
+    {
+      "year": "2024--25",
+      "q": "Q2a",
+      "marks": 12,
+      "primary": "3.1.1",
+      "support": [
+        "2.2.1",
+        "2.3.2"
+      ],
+      "note": "正交调制和信号的平稳条件"
+    },
+    {
+      "year": "2024--25",
+      "q": "Q2b",
+      "marks": 8,
+      "primary": "3.4.2",
+      "support": [],
+      "note": "由平稳条件求功率谱"
+    },
+    {
+      "year": "2024--25",
+      "q": "Q2c",
+      "marks": 5,
+      "primary": "1.4.3",
+      "support": [
+        "2.3.2"
+      ],
+      "note": "无关条件下交叉项简化"
+    },
+    {
+      "year": "2024--25",
+      "q": "Q3a",
+      "marks": 9,
+      "primary": "5.2.1",
+      "support": [],
+      "note": "RC电阻、电容支路频响"
+    },
+    {
+      "year": "2024--25",
+      "q": "Q3b",
+      "marks": 6,
+      "primary": "5.2.1",
+      "support": [],
+      "note": "由支路谱求相关"
+    },
+    {
+      "year": "2024--25",
+      "q": "Q3c",
+      "marks": 10,
+      "primary": "5.1.2",
+      "support": [
+        "2.3.2"
+      ],
+      "note": "先由支路频响求互相关"
+    },
+    {
+      "year": "2024--25",
+      "q": "Q4a",
+      "marks": 9,
+      "primary": "6.3.2",
+      "support": [],
+      "note": "理想带通噪声及正交分量"
+    },
+    {
+      "year": "2024--25",
+      "q": "Q4b",
+      "marks": 6,
+      "primary": "6.3.2",
+      "support": [],
+      "note": "同相与正交分量互谱"
+    },
+    {
+      "year": "2024--25",
+      "q": "Q4c",
+      "marks": 10,
+      "primary": "1.6",
+      "support": [
+        "1.2.3",
+        "2.4.1",
+        "2.4.2",
+        "2.4.3"
+      ],
+      "note": "联合高斯密度及无关推独立"
+    },
+    {
+      "year": "2025--26",
+      "q": "Q1a",
+      "marks": 6,
+      "primary": "1.1.2",
+      "support": [
+        "2.1.2"
+      ],
+      "note": "同一次投币定义的单时刻密度"
+    },
+    {
+      "year": "2025--26",
+      "q": "Q1b",
+      "marks": 6,
+      "primary": "1.2.1",
+      "support": [
+        "2.3.1"
+      ],
+      "note": "同一次投币定义的二时刻密度"
+    },
+    {
+      "year": "2025--26",
+      "q": "Q1c",
+      "marks": 6,
+      "primary": "1.4.2",
+      "support": [
+        "2.1.3"
+      ],
+      "note": "两个样本函数的协方差"
+    },
+    {
+      "year": "2025--26",
+      "q": "Q1d",
+      "marks": 7,
+      "primary": "1.2.1",
+      "support": [
+        "1.2.3",
+        "2.2.2",
+        "2.5"
+      ],
+      "note": "每个时刻重新独立投币"
+    },
+    {
+      "year": "2025--26",
+      "q": "Q2a",
+      "marks": 9,
+      "primary": "1.5.1",
+      "support": [
+        "1.2.3",
+        "2.2.1",
+        "2.5"
+      ],
+      "note": "相位特征函数控制平稳条件"
+    },
+    {
+      "year": "2025--26",
+      "q": "Q2b",
+      "marks": 7,
+      "primary": "3.4.2",
+      "support": [],
+      "note": "随机幅度调制的功率谱"
+    },
+    {
+      "year": "2025--26",
+      "q": "Q2c",
+      "marks": 9,
+      "primary": "4.1.1",
+      "support": [
+        "2.1.3"
+      ],
+      "note": "利用时间平均方差判断均值各态历经"
+    },
+    {
+      "year": "2025--26",
+      "q": "Q3a",
+      "marks": 10,
+      "primary": "5.1.2",
+      "support": [
+        "2.3.3"
+      ],
+      "note": "两径LTI系统输出相关与谱"
+    },
+    {
+      "year": "2025--26",
+      "q": "Q3b",
+      "marks": 10,
+      "primary": "5.4.3",
+      "support": [],
+      "note": "匹配滤波后的相关与谱"
+    },
+    {
+      "year": "2025--26",
+      "q": "Q3c",
+      "marks": 5,
+      "primary": "5.3.2",
+      "support": [],
+      "note": "等效矩形带宽与时延"
+    },
+    {
+      "year": "2025--26",
+      "q": "Q4a",
+      "marks": 10,
+      "primary": "6.3.2",
+      "support": [],
+      "note": "非中心载频的正交分量谱"
+    },
+    {
+      "year": "2025--26",
+      "q": "Q4b",
+      "marks": 7,
+      "primary": "1.6",
+      "support": [
+        "1.2.3",
+        "2.4.1",
+        "2.4.2",
+        "2.4.3"
+      ],
+      "note": "同一时刻二维高斯分布"
+    },
+    {
+      "year": "2025--26",
+      "q": "Q4c",
+      "marks": 8,
+      "primary": "1.4.2",
+      "support": [
+        "1.6",
+        "2.4.1",
+        "2.4.3"
+      ],
+      "note": "异时刻协方差决定联合密度"
+    }
+  ],
+  "stats": {
+    "1": {
+      "per_paper": [
+        20,
+        18,
+        27,
+        20,
+        29,
+        33,
+        24,
+        49
+      ],
+      "total": 220,
+      "mean": 27.5,
+      "old_four_mean": 21.25,
+      "recent_four_mean": 33.75
+    },
+    "2": {
+      "per_paper": [
+        15,
+        21,
+        31,
+        22,
+        29,
+        0,
+        7,
+        0
+      ],
+      "total": 125,
+      "mean": 15.625,
+      "old_four_mean": 22.25,
+      "recent_four_mean": 9.0
+    }
+  },
+  "source": {
+    "repository": "StrikerLeecy126/UESTC_Glasgow_College_CE_Final_Exams",
+    "commit": "6d1f1ff98185154e02d346036439ddd0964a0e4d",
+    "papers": [
+      {
+        "file": "试卷/UESTC3024_1_Stochastic_Signal_Analysis_201812.pdf",
+        "url": "https://raw.githubusercontent.com/StrikerLeecy126/UESTC_Glasgow_College_CE_Final_Exams/6d1f1ff98185154e02d346036439ddd0964a0e4d/Final%20Exams/Stochastic%20Signal%EF%BC%88%E9%9A%8F%E6%9C%BA%E4%BF%A1%E5%8F%B7%EF%BC%89/UESTC3024_1_Stochastic_Signal_Analysis_201812.pdf",
+        "sha256": "ec267ab386c53b40c98790a4c304920882cd6ad8a89b07234d1152cee676e42e",
+        "bytes": 158212
+      },
+      {
+        "file": "试卷/UESTC3024_1_Stochastic_Signal_Analysis_201912.pdf",
+        "url": "https://raw.githubusercontent.com/StrikerLeecy126/UESTC_Glasgow_College_CE_Final_Exams/6d1f1ff98185154e02d346036439ddd0964a0e4d/Final%20Exams/Stochastic%20Signal%EF%BC%88%E9%9A%8F%E6%9C%BA%E4%BF%A1%E5%8F%B7%EF%BC%89/UESTC3024_1_Stochastic_Signal_Analysis_201912.pdf",
+        "sha256": "c69ad5a3d69bf522b78f699b73f68fe3f0a1e53bbfcd2ed38730735801d31a66",
+        "bytes": 272282
+      },
+      {
+        "file": "试卷/UESTC3024_1_Stochastic_Signal_Analysis_202104.pdf",
+        "url": "https://raw.githubusercontent.com/StrikerLeecy126/UESTC_Glasgow_College_CE_Final_Exams/6d1f1ff98185154e02d346036439ddd0964a0e4d/Final%20Exams/Stochastic%20Signal%EF%BC%88%E9%9A%8F%E6%9C%BA%E4%BF%A1%E5%8F%B7%EF%BC%89/UESTC3024_1_Stochastic_Signal_Analysis_202104.pdf",
+        "sha256": "d694cdc95a048621a88996314bc7c8bd0222c02745ce4c43f235978ed17245ef",
+        "bytes": 230799
+      },
+      {
+        "file": "试卷/UESTC3024_1_Stochastic_Signal_Analysis_202112.pdf",
+        "url": "https://raw.githubusercontent.com/StrikerLeecy126/UESTC_Glasgow_College_CE_Final_Exams/6d1f1ff98185154e02d346036439ddd0964a0e4d/Final%20Exams/Stochastic%20Signal%EF%BC%88%E9%9A%8F%E6%9C%BA%E4%BF%A1%E5%8F%B7%EF%BC%89/UESTC3024_1_Stochastic_Signal_Analysis_202112.pdf",
+        "sha256": "09b3aee5c58c456734ba4d75ff55007ac224db32a838a898a7e110b2de1c3b37",
+        "bytes": 411681
+      }
+    ]
+  }
+}
