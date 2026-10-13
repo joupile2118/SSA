@@ -1,0 +1,575 @@
+% !TEX program = pdflatex
+% =====================================================================
+%  Stochastic Signal Analysis — Chapter 1 (Probability Theory) Review Set
+%  21 questions / 7 days / one question per page
+%  Built from the exam-frequency analysis of 4 past papers (2022-23 … 2025-26)
+%  Compile: pdflatex (twice)
+% =====================================================================
+\documentclass[11pt]{article}
+
+% ---------------------------------------------------------------------
+% Page geometry: matches the portrait display of the 13-inch iPad Air (M2)
+% exactly, so the page fills the screen with no letterboxing.
+%   Display: 2732 x 2048 px at 264 ppi  ->  portrait 2048 x 2732 px
+%   Aspect : 2048/2732 = 512/683 = 0.7496340
+%   Height 297mm (kept equal to A4 so the vertical layout is unchanged)
+%   Width  297 x 512/683 = 222.641mm
+%   Check  222.641/297 = 0.7496340  = 512/683   (exact)
+% On this screen the page renders at 262.85/297 = 0.885 scale, i.e. exactly
+% the same on-screen text size as A4 did, but with no side bars.
+% ---------------------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{newtxtext}
+\usepackage{newtxmath}
+\usepackage[paperwidth=222.6413mm,paperheight=297mm,
+            left=1.9cm,right=1.9cm,top=2.1cm,bottom=1.7cm,headsep=0.5cm]{geometry}
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{ragged2e}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{tikz}
+\usepackage{fancyhdr}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+% ------------------------------ palette ------------------------------
+\definecolor{navy}{HTML}{1B3A5C}
+\definecolor{accentred}{HTML}{B23A48}
+\definecolor{accentgold}{HTML}{B7791F}
+\definecolor{accentgreen}{HTML}{2F6F4E}
+\definecolor{ink}{HTML}{1F2933}
+\definecolor{muted}{HTML}{5A6470}
+\definecolor{qbg}{HTML}{F4F6F8}
+\definecolor{linec}{HTML}{9AA3AD}
+\definecolor{rulegray}{HTML}{C9CED6}
+
+% ------------------------------ lists -------------------------------
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newlist{qparts}{enumerate}{1}
+\setlist[qparts]{label=(\alph*),leftmargin=1.5em,itemsep=2.5pt,topsep=3pt,parsep=0pt}
+\newlist{qnum}{enumerate}{1}
+\setlist[qnum]{label=(\arabic*),leftmargin=1.5em,itemsep=2.5pt,topsep=3pt,parsep=0pt}
+
+% ------------------------------ header/footer -----------------------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[L]{\footnotesize\color{navy}Stochastic Signal Analysis \textperiodcentered\ Chapter 1 Review Set}
+\fancyhead[R]{\footnotesize\color{navy}\thepage}
+
+% ------------------------------ question page -----------------------
+% \qpage{<day line>}{<question number>}{<source tag>}{<body>}
+\newcommand{\qpage}[4]{%
+  \clearpage
+  \begin{tcolorbox}[enhanced, colback=navy, colframe=navy, boxrule=0pt, arc=1.5pt,
+      left=10pt, right=10pt, top=7pt, bottom=7pt, width=\textwidth]
+    \textcolor{white}{\large\bfseries #2}\hfill\textcolor{white}{\small #1}%
+  \end{tcolorbox}
+  \vspace{2.2mm}
+  {\color{accentred}\bfseries (#3)}\par
+  \vspace{2.6mm}
+  \begin{tcolorbox}[enhanced, breakable=false, colback=qbg, colframe=qbg,
+      boxrule=0pt, arc=1.5pt, left=10pt, right=10pt, top=8pt, bottom=8pt]
+    #4
+  \end{tcolorbox}
+  \vspace{3mm}
+  \begin{tcolorbox}[height fill, enhanced, colback=white, colframe=linec!55,
+      boxrule=0.5pt, arc=1.5pt, left=9pt, right=9pt, top=6pt, bottom=6pt]
+    \hfill\textcolor{linec}{\footnotesize Working space}%
+  \end{tcolorbox}
+}
+
+\newcommand{\hint}[1]{\par\vspace{2pt}{\small\itshape\color{muted}Hint: #1\par}}
+\newcommand{\sect}[1]{{\small\color{muted}#1}}
+\newcommand{\dd}{\mathrm{d}}
+
+\begin{document}
+
+% =====================================================================
+%  COVER
+% =====================================================================
+\thispagestyle{empty}
+\vspace*{0.6cm}
+
+\noindent{\color{navy}\rule{\textwidth}{1.4pt}}\\[0.45em]
+{\Huge\bfseries\color{navy} Chapter 1 Review Problem Set\par}
+\vspace{0.3em}
+{\large\color{ink} Probability Theory — the Foundation of Random Signal Analysis\par}
+\vspace{0.45em}
+\noindent{\color{navy}\rule{\textwidth}{1.4pt}}
+
+\vspace{0.9em}
+{\large\color{accentred}\bfseries 21 questions \textperiodcentered\ 7 days \textperiodcentered\ 3 questions per day\par}
+
+\vspace{1.0em}
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt,arc=1.5pt,
+  left=10pt,right=10pt,top=8pt,bottom=8pt]
+\textbf{\color{navy}How to use this set}
+\begin{itemize}[leftmargin=1.4em,itemsep=3pt,topsep=4pt]
+  \item \textbf{One question per page.} The ruled area below each question is deliberately left
+        blank for handwritten working. There are no solutions in this booklet.
+  \item \textbf{Source tag.} The bracketed line before every question gives where the question
+        comes from: a past exam paper, a textbook exercise, or a formula-recall prompt.
+  \item \textbf{Suggested pace.} 3 questions per day, about 20--30 minutes each.
+        Do the formula-recall questions from memory first, then check against your notes.
+  \item \textbf{Ordering follows exam frequency}, not textbook order. The topics are ranked by the
+        marks they actually carried across the four past papers.
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.8em}
+\begin{tcolorbox}[colback=white,colframe=accentred,boxrule=0.9pt,arc=1.5pt,
+  left=10pt,right=10pt,top=8pt,bottom=8pt]
+\textbf{\color{accentred}Where this set comes from}\\[3pt]
+Every question is mapped to the exam-frequency analysis of four past papers
+(2022--23, 2023--24, 2024--25, 2025--26). Across those papers Chapter 1 carried
+\textbf{29 / 33 / 24 / 49 marks} — an average of \textbf{33.8 marks per paper}, and two papers
+devoted a whole 25-mark question to it. The plan below puts the most time on the
+highest-yield topics.
+\end{tcolorbox}
+
+\vspace{0.8em}
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt,arc=1.5pt,
+  left=10pt,right=10pt,top=8pt,bottom=8pt]
+\textbf{\color{navy}Chapter 1 topics covered, by exam frequency tier}\\[4pt]
+\renewcommand{\arraystretch}{1.2}
+\scriptsize
+\begin{tabularx}{\textwidth}{@{}c c L{4.3cm} c c X@{}}
+\toprule
+\textbf{Tier} & \textbf{\S} & \textbf{Topic} & \textbf{Marks} & \textbf{Hits} & \textbf{Questions} \\
+\midrule
+\rowcolor{white}
+\textbf{\color{accentred}S} & 1.4.2 & Moments and joint moments & 37 & 3/4 & Q1, Q2, Q3, Q4, Q7, Q8, Q18 \\
+\textbf{\color{accentred}S} & 1.6 & Typical distributions & 25 & 3/4 & Q13, Q15, Q16, Q17, Q18 \\
+\midrule
+\rowcolor{white}
+\textbf{\color{accentgold}A} & 1.5.1 & Characteristic function (one-dimensional) & 18 & 2/4 & Q10, Q11, Q12 \\
+\textbf{\color{accentgold}A} & 1.2.1 & Multivariate random variables & 17 & 2/4 & Q7, Q8, Q9, Q17, Q18 \\
+\textbf{\color{accentgold}A} & 1.4.3 & Uncorrelatedness and orthogonality & 14 & 1/4 & Q5, Q6 \\
+\midrule
+\rowcolor{white}
+\textbf{\color{accentgreen}B} & 1.3.1 & Function of one random variable & 10 & 1/4 & Q14 \\
+\textbf{\color{accentgreen}B} & 1.4.1 & Expectation & 8 & 1/4 & Q1, Q2, Q3 \\
+\textbf{\color{accentgreen}B} & 1.1.2 & Random variables & 6 & 1/4 & Q8 \\
+\textbf{\color{accentgreen}B} & 1.2.3 & Independence & 0 & 4/4 & Q9, Q16 \\
+\midrule
+\rowcolor{white}
+\textbf{\color{muted}C} & 1.1.1 & Total probability and Bayes' rule & 0 & 0/4 & Q19 \\
+\textbf{\color{muted}C} & 1.3.2 & Function of two random variables & 0 & 0/4 & Q7, Q16 \\
+\textbf{\color{muted}C} & 1.4.4 & Conditional expectation & 0 & 0/4 & Q20 \\
+\textbf{\color{muted}C} & 1.5.2 & Joint characteristic function & 0 & 0/4 & Q21 \\
+\bottomrule
+\end{tabularx}
+\end{tcolorbox}
+
+\clearpage
+% =====================================================================
+%  SEVEN-DAY PLAN
+% =====================================================================
+\thispagestyle{fancy}
+\noindent{\color{navy}\rule{\textwidth}{1.2pt}}\\[0.3em]
+{\Large\bfseries\color{navy} The Seven-Day Plan}\\[0.3em]
+\noindent{\color{navy}\rule{\textwidth}{1.2pt}}
+
+\vspace{0.9em}
+\renewcommand{\arraystretch}{1.4}
+\footnotesize
+\noindent\begin{tabularx}{\textwidth}{@{}c c L{4.9cm} X@{}}
+\toprule
+\textbf{Day} & \textbf{Q} & \textbf{Sources} & \textbf{Focus and target skills} \\
+\midrule
+\rowcolor{qbg}
+\textbf{1} & 1, 2, 3 & Formula recall (\S1.4.1--\S1.4.2); Textbook Ex.\ 1.21; Exam 2023--24 Q3(a)--(c)
+ & Expectation, variance and covariance. Write the definitions from memory, then manipulate $E$, $D$ and $\mathrm{Cov}$ of linear combinations, then normalise a joint density and find $E$ and $D$ from it. \\
+\midrule
+\rowcolor{white}
+\textbf{2} & 4, 5, 6 & Exam 2023--24 Q3(d); Textbook Ex.\ 1.22; Exam 2024--25 Q1(b)
+ & Joint moments and the independence triangle. Extract $m_{XY}$ and $\rho_{XY}$ from a density, then separate the three notions \emph{orthogonal}, \emph{uncorrelated} and \emph{independent} on two contrasting examples. \\
+\midrule
+\rowcolor{qbg}
+\textbf{3} & 7, 8, 9 & Textbook Ex.\ 1.14; Exam 2025--26 Q1(a)--(c); Exam 2025--26 Q1(d)
+ & Joint distributions. Joint law, marginals and the law of $Z=XY$ for discrete variables; probability densities built from a random experiment; two-dimensional densities and covariance. \\
+\midrule
+\rowcolor{white}
+\textbf{4} & 10, 11, 12 & Formula recall (\S1.5.1); Exam 2022--23 Q1(b); Textbook Ex.\ 1.29
+ & Characteristic functions. Definition, Fourier pair, uniqueness and the three properties; then CF of a shifted uniform, and recovering a density and its moments from a CF. \\
+\midrule
+\rowcolor{qbg}
+\textbf{5} & 13, 14, 15 & Formula recall (\S1.6); Textbook Ex.\ 1.17; Exam 2023--24 Q2(c)
+ & Typical distributions and Gaussian transformations. Reproduce six distributions from memory; density of a non-monotone function including its impulse; Gaussianity of a filtered noise difference. \\
+\midrule
+\rowcolor{white}
+\textbf{6} & 16, 17, 18 & Textbook Ex.\ 1.16; Formula recall (\S1.2.1, \S1.6); Exam 2025--26 Q4(b)--(c)
+ & Transformations and the bivariate Gaussian density. Joint density of $U=X{+}Y$, $V=X{-}Y$; the general bivariate Gaussian density and its two-time form; in-phase and quadrature components. \\
+\midrule
+\rowcolor{qbg}
+\textbf{7} & 19, 20, 21 & Textbook Ex.\ 1.6; Textbook Ex.\ 1.24; Textbook Ex.\ 1.33
+ & The remaining topics. Total probability and Bayes' rule, conditional expectation and the tower property, and marginal characteristic functions from a joint CF. \\
+\bottomrule
+\end{tabularx}
+
+\vspace{1.0em}
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt,arc=1.5pt,
+  left=10pt,right=10pt,top=8pt,bottom=8pt]
+\footnotesize
+\textbf{\color{navy}Notes on scope.}
+\begin{itemize}[leftmargin=1.4em,itemsep=2pt,topsep=3pt]
+  \item \S1.4.3 (uncorrelatedness and orthogonality) carried 14 marks in the past papers but is
+        \emph{not} drilled by the current homework. Q5 and Q6 are included specifically to close that gap.
+  \item \S1.1.1, \S1.3.2, \S1.4.4 and \S1.5.2 were never examined directly in the four papers, but
+        every one of them is a \emph{compulsory} homework exercise, so Day 7 covers them for the coursework mark.
+  \item \S1.4.5 (Chebyshev and Cauchy--Schwarz inequalities) and \S1.3.3 (Rayleigh and Rice distributions)
+        are deliberately omitted: they took 0 marks in all four papers and are not set as homework.
+\end{itemize}
+\end{tcolorbox}
+
+% =====================================================================
+%  DAY 1
+% =====================================================================
+\qpage{Day 1 \textperiodcentered\ Expectation, Variance and Covariance}{Question 1}{Formula recall \textemdash\ \S1.4.1 and \S1.4.2}{%
+For two random variables $X$ and $Y$, write down the definition of each of the following
+quantities. Give both the general definition and the form used when a probability density
+function is available.
+\begin{qparts}
+  \item the $n$-th moment about the origin, $m_n$;
+  \item the $n$-th central moment, $\mu_n$;
+  \item the mean-square value and the root-mean-square value;
+  \item the variance $D(X)$ and the standard deviation $\sigma_X$;
+  \item the joint moment $m_{kl}$ about the origin;
+  \item the covariance $\mathrm{Cov}(X,Y)$;
+  \item the correlation coefficient $\rho_{XY}$.
+\end{qparts}
+Finally, \textbf{derive} the identity
+\[
+D(aX+bY)=a^{2}D(X)+b^{2}D(Y)+2ab\,\mathrm{Cov}(X,Y).
+\]
+}
+
+\qpage{Day 1 \textperiodcentered\ Expectation, Variance and Covariance}{Question 2}{Textbook Exercise 1.21}{%
+For the random variables $X$ and $Y$ it is known that
+\[
+EX=1,\qquad EY=3,\qquad D(X)=4,\qquad D(Y)=16,\qquad \rho_{XY}=0.5 .
+\]
+Let
+\[
+U=3X+Y,\qquad V=X-2Y .
+\]
+Find $EU$, $EV$, $D(U)$, $D(V)$ and $\mathrm{Cov}(U,V)$.
+}
+
+\qpage{Day 1 \textperiodcentered\ Expectation, Variance and Covariance}{Question 3}{Final examination 2023--24, Q3(a)--(c)}{%
+The joint probability density function of the random variables $X$ and $Y$ is
+\[
+f_{XY}(x,y)=A\sin(x+y),\qquad 0\le x\le \frac{\pi}{2},\qquad 0\le y\le \frac{\pi}{2}.
+\]
+Find
+\begin{qparts}
+  \item the coefficient $A$;
+  \item the expectations $E(X)$ and $E(Y)$;
+  \item the variances $D(X)$ and $D(Y)$.
+\end{qparts}
+}
+
+% =====================================================================
+%  DAY 2
+% =====================================================================
+\qpage{Day 2 \textperiodcentered\ Joint Moments, Correlation and Independence}{Question 4}{Final examination 2023--24, Q3(d)}{%
+For the same joint probability density function as in Question 3,
+\[
+f_{XY}(x,y)=A\sin(x+y),\qquad 0\le x\le \frac{\pi}{2},\qquad 0\le y\le \frac{\pi}{2},
+\]
+find
+\begin{qparts}
+  \item the joint moment $m_{XY}=E(XY)$;
+  \item the correlation coefficient $\rho_{XY}$.
+\end{qparts}
+Hence state, with justification, whether $X$ and $Y$ are uncorrelated, whether they are
+orthogonal, and whether they are independent.
+}
+
+\qpage{Day 2 \textperiodcentered\ Joint Moments, Correlation and Independence}{Question 5}{Textbook Exercise 1.22}{%
+The joint probability density function of the random variables $X$ and $Y$ is
+\[
+f_{XY}(x,y)=
+\begin{cases}
+\dfrac{xy}{9}, & 0\le x<2,\quad 0\le y<3,\\[6pt]
+0, & \text{otherwise}.
+\end{cases}
+\]
+Determine whether $X$ and $Y$ are \textbf{orthogonal}, whether they are \textbf{uncorrelated},
+and whether they are \textbf{independent}. Justify each answer.
+}
+
+\qpage{Day 2 \textperiodcentered\ Joint Moments, Correlation and Independence}{Question 6}{Final examination 2024--25, Q1(b)}{%
+Two random signals are given by
+\[
+X[n]=\sin(2\pi n+\phi),\qquad Y[n]=\cos(2\pi n+\phi),
+\]
+where $\phi\sim U(0,\pi)$ and $n$ is an integer.
+Calculate and discuss the \textbf{orthogonality}, the \textbf{uncorrelatedness} and the
+\textbf{statistical independence} of the two random signals. Justify your answer.
+\hint{The deterministic identities for integer $n$ simplify both signals a great deal before
+any averaging is done. Remember that orthogonality and uncorrelatedness are two different
+conditions, and that neither of them implies independence in general.}
+}
+
+% =====================================================================
+%  DAY 3
+% =====================================================================
+\qpage{Day 3 \textperiodcentered\ Joint Distributions of Several Random Variables}{Question 7}{Textbook Exercise 1.14}{%
+The discrete random variables $X$ and $Y$ have the following joint probability mass function.
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{c|ccc}
+\toprule
+$X$ \textbackslash\ $Y$ & $-1$ & $0$ & $1$ \\
+\midrule
+$0$ & $0.07$ & $0.18$ & $0.15$ \\
+$1$ & $0.08$ & $0.32$ & $0.20$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+Find
+\begin{qnum}
+  \item the joint distribution function and the joint probability density function of $X$ and $Y$;
+  \item the marginal probability mass functions of $X$ and of $Y$;
+  \item the probability mass function of $Z=XY$;
+  \item the correlation coefficient of $X$ and $Y$.
+\end{qnum}
+}
+
+\qpage{Day 3 \textperiodcentered\ Joint Distributions of Several Random Variables}{Question 8}{Final examination 2025--26, Q1(a)--(c)}{%
+A continuous-time random process is defined by throwing a coin once:
+\[
+X(t)=
+\begin{cases}
+\sin(2\pi t), & \text{if the head is obtained},\\[4pt]
+t^{2}, & \text{if the tail is obtained}.
+\end{cases}
+\]
+The probabilities of obtaining a head and a tail are identical. Find
+\begin{qparts}
+  \item the one-dimensional probability density function $f_X(x,2)$;
+  \item the two-dimensional probability density function $f_X(x_1,x_2;1,2)$;
+  \item the covariance $C_X(t_1,t_2)$.
+\end{qparts}
+\hint{Because the process takes only two possible waveforms, every probability density here is a
+sum of Dirac impulses. Write the general expression in $t_1$ and $t_2$ first, and substitute the
+numbers only at the end.}
+}
+
+\qpage{Day 3 \textperiodcentered\ Joint Distributions of Several Random Variables}{Question 9}{Final examination 2025--26, Q1(d)}{%
+A discrete-time random process is defined by independently throwing a coin repeatedly:
+\[
+Y[n]=
+\begin{cases}
+\sin(2\pi n), & \text{if the head is obtained in the } n\text{-th throw},\\[4pt]
+n^{2}, & \text{if the tail is obtained in the } n\text{-th throw}.
+\end{cases}
+\]
+In every throw the probabilities of a head and a tail are identical. Find the two-dimensional
+probability density function $f_Y(y_1,y_2;1,2)$.
+}
+
+% =====================================================================
+%  DAY 4
+% =====================================================================
+\qpage{Day 4 \textperiodcentered\ Characteristic Functions}{Question 10}{Formula recall \textemdash\ \S1.5.1}{%
+Let $X$ be a random variable with probability density function $f_X(x)$ and characteristic
+function $\phi_X(v)$.
+\begin{qparts}
+  \item Write the definition of $\phi_X(v)$ as an expectation, and also as an integral.
+  \item State the Fourier transform pair that relates $\phi_X(v)$ and $f_X(x)$, and state the
+        uniqueness theorem.
+  \item State Property 1: the characteristic function of a sum of independent random variables.
+  \item State Property 2: the characteristic function of $Y=aX+b$.
+  \item State Property 3: how the moments of $X$ are obtained from the derivatives of
+        $\phi_X(v)$ at the origin. Write the general formula for $E[X^{k}]$.
+\end{qparts}
+}
+
+\qpage{Day 4 \textperiodcentered\ Characteristic Functions}{Question 11}{Final examination 2022--23, Q1(b)}{%
+A random signal is given by
+\[
+X(t)=U+t,\qquad t\in[-2,2],
+\]
+where $U$ is a random variable uniformly distributed on $[0,\pi]$. Find the characteristic
+function of $X(t)$.
+\hint{Find the characteristic function of $U$ first, then use the property of Question 10(d).
+The result should depend on both $v$ and $t$.}
+}
+
+\qpage{Day 4 \textperiodcentered\ Characteristic Functions}{Question 12}{Textbook Exercise 1.29}{%
+For each of the following characteristic functions of a random variable $X$, find its probability
+density function, its mean, its mean-square value and its variance.
+\begin{qparts}
+  \item $\phi(v)=0.2+0.3e^{j2v}+0.2e^{j4v}+0.2e^{-j2v}+0.1e^{-j4v}$
+  \item $\phi(v)=0.3e^{jv}+0.7e^{-jv}$
+  \item $\phi(v)=\dfrac{4}{4-jv}$
+  \item $\phi(v)=\dfrac{\sin 5v}{5v}$
+\end{qparts}
+}
+
+% =====================================================================
+%  DAY 5
+% =====================================================================
+\qpage{Day 5 \textperiodcentered\ Typical Distributions and Gaussian Transformations}{Question 13}{Formula recall \textperiodcentered\ \S1.6}{%
+From memory, reproduce the following table for six typical distributions. For each one give the
+probability density function (or the probability mass function), the characteristic function,
+the mean and the variance.
+\begin{center}
+\renewcommand{\arraystretch}{2.15}
+\begin{tabularx}{\textwidth}{@{}c L{3.9cm} X X X@{}}
+\toprule
+& \textbf{Distribution} & \textbf{Density / mass function} & \textbf{Characteristic function} & \textbf{Mean and variance} \\
+\midrule
+(a) & Uniform $U(a,b)$ & & & \\
+(b) & Exponential, parameter $\lambda$ & & & \\
+(c) & Gaussian $N(\mu,\sigma^{2})$ & & & \\
+(d) & $0$--$1$ distribution, parameter $p$ & & & \\
+(e) & Binomial $B(n,p)$ & & & \\
+(f) & Poisson $P(\lambda)$ & & & \\
+\bottomrule
+\end{tabularx}
+\end{center}
+}
+
+\qpage{Day 5 \textperiodcentered\ Typical Distributions and Gaussian Transformations}{Question 14}{Textbook Exercise 1.17}{%
+The output $Y$ of a half-wave rectifier is related to its input $X$ by the model
+\[
+Y=g(X)=
+\begin{cases}
+X, & X\ge 0,\\
+0, & X<0 .
+\end{cases}
+\]
+The input random variable $X$ has probability density function $f_X(x)$ and distribution function
+$F_X(x)$. Find the probability density function $f_Y(y)$ of the output.
+\hint{$g$ is not one-to-one, and the whole negative half-line is mapped to the single value
+$0$. Handle the continuous part and the discrete value separately, and expect a Dirac impulse.}
+}
+
+\qpage{Day 5 \textperiodcentered\ Typical Distributions and Gaussian Transformations}{Question 15}{Final examination 2023--24, Q2(c)}{%
+A zero-mean white noise $W(t)$ with power spectral density $N_0/2$ is applied to a linear
+time-invariant system whose impulse response is
+\[
+h(t)=e^{-t}u(t).
+\]
+Let $X(t)$ be the output of that system, and form a second signal
+\[
+Y(t)=X(t)-X(t-T),\qquad T>0 .
+\]
+You may use the result
+\[
+R_X(\tau)=\frac{N_0}{4}e^{-|\tau|}.
+\]
+Determine whether or not $Y(t)$ follows a Gaussian distribution. Justify your answer, and give
+its one-dimensional probability density function.
+\hint{$Y(t)$ is a linear functional of a Gaussian process. Its mean and its variance are all you
+need; the variance follows from $R_Y(0)=2R_X(0)-2R_X(T)$.}
+}
+
+% =====================================================================
+%  DAY 6
+% =====================================================================
+\qpage{Day 6 \textperiodcentered\ Transformations and the Bivariate Gaussian Density}{Question 16}{Textbook Exercise 1.16}{%
+Let $X\sim N(0,1)$ and $Y\sim N(0,1)$ be independent random variables. Define
+\[
+U=X+Y,\qquad V=X-Y .
+\]
+\begin{qnum}
+  \item Find the joint probability density function $f_{UV}(u,v)$ of the pair $(U,V)$.
+  \item Determine whether $U$ and $V$ are independent.
+\end{qnum}
+}
+
+\qpage{Day 6 \textperiodcentered\ Transformations and the Bivariate Gaussian Density}{Question 17}{Formula recall \textperiodcentered\ \S1.2.1 and \S1.6}{%
+\begin{qparts}
+  \item Write the general bivariate Gaussian joint probability density function $f_{XY}(x,y)$ for
+        means $\mu_X,\mu_Y$, variances $\sigma_X^{2},\sigma_Y^{2}$ and correlation coefficient $\rho$.
+  \item State the condition on $\rho$ under which $X$ and $Y$ are independent, and explain why
+        the condition works.
+  \item Give the special case $\sigma_X=\sigma_Y=\sigma$ and $\rho=0$.
+  \item For a Gaussian random process $X(t)$, explain how the two-dimensional density
+        $f_X(x_1,x_2;t_1,t_2)$ is obtained. State exactly which two quantities of the process
+        determine it completely.
+\end{qparts}
+}
+
+\qpage{Day 6 \textperiodcentered\ Transformations and the Bivariate Gaussian Density}{Question 18}{Final examination 2025--26, Q4(b)--(c)}{%
+A zero-mean stationary Gaussian signal is given by
+\[
+X(t)=i(t)\cos\omega_0 t-q(t)\sin\omega_0 t,\qquad \omega_0=148\pi ,
+\]
+where $i(t)$ and $q(t)$ are the in-phase and quadrature components. Its power spectral density
+$S_X(\omega)$ equals $1$ for $144\pi\le|\omega|\le156\pi$ and equals $0$ elsewhere.
+\begin{center}
+\begin{tikzpicture}[x=0.92cm,y=1.05cm,>=stealth]
+  \draw[->] (-4.2,0) -- (4.3,0) node[right,font=\small] {$\omega$};
+  \draw[->] (0,0) -- (0,1.6) node[above,font=\small] {$S_X(\omega)$};
+  \draw[thick,fill=navy!18] (-3.25,0) rectangle (-2.75,1);
+  \draw[thick,fill=navy!18] (2.75,0) rectangle (3.25,1);
+  \draw[dashed] (2.75,0) -- (2.75,-0.14);
+  \draw[dashed] (3.25,0) -- (3.25,-0.14);
+  \node[below left,font=\scriptsize] at (2.72,-0.16) {$144\pi$};
+  \node[below right,font=\scriptsize] at (3.28,-0.16) {$156\pi$};
+  \node[left,font=\scriptsize] at (-0.08,1) {$1$};
+  \node[below left,font=\scriptsize] at (-0.08,-0.02) {$0$};
+  \node[below,font=\scriptsize] at (-3.0,-0.16) {mirror image};
+\end{tikzpicture}
+\end{center}
+Find
+\begin{qparts}
+  \item the joint probability density function $f_{iq}(i,q;t,t)$;
+  \item the joint probability density function $f_{iq}\!\left(i,q;t,t+\tfrac{1}{12}\right)$.
+\end{qparts}
+}
+
+% =====================================================================
+%  DAY 7
+% =====================================================================
+\qpage{Day 7 \textperiodcentered\ The Remaining Chapter 1 Topics}{Question 19}{Textbook Exercise 1.6}{%
+There are four batches of components. The first batch contains $2\,000$ components, of which
+$5\%$ are defective. The second batch contains $500$ components, of which $40\%$ are defective.
+The third and fourth batches each contain $1\,000$ components, with approximately $10\%$
+defective. A batch is selected at random, and then a component is drawn at random from that
+batch. Find
+\begin{qnum}
+  \item the probability that the selected component is defective;
+  \item the probability that the component came from the second batch, given that it is defective.
+\end{qnum}
+}
+
+\qpage{Day 7 \textperiodcentered\ The Remaining Chapter 1 Topics}{Question 20}{Textbook Exercise 1.24}{%
+The random variable $X$ is uniformly distributed on $[0,a]$. Given $X$, the random variable $Y$
+is uniformly distributed on $[X,a]$. Find
+\begin{qnum}
+  \item $E(Y\mid X)$, for $0\le X\le a$;
+  \item $EY$.
+\end{qnum}
+\hint{For part (2) you do not need to find the density of $Y$. Use the tower property of
+conditional expectation.}
+}
+
+\qpage{Day 7 \textperiodcentered\ The Remaining Chapter 1 Topics}{Question 21}{Textbook Exercise 1.33}{%
+The joint characteristic function of the random variables $X$ and $Y$ is
+\[
+\phi_{XY}(u,v)=\frac{6}{6-2ju-3jv-uv}.
+\]
+Find
+\begin{qnum}
+  \item the characteristic function of $X$;
+  \item the expectation and the variance of $Y$.
+\end{qnum}
+\hint{Both answers come from the same idea: set one of the two variables to zero to obtain the
+marginal characteristic function, then recognise which distribution it belongs to.}
+}
+
+\end{document}

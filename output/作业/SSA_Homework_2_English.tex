@@ -1,0 +1,159 @@
+% Self-contained source. Compile twice with XeLaTeX into tmp/.
+% Exercise wording is translated from the Chinese textbook, not an official English edition.
+\documentclass[a4paper,12pt]{article}
+\usepackage[margin=22mm,headheight=16pt,headsep=8mm,footskip=12mm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,enumitem,fancyhdr,xcolor,lastpage}
+\usepackage[unicode,hidelinks]{hyperref}
+\hypersetup{pdftitle={Stochastic Signal Analysis - Homework 2},pdfauthor={}}
+\definecolor{muted}{gray}{0.38}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small Stochastic Signal Analysis}
+\fancyhead[R]{\small Homework 2}
+\fancyfoot[L]{\scriptsize\color{muted}English translation from the Chinese textbook (5th ed.)}
+\fancyfoot[R]{\small Page \thepage\ of \pageref*{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\parindent}{0pt}\setlength{\parskip}{0.5em}
+\linespread{1.18}
+\setlist[enumerate]{label=(\arabic*),leftmargin=2.3em,labelsep=0.4em,itemsep=0.35em,topsep=0.4em}
+\newcommand{\problem}[3]{%
+ {\small\color{muted}Chapter 2\enspace /\enspace Random Signals}\par
+ {\small Issued: 13 October 2026\hfill Due: \textbf{27 October 2026}}\par
+ \vspace{2mm}
+ {\small Name: \underline{\hspace{35mm}}\hfill Student ID: \underline{\hspace{38mm}}}\par
+ \vspace{4mm}
+ {\LARGE\bfseries Exercise #1}\hfill{\normalsize\bfseries #2}\par
+ {\small\color{muted}Textbook p.\ #3}\par\vspace{3mm}}
+\newcommand{\answer}{\par\vspace{6mm}{\small\color{muted}Answer / Working}\par\vspace{1mm}{\color{muted}\hrule height 0.3pt}\vfill}
+\begin{document}
+\problem{2.3}{Required}{61}
+
+A coin is tossed, and a random process is defined by
+\[
+X(t)=\begin{cases}
+\cos\pi t,&\text{if heads occurs},\\
+2t,&\text{if tails occurs}.
+\end{cases}
+\]
+Heads and tails are equally likely. Find:
+\begin{enumerate}
+\item The one-dimensional distribution functions $F_X(x,1/2)$ and $F_X(x,1)$ of $X(t)$;
+\item The two-dimensional distribution function $F_X(x_1,x_2;1/2,1)$ of $X(t)$;
+\item Sketch the graphs of the above distribution functions.
+\end{enumerate}
+\answer
+
+\newpage
+\problem{2.13}{Required}{62}
+
+Consider the sinusoidal voltage signal
+\[
+X(t)=A\cos(\omega t+\Theta),
+\]
+where $\omega$ is a constant, $A\sim U(-1,+1)$, and $\Theta\sim U(-\pi,+\pi)$. The random variables $A$ and $\Theta$ are independent.
+
+If this voltage is applied across a parallel RC circuit, find the total current signal and its mean-square value.
+\answer
+
+\newpage
+\problem{2.16}{Required}{62}
+
+Let the random process be
+\[
+X(t)=A\cos\omega t+B\sin\omega t,
+\]
+where $\omega$ is a constant and $A$ and $B$ are independent Gaussian random variables. Given that
+\[
+E[A]=E[B]=0,\qquad E[A^2]=E[B^2]=\sigma^2,
+\]
+find the one-dimensional and two-dimensional probability density functions of $X(t)$.
+\answer
+
+\newpage
+\problem{2.19}{Required}{62}
+
+Let the random vector $(X,Y)\sim N(\boldsymbol{\mu},\boldsymbol{C})$, where
+\[
+\boldsymbol{\mu}=\begin{bmatrix}2\\2\end{bmatrix},\qquad
+\boldsymbol{C}=\begin{bmatrix}2&3\\3&5\end{bmatrix}.
+\]
+Find the joint probability density function of $(X,Y)$ and its characteristic function $\phi_{XY}(u,v)$.
+\answer
+
+\newpage
+\problem{2.1}{Optional}{61}
+
+Consider the sinusoidal random signal $X(t)=V\cos\omega t$, where $0\le t<\infty$, $\omega$ is a constant, and $V$ is uniformly distributed on $[0,1]$.
+\begin{enumerate}
+\item Sketch two sample functions of this process.
+\item Determine the probability density function of the random variable $X(t_i)$ at each of the times
+\[
+t_i=0,\quad\frac{\pi}{4\omega},\quad\frac{3\pi}{4\omega},\quad\frac{\pi}{\omega}.
+\]
+\item Find the probability density function of $X(t_0)$ when $t_0=\pi/(2\omega)$.
+\end{enumerate}
+\answer
+
+\newpage
+\problem{2.4}{Optional}{61}
+
+Suppose that the binary data sequence $\{B(n),n=1,2,3,\ldots\}$ is a Bernoulli random sequence. Each bit corresponds to a random variable $B(n)$, with
+\[
+P[B(n)=0]=0.2,\qquad P[B(n)=1]=0.8.
+\]
+\begin{enumerate}
+\item What is the probability that four consecutive bits form the word $\{1011\}$?
+\item What is the mean word formed by four consecutive bits?
+\item Which word formed by four consecutive bits has the highest probability?
+\end{enumerate}
+\answer
+
+\newpage
+\problem{2.7}{Optional}{61--62}
+
+The position of a moving particle is described by the straight-line process
+\[
+X(t)=Vt+X_0,
+\]
+where $V\sim N(1,1)$ and $X_0\sim N(0,2)$ are independent.
+
+Find the one-dimensional probability density function, mean, and variance of the random variable $X(t)$ at time $t$.
+\answer
+
+\newpage
+\problem{2.8}{Optional}{62}
+
+Suppose that the Bernoulli sequence $\{I_n,n=1,2,\ldots\}$ takes the values $-1$ and $+1$ with equal probabilities.
+
+Find its one-dimensional probability density function, mean, and covariance function.
+\answer
+
+\newpage
+\problem{2.11}{Optional}{62}
+
+Consider the two random signals
+\[
+X(t)=A\sin(\omega t+\Theta),\qquad
+Y(t)=B\cos(\omega t+\Theta),
+\]
+where $A$ and $B$ are random variables with unspecified distributions, $\Theta$ is uniformly distributed on $[0,2\pi]$, and $\omega$ is a constant. The random variables $A$, $B$, and $\Theta$ are pairwise statistically independent.
+% Preserve the textbook's pairwise independence assumption; do not strengthen it to mutual independence.
+\begin{enumerate}
+\item Find the cross-correlation function $R_{XY}(t_1,t_2)$ of the two random signals.
+\item Discuss their orthogonality, uncorrelatedness, and statistical independence.
+\end{enumerate}
+\answer
+
+\newpage
+\problem{2.18}{Optional}{62}
+
+A Gaussian signal has mean and covariance function
+\[
+m_X(t)=2,\qquad C_X(t_1,t_2)=8\cos(t_1-t_2).
+\]
+Write down its three-dimensional probability density function at the times
+\[
+t_1=0,\qquad t_2=0.5,\qquad t_3=1.
+\]
+% Preserve the textbook question. A later solution must address the singular covariance matrix.
+\answer
+\end{document}

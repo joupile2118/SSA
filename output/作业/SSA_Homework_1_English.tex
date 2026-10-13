@@ -1,0 +1,130 @@
+% Self-contained source. Compile twice with XeLaTeX into tmp/.
+% Exercise wording is translated from the Chinese textbook, not an official English edition.
+\documentclass[a4paper,12pt]{article}
+\usepackage[margin=22mm,headheight=16pt,headsep=8mm,footskip=12mm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,enumitem,fancyhdr,xcolor,lastpage}
+\usepackage[unicode,hidelinks]{hyperref}
+\hypersetup{pdftitle={Stochastic Signal Analysis - Homework 1},pdfauthor={}}
+\definecolor{muted}{gray}{0.38}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small Stochastic Signal Analysis}
+\fancyhead[R]{\small Homework 1}
+\fancyfoot[L]{\scriptsize\color{muted}English translation from the Chinese textbook (5th ed.)}
+\fancyfoot[R]{\small Page \thepage\ of \pageref*{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\parindent}{0pt}\setlength{\parskip}{0.5em}
+\linespread{1.18}
+\setlist[enumerate]{label=(\arabic*),leftmargin=2.3em,labelsep=0.4em,itemsep=0.35em,topsep=0.4em}
+\newcommand{\problem}[3]{%
+ {\small\color{muted}Chapter 1\enspace /\enspace Probability Fundamentals}\par
+ 
+ \vspace{2mm}
+ {\small Name: \underline{\hspace{35mm}}\hfill Student ID: \underline{\hspace{38mm}}}\par
+ \vspace{4mm}
+ {\LARGE\bfseries Exercise #1}\hfill{\normalsize\bfseries #2}\par
+ {\small\color{muted}Textbook p.\ #3}\par\vspace{3mm}}
+\newcommand{\answer}{\par\vspace{6mm}{\small\color{muted}Answer / Working}\par\vspace{1mm}{\color{muted}\hrule height 0.3pt}\vfill}
+\begin{document}
+
+\problem{1.6}{Required}{34}
+There are four batches of components. The first batch contains $2\,000$ components, of which $5\%$ are defective. The second batch contains $500$ components, of which $40\%$ are defective. The third and fourth batches each contain $1\,000$ components, with approximately $10\%$ defective. A batch is selected at random, and then a component is drawn at random from that batch. Find:
+\begin{enumerate}
+\item The probability that the selected component is defective.
+\item The probability that the component came from the second batch, given that it is defective.
+\end{enumerate}
+\answer\newpage
+\problem{1.14}{Required}{34}
+The discrete random variables $X$ and $Y$ have the following joint probability mass function. Find:
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{c|ccc}
+\toprule
+$X\backslash Y$ & $-1$ & $0$ & $1$ \\
+\midrule
+$0$ & $0.07$ & $0.18$ & $0.15$ \\
+$1$ & $0.08$ & $0.32$ & $0.20$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{enumerate}
+\item The joint distribution function and joint probability density function of $X$ and $Y$;
+\item The marginal probability mass functions of $X$ and $Y$;
+\item The probability mass function of $Z=XY$;
+\item The correlation coefficient of $X$ and $Y$.
+\end{enumerate}
+\answer\newpage
+\problem{1.16}{Required}{35}
+Let $X\sim N(0,1)$ and $Y\sim N(0,1)$ be independent random variables. Define $U=X+Y$ and $V=X-Y$.
+\begin{enumerate}
+\item Find the joint probability density function $f_{UV}(u,v)$ of $(U,V)$.
+\item Determine whether $U$ and $V$ are independent.
+\end{enumerate}
+\answer\newpage
+\problem{1.21}{Required}{35}
+For the random variables $X$ and $Y$, it is known that
+\[
+EX=1,\quad EY=3,\quad D(X)=4,\quad D(Y)=16,\quad \rho_{XY}=0.5,
+\]
+Let $U=3X+Y$ and $V=X-2Y$. Find $EU$, $EV$, $D(U)$, $D(V)$, and $\operatorname{Cov}(U,V)$.
+\answer\newpage
+\problem{1.24}{Required}{35}
+The random variable $X$ is uniformly distributed on $[0,a]$. Given $X$, the random variable $Y$ is uniformly distributed on $[X,a]$. Find:
+\begin{enumerate}
+\item $E(Y\mid X)$, $0\leq X\leq a$;
+\item $EY$.
+\end{enumerate}
+\answer\newpage
+\problem{1.33}{Required}{36}
+The joint characteristic function of the random variables $X$ and $Y$ is
+\[
+\phi_{XY}(u,v)=\frac{6}{6-2\mathrm{j}u-3\mathrm{j}v-uv}.
+\]
+Find:
+\begin{enumerate}
+\item The characteristic function of $X$;
+\item The expectation and variance of $Y$.
+\end{enumerate}
+\answer\newpage
+\problem{1.9}{Optional}{34}
+The random variable $X$ has the following probability mass function:
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{c|ccc}
+\toprule
+$X$ & $1$ & $2$ & $3$ \\
+\midrule
+$P$ & $0.2$ & $0.5$ & $0.3$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+Find the probability density function and distribution function of $X$, and sketch their graphs.
+\answer\newpage
+\problem{1.11}{Optional}{34}
+The random variable $X$ has probability density function $f(x)=a\mathrm{e}^{-|x|}$. Find:
+\begin{enumerate}
+\item The coefficient $a$;
+\item Its distribution function.
+\end{enumerate}
+\answer\newpage
+\problem{1.28}{Optional}{36}
+The random variables $X_1,X_2,X_3$ are mutually independent, with characteristic functions $\phi_1(v)$, $\phi_2(v)$, and $\phi_3(v)$, respectively. Find the characteristic function of each of the following random variables:
+\begin{enumerate}
+\item $X=X_1+X_2$;
+\item $X=X_1+X_2+X_3$;
+\item $X=X_1+2X_2+3X_3$;
+\item $X=2X_1+X_2+4X_3+10$.
+\end{enumerate}
+\answer\newpage
+\problem{1.29}{Optional}{36}
+For each of the following characteristic functions of a random variable $X$, find its probability density function, mean, mean-square value, and variance.
+\begin{enumerate}
+\item $\phi(v)=0.2+0.3\mathrm{e}^{\mathrm{j}2v}+0.2\mathrm{e}^{\mathrm{j}4v}+0.2\mathrm{e}^{-\mathrm{j}2v}+0.1\mathrm{e}^{-\mathrm{j}4v}$;
+\item $\phi(v)=0.3\mathrm{e}^{\mathrm{j}v}+0.7\mathrm{e}^{-\mathrm{j}v}$;
+\item $\displaystyle\phi(v)=\frac{4}{4-\mathrm{j}v}$;
+\item $\displaystyle\phi(v)=\frac{\sin 5v}{5v}$.
+\end{enumerate}
+\answer\newpage
+\problem{1.30}{Optional}{36}
+Use the Fourier transform to derive the characteristic function of the uniform distribution.
+\answer
+\end{document}

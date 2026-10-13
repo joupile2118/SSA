@@ -1,0 +1,1100 @@
+% !TEX program = xelatex
+% =====================================================================
+%  《随机信号分析》第一章复习习题集 —— 参考答案（中文）
+%  与 SSA_CH1_Review_Problem_Set.pdf 配套，共 21 题
+%  页面几何与 13 英寸 iPad Air (M2) 纵向屏幕一致
+%  编译：xelatex（两次）
+% =====================================================================
+\documentclass[11pt]{ctexart}
+
+\usepackage{amsmath}
+\usepackage{newtxmath}
+\usepackage[paperwidth=222.6413mm,paperheight=297mm,
+            left=1.9cm,right=1.9cm,top=2.1cm,bottom=1.7cm,headsep=0.5cm]{geometry}
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{ragged2e}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{fancyhdr}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+% ------------------------------ 配色 ------------------------------
+\definecolor{navy}{HTML}{1B3A5C}
+\definecolor{accentred}{HTML}{B23A48}
+\definecolor{accentgold}{HTML}{B7791F}
+\definecolor{accentgreen}{HTML}{2F6F4E}
+\definecolor{ink}{HTML}{1F2933}
+\definecolor{muted}{HTML}{5A6470}
+\definecolor{qbg}{HTML}{F4F6F8}
+\definecolor{linec}{HTML}{9AA3AD}
+
+% ------------------------------ 列表 ------------------------------
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newlist{qp}{enumerate}{1}
+\setlist[qp]{label=(\alph*),leftmargin=1.6em,itemsep=2pt,topsep=2pt,parsep=0pt}
+\newlist{qn}{enumerate}{1}
+\setlist[qn]{label=(\arabic*),leftmargin=1.6em,itemsep=2pt,topsep=2pt,parsep=0pt}
+\newlist{bul}{itemize}{1}
+\setlist[bul]{label=\textbullet,leftmargin=1.6em,itemsep=1.5pt,topsep=2pt,parsep=0pt}
+
+% ------------------------------ 页眉 ------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\footnotesize\color{navy}随机信号分析 \textperiodcentered\ 第一章复习习题集 \textperiodcentered\ 参考答案}
+\fancyhead[R]{\footnotesize\color{navy}\thepage}
+
+% ------------------------------ 解答页 ------------------------------
+% \apage{<天/主题>}{<题号>}{<题源>}{<考点>}{<正文>}
+\newcommand{\apage}[5]{%
+  \clearpage
+  \begin{tcolorbox}[enhanced, colback=navy, colframe=navy, boxrule=0pt, arc=1.5pt,
+      left=10pt, right=10pt, top=7pt, bottom=7pt, width=\textwidth]
+    \textcolor{white}{\large\bfseries #2}\hfill\textcolor{white}{\small #1}%
+  \end{tcolorbox}
+  \vspace{2.2mm}
+  {\color{accentred}\bfseries (#3)}\hfill{\small\color{muted}考点：#4}\par
+  \vspace{2.6mm}
+  \begin{tcolorbox}[enhanced, breakable, colback=qbg, colframe=qbg,
+      boxrule=0pt, arc=1.5pt, left=10pt, right=10pt, top=8pt, bottom=8pt]
+    #5
+  \end{tcolorbox}
+}
+
+\newcommand{\key}[1]{\par\vspace{3pt}\noindent\textbf{\color{navy}#1}\par\vspace{1pt}}
+\newcommand{\dd}{\mathrm{d}}
+
+\begin{document}
+
+% =====================================================================
+%  封面
+% =====================================================================
+\thispagestyle{empty}
+\vspace*{0.5cm}
+
+\noindent{\color{navy}\rule{\textwidth}{1.4pt}}\\[0.45em]
+{\Huge\bfseries\color{navy} 第一章复习习题集\par}
+\vspace{0.25em}
+{\Huge\bfseries\color{navy} 参考答案\par}
+\vspace{0.4em}
+\noindent{\color{navy}\rule{\textwidth}{1.4pt}}
+
+\vspace{0.7em}
+{\large\color{accentred}\bfseries 21 题全解 \textperiodcentered\ 中文解答 \textperiodcentered\ 与习题集逐题对应\par}
+
+\vspace{0.9em}
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt,arc=1.5pt,
+  left=10pt,right=10pt,top=8pt,bottom=8pt]
+\textbf{\color{navy}使用说明}
+\begin{bul}
+  \item 每题一页（个别较长者顺延），题号、题源与考点标注和习题集完全一致，便于对照批改。
+  \item 解答给的是\textbf{关键步骤与结论}，略去了纯代数化简的中间过程，方便自查时快速定位错误。
+  \item 凡是需要用到的公式，先在解答里点明出处（如"由 §1.4.2 的 $D(X\pm Y)$ 公式"），便于回课本定位。
+  \item 计算题在给出解析式后附了数值，方便核对量级；数值保留 4 位有效数字。
+\end{bul}
+\end{tcolorbox}
+
+\vspace{0.7em}
+\begin{tcolorbox}[colback=white,colframe=accentred,boxrule=0.9pt,arc=1.5pt,
+  left=10pt,right=10pt,top=8pt,bottom=8pt]
+\textbf{\color{accentred}本套题的考点分布}\\[3pt]
+按四套真题（2022--23、2023--24、2024--25、2025--26）的考频统计，第一章平均占
+\textbf{33.8 分/套}，最高一套达 \textbf{49 分}。本解答按同样的优先级组织：
+S 级考点（§1.4.2 矩与联合矩、§1.6 典型分布）占 7 题，A 级考点
+（§1.5.1 特征函数、§1.2.1 多维随机变量、§1.4.3 无关与正交）占 10 题。
+\end{tcolorbox}
+
+\vspace{0.7em}
+\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt,arc=1.5pt,
+  left=10pt,right=10pt,top=8pt,bottom=8pt]
+\textbf{\color{navy}答案速查}\\[4pt]
+\renewcommand{\arraystretch}{1.22}
+\scriptsize
+\begin{tabularx}{\textwidth}{@{}c c L{4.5cm} X@{}}
+\toprule
+\textbf{题} & \textbf{考点} & \textbf{题源} & \textbf{主要结论} \\
+\midrule
+\rowcolor{white}
+1 & §1.4.1/§1.4.2 & 公式默写 & 七个数字特征定义；$D(aX{+}bY)=a^2DX+b^2DY+2ab\,\mathrm{Cov}$ \\
+2 & §1.4.2 & 教材 1.21 & $EU=6,\ EV=-5,\ DU=76,\ DV=52,\ \mathrm{Cov}(U,V)=-40$ \\
+3 & §1.4.1/§1.4.2 & 真题 2023--24 Q3(a)--(c) & $A=\tfrac12$；$EX=EY=\tfrac{\pi}{4}$；$DX=DY=\tfrac{\pi^2}{16}+\tfrac{\pi}{2}-2\approx0.1876$ \\
+4 & §1.4.2/§1.4.3 & 真题 2023--24 Q3(d) & $m_{XY}=\tfrac{\pi}{2}-1\approx0.5708$；$\rho_{XY}\approx-0.2454$；$X,Y$ \textbf{相关}、\textbf{不正交}、\textbf{不独立} \\
+5 & §1.4.3 & 教材 1.22 & \textbf{独立}且\textbf{不相关}，但\textbf{不正交}（$E[XY]=\tfrac83\neq0$） \\
+6 & §1.4.3/§1.2.3 & 真题 2024--25 Q1(b) & \textbf{正交}且\textbf{不相关}，但\textbf{不独立}（$X^2+Y^2\equiv1$） \\
+7 & §1.2.1/§1.3.2/§1.4.2 & 教材 1.14 & 边缘 $0.40/0.60$ 与 $0.15/0.50/0.35$；$P(Z{=}0){=}0.72$；$\rho_{XY}=0$ \\
+8 & §1.1.2/§1.2.1/§1.4.2 & 真题 2025--26 Q1(a)--(c) & 冲激型密度；$C_X(t_1,t_2)=\tfrac14(\sin2\pi t_1-t_1^2)(\sin2\pi t_2-t_2^2)$ \\
+9 & §1.2.1/§1.2.3 & 真题 2025--26 Q1(d) & 独立时二维密度为 4 项冲激之和 \\
+10 & §1.5.1 & 公式默写 & 定义、傅氏变换对、唯一性、性质 1--3 \\
+11 & §1.5.1 & 真题 2022--23 Q1(b) & $\phi_{X(t)}(v)=e^{jvt}\dfrac{e^{jv\pi}-1}{jv\pi}$ \\
+12 & §1.5.1 & 教材 1.29 & 见解答（含 $6.44$、$0.84$、$0.0625$、$\tfrac{25}{3}$） \\
+13 & §1.6 & 公式默写 & 六个典型分布的密度、特征函数、均值与方差 \\
+14 & §1.3.1 & 教材 1.17 & $f_Y(y)=f_X(y)u(y)+F_X(0)\delta(y)$ \\
+15 & §1.6/§1.4.2 & 真题 2023--24 Q2(c) & 高斯；$\sigma_Y^2=\tfrac{N_0}{2}(1-e^{-T})$ \\
+16 & §1.3.2/§1.2.3 & 教材 1.16 & $f_{UV}=\tfrac{1}{4\pi}e^{-(u^2+v^2)/4}$；$U,V$ 独立，均 $N(0,2)$ \\
+17 & §1.2.1/§1.6 & 公式默写 & 二维高斯密度；$\rho=0\Leftrightarrow$ 独立；二维密度由均值与自协方差唯一确定 \\
+18 & §1.4.2/§1.6/§1.2.1 & 真题 2025--26 Q4(b)--(c) & $\sigma^2=12$；$f_{iq}(i,q;t,t)=\tfrac{1}{24\pi}e^{-(i^2+q^2)/24}$；时延下 $\rho=\tfrac1\pi$ \\
+19 & §1.1.1 & 教材 1.6 & $P(D)=0.1625$；$P(B_2|D)=\tfrac{8}{13}\approx0.6154$ \\
+20 & §1.4.4 & 教材 1.24 & $E(Y|X)=\tfrac{X+a}{2}$；$EY=\tfrac{3a}{4}$ \\
+21 & §1.5.2 & 教材 1.33 & $X\sim\mathrm{Exp}(3)$；$Y\sim\mathrm{Exp}(2)$，$EY=\tfrac12$，$DY=\tfrac14$ \\
+\bottomrule
+\end{tabularx}
+\end{tcolorbox}
+
+% =====================================================================
+%  解答
+% =====================================================================
+\apage{第 1 天 \textperiodcentered\ 期望、方差与协方差}{第 1 题}{公式默写 \textemdash\ §1.4.1、§1.4.2}{数字特征的定义与 $D(aX{+}bY)$ 的推导}{%
+设 $X$ 的概率密度为 $f(x)$，二维情形为 $f(x,y)$；离散型把积分换成求和即可。
+
+\key{七个定义}
+\begin{qp}
+  \item $n$ 阶原点矩：$m_n=E[X^n]=\displaystyle\int_{-\infty}^{+\infty}x^nf(x)\dd x$
+  \item $n$ 阶中心矩：$\mu_n=E\big[(X-EX)^n\big]$
+  \item 均方值 $E[X^2]$；均方根值（有效值）$\sqrt{E[X^2]}$
+  \item 方差 $D(X)=E\big[(X-EX)^2\big]=E[X^2]-(EX)^2$；标准差 $\sigma_X=\sqrt{D(X)}$
+  \item 联合原点矩：$m_{kl}=E[X^kY^l]=\displaystyle\iint x^ky^lf(x,y)\dd x\dd y$
+  \item 协方差：$\mathrm{Cov}(X,Y)=E\big[(X-EX)(Y-EY)\big]=E[XY]-EX\cdot EY$
+  \item 相关系数：$\rho_{XY}=\dfrac{\mathrm{Cov}(X,Y)}{\sigma_X\sigma_Y}$，且 $|\rho_{XY}|\le1$
+\end{qp}
+
+\key{推导 $D(aX+bY)$}
+记 $U=aX+bY$，则
+\[
+U-EU=a(X-EX)+b(Y-EY).
+\]
+两边取期望的平方（注意 $E[X-EX]=E[Y-EY]=0$）：
+\[
+D(U)=E\big[(U-EU)^2\big]
+=a^2E\big[(X-EX)^2\big]+b^2E\big[(Y-EY)^2\big]+2ab\,E\big[(X-EX)(Y-EY)\big],
+\]
+即
+\[
+\boxed{\,D(aX+bY)=a^2D(X)+b^2D(Y)+2ab\,\mathrm{Cov}(X,Y)\,}
+\]
+当 $X,Y$ 不相关（$\mathrm{Cov}=0$）时退化为 $D(aX+bY)=a^2D(X)+b^2D(Y)$；
+当 $a=1,b=\pm1$ 时即为常用的 $D(X\pm Y)=D(X)+D(Y)\pm2\mathrm{Cov}(X,Y)$。
+}
+
+\apage{第 1 天 \textperiodcentered\ 期望、方差与协方差}{第 2 题}{教材习题 1.21}{线性组合的 $E$、$D$、$\mathrm{Cov}$}{%
+已知 $EX=1$，$EY=3$，$D(X)=4$，$D(Y)=16$，$\rho_{XY}=0.5$。
+
+\key{先求协方差}
+由 $\rho_{XY}=\dfrac{\mathrm{Cov}(X,Y)}{\sigma_X\sigma_Y}$ 得
+\[
+\mathrm{Cov}(X,Y)=\rho_{XY}\sqrt{D(X)}\sqrt{D(Y)}=0.5\times2\times4=4 .
+\]
+
+\key{期望}
+\[
+EU=E(3X+Y)=3EX+EY=3(1)+3=6,
+\]
+\[
+EV=E(X-2Y)=EX-2EY=1-6=-5 .
+\]
+
+\key{方差}
+由 $D(aX+bY)=a^2D(X)+b^2D(Y)+2ab\,\mathrm{Cov}(X,Y)$：
+\[
+D(U)=D(3X+Y)=9D(X)+D(Y)+2\cdot3\cdot1\cdot\mathrm{Cov}(X,Y)
+=9(4)+16+6(4)=36+16+24=76,
+\]
+\[
+D(V)=D(X-2Y)=D(X)+4D(Y)+2\cdot1\cdot(-2)\cdot\mathrm{Cov}(X,Y)
+=4+64-16=52 .
+\]
+
+\key{协方差}
+由 $\mathrm{Cov}(aX+bY,\;cX+dY)=acD(X)+ad\,\mathrm{Cov}(X,Y)+bc\,\mathrm{Cov}(Y,X)+bdD(Y)$，
+取 $a=3,b=1,c=1,d=-2$：
+\[
+\mathrm{Cov}(U,V)=3(4)+3(-2)(4)+1(1)(4)+1(-2)(16)=12-24+4-32=-40 .
+\]
+
+\key{校验}
+用 $E[UV]-EU\cdot EV$ 复核：$UV=(3X+Y)(X-2Y)=3X^2-5XY-2Y^2$，
+$E[X^2]=D(X)+(EX)^2=5$，$E[Y^2]=16+9=25$，$E[XY]=\mathrm{Cov}+EX\cdot EY=7$，故
+$E[UV]=15-35-50=-70$，$\mathrm{Cov}(U,V)=-70-6\times(-5)=-40$ \checkmark
+}
+
+\apage{第 1 天 \textperiodcentered\ 期望、方差与协方差}{第 3 题}{真题 2023--24, Q3(a)--(c)}{联合密度归一化、期望与方差}{%
+\[
+f_{XY}(x,y)=A\sin(x+y),\qquad 0\le x\le \frac{\pi}{2},\qquad 0\le y\le\frac{\pi}{2}.
+\]
+
+\key{(a) 求 $A$}
+先对 $y$ 积分：
+\[
+\int_0^{\pi/2}\sin(x+y)\dd y=\big[-\cos(x+y)\big]_0^{\pi/2}=\sin x+\cos x .
+\]
+再对 $x$ 积分：
+\[
+\iint f_{XY}\dd x\dd y=A\int_0^{\pi/2}(\sin x+\cos x)\dd x
+=A\big[-\cos x+\sin x\big]_0^{\pi/2}=A(1+1)=2A .
+\]
+由归一化 $2A=1$ 得
+\[
+\boxed{A=\tfrac12}
+\]
+
+\key{(b) 期望}
+用同一个内层积分 $\int_0^{\pi/2}\sin(x+y)\dd y=\sin x+\cos x$：
+\[
+E(X)=\frac12\int_0^{\pi/2}x(\sin x+\cos x)\dd x .
+\]
+其中
+\[
+\int_0^{\pi/2}x\sin x\dd x=\big[-x\cos x+\sin x\big]_0^{\pi/2}=1,
+\qquad
+\int_0^{\pi/2}x\cos x\dd x=\big[x\sin x+\cos x\big]_0^{\pi/2}=\frac{\pi}{2}-1 .
+\]
+两式相加得 $\dfrac{\pi}{2}$，故
+\[
+EX=\frac12\cdot\frac{\pi}{2}=\frac{\pi}{4}\approx0.7854 .
+\]
+由于 $f_{XY}$ 关于 $x,y$ 完全对称，同理
+\[
+\boxed{EX=EY=\tfrac{\pi}{4}}
+\]
+
+\key{(c) 方差}
+\[
+E(X^2)=\frac12\int_0^{\pi/2}x^2(\sin x+\cos x)\dd x .
+\]
+由 $\int x^2\sin x\dd x=-x^2\cos x+2x\sin x+2\cos x$ 得 $\int_0^{\pi/2}x^2\sin x\dd x=\pi-2$；
+由 $\int x^2\cos x\dd x=x^2\sin x+2x\cos x-2\sin x$ 得 $\int_0^{\pi/2}x^2\cos x\dd x=\dfrac{\pi^2}{4}-2$。
+两者相加得 $\dfrac{\pi^2}{4}+\pi-4$，故
+\[
+E(X^2)=\frac12\Big(\frac{\pi^2}{4}+\pi-4\Big)=\frac{\pi^2}{8}+\frac{\pi}{2}-2 .
+\]
+\[
+\boxed{D(X)=E(X^2)-(EX)^2=\frac{\pi^2}{16}+\frac{\pi}{2}-2\approx0.1876}
+\]
+同理 $D(Y)=D(X)$。
+}
+
+\apage{第 2 天 \textperiodcentered\ 联合矩、相关性与独立性}{第 4 题}{真题 2023--24, Q3(d)}{联合矩、相关系数与独立/不相关/正交的判定}{%
+沿用第 3 题的 $f_{XY}(x,y)=\dfrac12\sin(x+y)$，$0\le x,y\le\dfrac{\pi}{2}$。
+
+\key{(a) 联合矩 $m_{XY}=E(XY)$}
+利用 $\sin(x+y)=\sin x\cos y+\cos x\sin y$，被积函数可分离：
+\[
+E(XY)=\frac12\iint xy\sin(x+y)\dd x\dd y
+=\frac12\Big[\Big(\!\int_0^{\pi/2}\!\!x\sin x\dd x\Big)\Big(\!\int_0^{\pi/2}\!\!y\cos y\dd y\Big)
++\Big(\!\int_0^{\pi/2}\!\!x\cos x\dd x\Big)\Big(\!\int_0^{\pi/2}\!\!y\sin y\dd y\Big)\Big].
+\]
+代入第 3 题算过的 $\int_0^{\pi/2}x\sin x\dd x=1$、$\int_0^{\pi/2}x\cos x\dd x=\dfrac{\pi}{2}-1$：
+\[
+E(XY)=\frac12\Big[1\cdot\Big(\frac{\pi}{2}-1\Big)+\Big(\frac{\pi}{2}-1\Big)\cdot1\Big]
+=\frac{\pi}{2}-1\approx0.5708 .
+\]
+
+\key{(b) 相关系数 $\rho_{XY}$}
+\[
+\mathrm{Cov}(X,Y)=E(XY)-EX\cdot EY=\Big(\frac{\pi}{2}-1\Big)-\frac{\pi^2}{16}\approx-0.0461,
+\]
+由第 3 题 $\sigma_X=\sigma_Y=\sqrt{0.187646}\approx0.4332$，
+\[
+\boxed{\rho_{XY}=\frac{\mathrm{Cov}(X,Y)}{\sigma_X\sigma_Y}
+=\frac{\frac{\pi}{2}-1-\frac{\pi^2}{16}}{\frac{\pi^2}{16}+\frac{\pi}{2}-2}\approx-0.2454}
+\]
+
+\key{三个判定}
+\begin{bul}
+  \item \textbf{不相关？不成立。} $\rho_{XY}\approx-0.2454\neq0$，说明 $X$ 与 $Y$ \textbf{相关}。
+  \item \textbf{正交？不成立。} 正交要求 $E[XY]=0$，而 $E[XY]\approx0.5708\neq0$。
+        根源是 $EX=EY=\tfrac{\pi}{4}\neq0$——"不相关"并不能推出"正交"。
+  \item \textbf{独立？不成立。} 由边缘密度
+        $f_X(x)=\int_0^{\pi/2}\tfrac12\sin(x+y)\dd y=\tfrac12(\sin x+\cos x)$（$f_Y$ 同理），
+        \[
+        f_X(x)f_Y(y)=\tfrac14(\sin x+\cos x)(\sin y+\cos y)\neq\tfrac12\sin(x+y)=f_{XY}(x,y),
+        \]
+        故不独立。（也可用"独立 $\Rightarrow$ 不相关"的逆否命题，由 $\rho\neq0$ 直接否定独立性。）
+\end{bul}
+}
+
+\apage{第 2 天 \textperiodcentered\ 联合矩、相关性与独立性}{第 5 题}{教材习题 1.22}{正交 / 不相关 / 独立：独立但不正交的例子}{%
+\[
+f_{XY}(x,y)=\frac{xy}{9},\qquad 0\le x<2,\quad 0\le y<3 .
+\]
+
+\key{先验证归一化}
+\[
+\iint f_{XY}\dd x\dd y=\frac19\Big(\int_0^2x\dd x\Big)\Big(\int_0^3y\dd y\Big)=\frac19\cdot2\cdot\frac92=1 \quad\text{\checkmark}
+\]
+
+\key{边缘密度}
+\[
+f_X(x)=\int_0^3\frac{xy}{9}\dd y=\frac{x}{9}\cdot\frac92=\frac{x}{2}\ (0<x<2),
+\qquad
+f_Y(y)=\int_0^2\frac{xy}{9}\dd x=\frac{y}{9}\cdot2=\frac{2y}{9}\ (0<y<3).
+\]
+
+\key{独立？\ 是}
+\[
+f_X(x)f_Y(y)=\frac{x}{2}\cdot\frac{2y}{9}=\frac{xy}{9}=f_{XY}(x,y),
+\]
+联合密度可分解为边缘密度之积，故 $X$ 与 $Y$ \textbf{相互独立}。
+
+\key{不相关？\ 是}
+\[
+EX=\int_0^2x\cdot\frac{x}{2}\dd x=\frac43,\qquad
+EY=\int_0^3y\cdot\frac{2y}{9}\dd y=2,
+\]
+\[
+E(XY)=\frac19\Big(\int_0^2x^2\dd x\Big)\Big(\int_0^3y^2\dd y\Big)=\frac19\cdot\frac83\cdot9=\frac83,
+\]
+\[
+\mathrm{Cov}(X,Y)=E(XY)-EX\cdot EY=\frac83-\frac43\cdot2=0
+\quad\Longrightarrow\quad \rho_{XY}=0,
+\]
+故 $X$ 与 $Y$ \textbf{不相关}。
+
+\key{正交？\ 否}
+正交的判据是 $E[XY]=0$，而 $E[XY]=\dfrac83\neq0$，故\textbf{不正交}。
+
+\key{小结}
+本题给出的是"独立、不相关、但\textbf{不正交}"的典型例。
+原因：不相关 $\Leftrightarrow$ 正交 $\wedge$（$EX$ 或 $EY$ 为零）。本题 $EX=\tfrac43\neq0$ 且 $EY=2\neq0$，
+所以"不相关"与"正交"并不等价。记忆要点：
+\[
+\text{独立}\;\Longrightarrow\;\text{不相关};\qquad
+\text{不相关}+(\text{至少一个均值为 }0)\;\Longleftrightarrow\;\text{正交}.
+\]
+}
+
+\apage{第 2 天 \textperiodcentered\ 联合矩、相关性与独立性}{第 6 题}{真题 2024--25, Q1(b)}{正交且不相关但不独立：最易考的三个概念辨析}{%
+\[
+X[n]=\sin(2\pi n+\phi),\qquad Y[n]=\cos(2\pi n+\phi),\qquad \phi\sim U(0,\pi).
+\]
+
+\key{第 1 步：化简}
+$n$ 为整数时 $\sin2\pi n=0$、$\cos2\pi n=1$，由和角公式
+\[
+X[n]=\sin(2\pi n+\phi)=\sin\phi,\qquad Y[n]=\cos(2\pi n+\phi)=\cos\phi ,
+\]
+即两个信号都退化成 $\phi$ 的函数。$\phi$ 在 $(0,\pi)$ 上均匀分布，$f(\phi)=\dfrac1\pi$。
+
+\key{第 2 步：一阶矩}
+\[
+E[X]=\frac1\pi\int_0^\pi\sin\phi\dd\phi=\frac1\pi\big[-\cos\phi\big]_0^\pi=\frac{2}{\pi}\approx0.6366,
+\]
+\[
+E[Y]=\frac1\pi\int_0^\pi\cos\phi\dd\phi=\frac1\pi\big[\sin\phi\big]_0^\pi=0 .
+\]
+
+\key{第 3 步：互相关}
+\[
+E[XY]=\frac1\pi\int_0^\pi\sin\phi\cos\phi\dd\phi
+=\frac{1}{2\pi}\int_0^\pi\sin2\phi\dd\phi
+=\frac{1}{2\pi}\Big[-\frac{\cos2\phi}{2}\Big]_0^\pi=0 .
+\]
+
+\key{第 4 步：三个判定}
+\begin{bul}
+  \item \textbf{正交：成立。} $E[XY]=0$，满足正交定义。
+  \item \textbf{不相关：成立。}
+        \[
+        \mathrm{Cov}(X,Y)=E[XY]-EX\cdot EY=0-\frac{2}{\pi}\cdot0=0 .
+        \]
+        这也与"不相关 $\Leftrightarrow$ 正交 $+$ 至少一个均值为零"一致：此处 $EY=0$。
+  \item \textbf{独立：不成立。} 恒有
+        \[
+        X^2+Y^2=\sin^2\phi+\cos^2\phi\equiv1 ,
+        \]
+        两者之间存在确定性函数关系 $Y=\pm\sqrt{1-X^2}$。从密度看，$(X,Y)$ 的联合分布集中在
+        单位圆这条二维零测集上，不可能等于 $f_Xf_Y$，故\textbf{不独立}。
+\end{bul}
+
+\key{小结}
+本题是"正交、不相关，但\textbf{不独立}"的标准反例。
+\textbf{只有在联合高斯分布下}，"不相关 $\Rightarrow$ 独立"才成立——
+这正是命题人想考的边界条件。
+}
+
+\apage{第 3 天 \textperiodcentered\ 多个随机变量的联合分布}{第 7 题}{教材习题 1.14}{联合（累积）分布、边缘分布律与 $Z=XY$ 的分布}{%
+联合分布律为 $p_{ij}=P(X=x_i,Y=y_j)$，全部 6 项之和 $=0.40+0.60=1$ \checkmark
+
+\key{(1) 联合分布函数与联合密度}
+用单位阶跃函数 $u(t)$（$t\ge0$ 时为 1，否则为 0）表示：
+\[
+F(x,y)=P(X\le x,\;Y\le y)=\sum_{x_i\le x}\sum_{y_j\le y}p_{ij}
+\]
+\[
+\begin{aligned}
+F(x,y)={}&0.07\,u(x)u(y+1)+0.18\,u(x)u(y)+0.15\,u(x)u(y-1)\\
+&+0.08\,u(x-1)u(y+1)+0.32\,u(x-1)u(y)+0.20\,u(x-1)u(y-1).
+\end{aligned}
+\]
+离散型随机变量的"密度函数"用冲激函数表示：
+\[
+\begin{aligned}
+f(x,y)={}&0.07\delta(x)\delta(y+1)+0.18\delta(x)\delta(y)+0.15\delta(x)\delta(y-1)\\
+&+0.08\delta(x-1)\delta(y+1)+0.32\delta(x-1)\delta(y)+0.20\delta(x-1)\delta(y-1).
+\end{aligned}
+\]
+
+\key{(2) 边缘分布律}
+对行求和得 $X$ 的分布律，对列求和得 $Y$ 的分布律：
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabular}{c|ccc|c}
+\toprule
+$X\backslash Y$ & $-1$ & $0$ & $1$ & $p_{X}$ \\
+\midrule
+$0$ & $0.07$ & $0.18$ & $0.15$ & $\mathbf{0.40}$ \\
+$1$ & $0.08$ & $0.32$ & $0.20$ & $\mathbf{0.60}$ \\
+\midrule
+$p_{Y}$ & $\mathbf{0.15}$ & $\mathbf{0.50}$ & $\mathbf{0.35}$ & $1.00$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\key{(3) $Z=XY$ 的分布律}
+$X$ 只取 $0$ 或 $1$：$X=0$ 时恒有 $Z=0$；$X=1$ 时 $Z=Y$。于是
+\[
+P(Z=0)=0.40+0.32=0.72,\qquad
+P(Z=-1)=0.08,\qquad
+P(Z=1)=0.20 .
+\]
+校验 $0.72+0.08+0.20=1$ \checkmark
+
+\key{(4) 相关系数}
+\[
+EX=0(0.40)+1(0.60)=0.60,\qquad E(X^2)=0.60\ \Rightarrow\ D(X)=0.60-0.36=0.24,
+\]
+\[
+EY=(-1)(0.15)+0(0.50)+1(0.35)=0.20,\qquad E(Y^2)=0.15+0.35=0.50\ \Rightarrow\ D(Y)=0.50-0.04=0.46,
+\]
+\[
+E(XY)=(1)(-1)(0.08)+(1)(1)(0.20)=0.12,
+\]
+\[
+\mathrm{Cov}(X,Y)=0.12-(0.60)(0.20)=0
+\quad\Longrightarrow\quad \boxed{\rho_{XY}=0}
+\]
+
+\key{附注（重要）}
+$\rho_{XY}=0$ 说明 $X,Y$ 不相关，但二者\textbf{并不独立}：例如
+\[
+P(X=0,Y=0)=0.18\neq0.40\times0.50=P(X=0)P(Y=0).
+\]
+这是又一个"不相关但不独立"的例子，与第 6 题互为印证。
+}
+
+\apage{第 3 天 \textperiodcentered\ 多个随机变量的联合分布}{第 8 题}{真题 2025--26, Q1(a)--(c)}{由随机试验定义的信号：一维/二维密度与协方差}{%
+\[
+X(t)=\begin{cases}\sin(2\pi t), & \text{正面}\\[2pt] t^2, & \text{反面}\end{cases}
+\qquad P(\text{正})=P(\text{反})=\tfrac12 .
+\]
+注意 $t=1$ 时 $\sin2\pi=0$、$1^2=1$；$t=2$ 时 $\sin4\pi=0$、$2^2=4$。
+
+\key{(a) 一维密度 $f_X(x,2)$}
+$t=2$ 时 $X(2)$ 以 $\tfrac12$ 取 $0$、以 $\tfrac12$ 取 $4$，故
+\[
+\boxed{f_X(x,2)=\tfrac12\delta(x)+\tfrac12\delta(x-4)}
+\]
+
+\key{(b) 二维密度 $f_X(x_1,x_2;1,2)$}
+$t_1=1$：取 $0$（正）或 $1$（反）；$t_2=2$：取 $0$（正）或 $4$（反）。
+\textbf{同一次抛掷同时决定两个时刻的取值}，所以 4 种组合里只有 2 种会出现：
+\[
+(\text{正})\;(0,0)\ \text{概率}\tfrac12;\qquad
+(\text{反})\;(1,4)\ \text{概率}\tfrac12 .
+\]
+\[
+\boxed{f_X(x_1,x_2;1,2)=\tfrac12\delta(x_1)\delta(x_2)+\tfrac12\delta(x_1-1)\delta(x_2-4)}
+\]
+（两个时刻完全相关，这正是它与第 9 题的根本区别。）
+
+\key{(c) 协方差 $C_X(t_1,t_2)$}
+引入等概率取 $\pm1$ 的随机变量 $C$，则 $X(t)$ 可写成"均值 $+$ 随机部分"：
+\[
+X(t)=m(t)+C\,d(t),\qquad
+m(t)=\frac{\sin2\pi t+t^2}{2},\qquad
+d(t)=\frac{\sin2\pi t-t^2}{2}.
+\]
+由于 $E[C]=0$、$E[C^2]=1$，
+\[
+E[X(t_1)X(t_2)]=m(t_1)m(t_2)+d(t_1)d(t_2),
+\]
+\[
+\boxed{C_X(t_1,t_2)=\mathrm{Cov}\big(X(t_1),X(t_2)\big)=d(t_1)d(t_2)
+=\frac14\big(\sin2\pi t_1-t_1^2\big)\big(\sin2\pi t_2-t_2^2\big)}
+\]
+
+\key{校验}
+取 $t_1=t_2=t$：$C_X(t,t)=\tfrac14(\sin2\pi t-t^2)^2=D(X(t))$。
+$X(t)$ 是等概率两点分布，方差确为 $\big(\tfrac{a-b}{2}\big)^2$ \checkmark\\[2pt]
+取 $t_1=1,t_2=2$：$C_X(1,2)=\tfrac14(0-1)(0-4)=1$。
+直接验证：$E[X(1)X(2)]=\tfrac12(0)+\tfrac12(1\cdot4)=2$，$E[X(1)]=0.5$，$E[X(2)]=2$，
+$\mathrm{Cov}=2-0.5\times2=1$ \checkmark
+}
+
+\apage{第 3 天 \textperiodcentered\ 多个随机变量的联合分布}{第 9 题}{真题 2025--26, Q1(d)}{独立重复试验：二维密度可分解}{%
+\[
+Y[n]=\begin{cases}\sin(2\pi n), & \text{第 } n \text{ 次抛掷为正面}\\[2pt] n^2, & \text{第 } n \text{ 次抛掷为反面}\end{cases}
+\qquad\text{各次抛掷独立，}P=\tfrac12 .
+\]
+因为 $n$ 为整数，$\sin(2\pi n)=0$，所以
+\[
+P(Y[n]=0)=\tfrac12,\qquad P(Y[n]=n^2)=\tfrac12 .
+\]
+
+\key{一维密度}
+\[
+n=1:\quad f_{Y_1}(y_1)=\tfrac12\delta(y_1)+\tfrac12\delta(y_1-1)
+\]
+\[
+n=2:\quad f_{Y_2}(y_2)=\tfrac12\delta(y_2)+\tfrac12\delta(y_2-4)
+\]
+
+\key{二维密度（独立性 $\Rightarrow$ 边缘之积）}
+各次抛掷相互独立，故 $Y[1]$ 与 $Y[2]$ 独立，二维密度等于两个一维密度之积，展开得 4 个冲激项：
+\[
+\boxed{f_Y(y_1,y_2;1,2)=\tfrac14\Big[\delta(y_1)\delta(y_2)+\delta(y_1)\delta(y_2-4)
++\delta(y_1-1)\delta(y_2)+\delta(y_1-1)\delta(y_2-4)\Big]}
+\]
+
+\key{与第 8 题(b) 的对比（考点精髓）}
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabularx}{\textwidth}{@{}L{3.4cm} c X@{}}
+\toprule
+& \textbf{项数} & \textbf{含义} \\
+\midrule
+第 8 题 (b) 同一次抛掷 & 2 项 & 两次取值完全相关，二维密度不可分解 \\
+第 9 题 独立重复抛掷 & 4 项 & 独立，二维密度 $=$ 边缘之积 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+判断二维密度能否写成边缘之积，是区分"独立"与"不独立"最快的办法。
+}
+
+\apage{第 4 天 \textperiodcentered\ 特征函数}{第 10 题}{公式默写 \textemdash\ §1.5.1}{特征函数的定义、变换对、唯一性与三条性质}{%
+\key{(a) 定义}
+特征函数是 $e^{jvX}$ 的数学期望：
+\[
+\phi_X(v)=E\big[e^{jvX}\big]=
+\begin{cases}
+\displaystyle\int_{-\infty}^{+\infty}f_X(x)e^{jvx}\dd x, & \text{连续型}\\[8pt]
+\displaystyle\sum_k P_k\,e^{jvx_k}, & \text{离散型}
+\end{cases}
+\]
+其中 $j=\sqrt{-1}$，$v$ 为实变量。
+
+\key{(b) 傅里叶变换对与唯一性定理}
+\[
+\phi_X(v)=\int_{-\infty}^{+\infty}f_X(x)e^{jvx}\dd x,
+\qquad
+f_X(x)=\frac{1}{2\pi}\int_{-\infty}^{+\infty}\phi_X(v)e^{-jvx}\dd v .
+\]
+\textbf{唯一性定理}：$f_X(x)$ 与 $\phi_X(v)$ 一一对应、互相唯一确定，
+因此特征函数是描述随机变量概率特性的另一种完整方式。
+（注意：$\phi_X(v)$ 与 $v$ 本身都没有直接的物理意义。）
+
+\key{(c) 性质 1（独立和 $\Rightarrow$ 乘积）}
+若 $X_1,X_2,\cdots,X_n$ 相互独立，则
+\[
+\phi_{X_1+X_2+\cdots+X_n}(v)=\prod_{i=1}^{n}\phi_{X_i}(v).
+\]
+证明要点：$E\big[e^{jv\sum X_i}\big]=E\big[\prod e^{jvX_i}\big]=\prod E\big[e^{jvX_i}\big]$。
+
+\key{(d) 性质 2（线性变换）}
+\[
+\phi_{aX+b}(v)=e^{jvb}\,\phi_X(av).
+\]
+
+\key{(e) 性质 3（由特征函数求矩）}
+若 $E|X|^r<\infty$（$r$ 为非负整数），则对一切 $k\le r$，$\phi_X(v)$ 的 $k$ 阶导数存在且连续，并且
+\[
+\boxed{\,E\big[X^k\big]=j^{-k}\,\phi_X^{(k)}(0)\,}
+\]
+特别地 $E[X]=-j\,\phi_X'(0)$，$E[X^2]=-\phi_X''(0)$。
+}
+
+\apage{第 4 天 \textperiodcentered\ 特征函数}{第 11 题}{真题 2022--23, Q1(b)}{均匀分布的特征函数与线性变换性质}{%
+\[
+X(t)=U+t,\qquad t\in[-2,2],\qquad U\sim U[0,\pi].
+\]
+
+\key{第 1 步：求 $U$ 的特征函数}
+$U$ 的密度为 $f_U(u)=\dfrac1\pi$（$0\le u\le\pi$），于是
+\[
+\phi_U(v)=\int_0^\pi\frac1\pi e^{jvu}\dd u
+=\frac{1}{jv\pi}\Big[e^{jvu}\Big]_0^\pi
+=\frac{e^{jv\pi}-1}{jv\pi}.
+\]
+
+\key{第 2 步：用性质 2 平移}
+$X(t)=U+t$，即 $a=1$、$b=t$。由第 10 题性质 2 的 $\phi_{aX+b}(v)=e^{jvb}\phi_X(av)$：
+\[
+\boxed{\phi_{X(t)}(v)=e^{jvt}\phi_U(v)=e^{jvt}\,\frac{e^{jv\pi}-1}{jv\pi}}
+\]
+
+\key{等价形式（更直观）}
+把分子配方：
+\[
+\frac{e^{jv\pi}-1}{jv\pi}
+=\frac{e^{jv\pi/2}\big(e^{jv\pi/2}-e^{-jv\pi/2}\big)}{jv\pi}
+=e^{jv\pi/2}\cdot\frac{\sin(v\pi/2)}{v\pi/2},
+\]
+故
+\[
+\phi_{X(t)}(v)=e^{jv\left(t+\frac{\pi}{2}\right)}\cdot\frac{\sin(v\pi/2)}{v\pi/2}.
+\]
+相位项表明分布中心在 $t+\dfrac\pi2$（即 $EU+t$），幅度项是均匀分布特征的 $\mathrm{sinc}$ 形状。
+
+\key{校验}
+令 $v=0$ 应得 $\phi=1$。对原式用洛必达或直接展开：
+$\dfrac{e^{jv\pi}-1}{jv\pi}\to\dfrac{jv\pi}{jv\pi}=1$ \checkmark
+}
+
+\apage{第 4 天 \textperiodcentered\ 特征函数}{第 12 题}{教材习题 1.29}{由特征函数反求密度函数与各阶矩}{%
+\key{(1) $\phi(v)=0.2+0.3e^{j2v}+0.2e^{j4v}+0.2e^{-j2v}+0.1e^{-j4v}$}
+系数之和 $=0.2+0.3+0.2+0.2+0.1=1$，故为离散型，指数上的系数即为取值：
+\[
+f(x)=0.2\delta(x)+0.3\delta(x-2)+0.2\delta(x-4)+0.2\delta(x+2)+0.1\delta(x+4).
+\]
+\[
+E X=0(0.2)+2(0.3)+4(0.2)+(-2)(0.2)+(-4)(0.1)=0.6,
+\]
+\[
+E X^2=0+4(0.3)+16(0.2)+4(0.2)+16(0.1)=6.8,
+\qquad
+D(X)=6.8-0.36=\boxed{6.44}
+\]
+
+\key{(2) $\phi(v)=0.3e^{jv}+0.7e^{-jv}$}
+$X$ 取 $1$ 的概率 $0.3$，取 $-1$ 的概率 $0.7$：
+\[
+f(x)=0.3\delta(x-1)+0.7\delta(x+1),
+\]
+\[
+EX=0.3-0.7=-0.4,\qquad EX^2=1,\qquad D(X)=1-0.16=\boxed{0.84}
+\]
+
+\key{(3) $\phi(v)=\dfrac{4}{4-jv}=\dfrac{1}{1-jv/4}$}
+与指数分布的特征函数 $\dfrac{\lambda}{\lambda-jv}=\dfrac{1}{1-jv/\lambda}$ 对照，得 $\lambda=4$：
+\[
+X\sim\mathrm{Exp}(4),\qquad f(x)=4e^{-4x}\ (x\ge0),
+\]
+\[
+EX=\frac1\lambda=\frac14=0.25,\qquad
+EX^2=\frac{2}{\lambda^2}=\frac{1}{8}=0.125,\qquad
+D(X)=\frac{1}{\lambda^2}=\boxed{0.0625}
+\]
+
+\key{(4) $\phi(v)=\dfrac{\sin 5v}{5v}$}
+由 $U(a,b)$ 的特征函数 $\dfrac{e^{jvb}-e^{jva}}{jv(b-a)}$，代入 $a=-5,b=5$：
+\[
+\frac{e^{j5v}-e^{-j5v}}{jv\cdot10}=\frac{2j\sin5v}{10jv}=\frac{\sin5v}{5v},
+\]
+故 $X\sim U(-5,5)$：
+\[
+f(x)=\frac{1}{10}\ (|x|<5),\qquad
+EX=0,\qquad
+EX^2=\frac{(b-a)^2}{12}=\frac{100}{12}=\boxed{\frac{25}{3}\approx8.333},\qquad
+D(X)=\frac{25}{3}
+\]
+}
+
+\apage{第 5 天 \textperiodcentered\ 典型分布与高斯变换}{第 13 题}{公式默写 \textperiodcentered\ §1.6}{六个典型分布一览（必背）}{%
+\begin{center}
+\renewcommand{\arraystretch}{1.75}
+\scriptsize
+\begin{tabularx}{\textwidth}{@{}c L{2.5cm} X X X@{}}
+\toprule
+& \textbf{分布} & \textbf{密度 / 分布律} & \textbf{特征函数 $\phi_X(v)$} & \textbf{均值、方差} \\
+\midrule
+(a) & 均匀 $U(a,b)$ & $f=\dfrac{1}{b-a},\ a<x<b$
+    & $\dfrac{e^{jvb}-e^{jva}}{jv(b-a)}$
+    & $EX=\dfrac{a+b}{2}$；$D(X)=\dfrac{(b-a)^2}{12}$ \\
+(b) & 指数（参数 $\lambda$） & $f=\lambda e^{-\lambda x},\ x\ge0$
+    & $\dfrac{\lambda}{\lambda-jv}$
+    & $EX=\dfrac1\lambda$；$D(X)=\dfrac{1}{\lambda^2}$ \\
+(c) & 高斯 $N(\mu,\sigma^2)$ & $f=\dfrac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$
+    & $e^{jv\mu-\frac12\sigma^2v^2}$
+    & $EX=\mu$；$D(X)=\sigma^2$ \\
+(d) & $0$--$1$ 分布（参数 $p$） & $P(X{=}1)=p,\ P(X{=}0)=q$
+    & $q+pe^{jv}$
+    & $EX=p$；$D(X)=pq$ \\
+(e) & 二项 $B(n,p)$ & $P(X{=}k)=\dbinom{n}{k}p^kq^{n-k}$
+    & $(q+pe^{jv})^n$
+    & $EX=np$；$D(X)=npq$ \\
+(f) & 泊松 $P(\lambda)$ & $P(X{=}k)=\dfrac{\lambda^k}{k!}e^{-\lambda}$
+    & $e^{\lambda(e^{jv}-1)}$
+    & $EX=\lambda$；$D(X)=\lambda$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vspace{2pt}
+\key{记忆线索}
+\begin{bul}
+  \item 高斯、二项、泊松的特征函数都写成"指数型"：高斯指数里含 $v^2$，泊松指数里含 $e^{jv}$，
+        二项是 $n$ 次幂——把 $0$--$1$ 分布的特征函数取 $n$ 次幂即得二项（由性质 1）。
+  \item 均匀分布的密度是"矩形"，其特征函数是 $\mathrm{sinc}$ 型；
+        指数分布的特征函数是分式 $\dfrac{\lambda}{\lambda-jv}$。
+  \item 均值与方差可直接由定义记住：均匀取中点、指数是 $\lambda^{-1}$ 与 $\lambda^{-2}$、
+        高斯是 $\mu$ 与 $\sigma^2$、二项是 $np$ 与 $npq$、泊松两者都是 $\lambda$。
+\end{bul}
+}
+
+\apage{第 5 天 \textperiodcentered\ 典型分布与高斯变换}{第 14 题}{教材习题 1.17}{非单调函数的密度：连续部分 $+$ 原点冲激}{%
+\[
+Y=g(X)=\begin{cases}X, & X\ge0\\ 0, & X<0\end{cases}
+\]
+
+\key{方法：先求分布函数 $F_Y(y)$，再求导}
+\noindent\textbf{(i) $y<0$：} $Y\ge0$ 恒成立，故
+\[
+F_Y(y)=P(Y\le y)=0 .
+\]
+\noindent\textbf{(ii) $y\ge0$：} 关键在于化简事件。若 $X<0$ 则 $Y=0\le y$；
+若 $0\le X\le y$ 则 $Y=X\le y$；反之若 $Y\le y$ 必有 $X\le y$。因此
+\[
+\{Y\le y\}=\{X\le y\}\quad(y\ge0)
+\qquad\Longrightarrow\qquad
+F_Y(y)=F_X(y)\ (y\ge0).
+\]
+合起来即
+\[
+F_Y(y)=F_X(y)\,u(y),
+\]
+其中 $u(y)$ 为单位阶跃函数。
+
+\key{求导得密度}
+对乘积求导，并注意 $F_X(y)\delta(y)=F_X(0)\delta(y)$：
+\[
+f_Y(y)=\frac{\dd F_Y}{\dd y}=f_X(y)u(y)+F_X(y)\delta(y),
+\]
+\[
+\boxed{\,f_Y(y)=f_X(y)\,u(y)+F_X(0)\,\delta(y)\,}
+\]
+
+\key{物理含义（考试常问）}
+\begin{bul}
+  \item 连续部分：把 $f_X$ 的\textbf{正半轴}原样保留（$X\ge0$ 时 $Y=X$）。
+  \item 冲激部分：整个负半轴 $\{X<0\}$ 被"压"到 $y=0$ 一点，
+        其强度等于该事件的概率 $P(X\le0)=F_X(0)$。
+\end{bul}
+这就是"非单调变换会产生离散分量"的标准范例，也是 §1.3.1 的核心技巧。
+}
+
+\apage{第 5 天 \textperiodcentered\ 典型分布与高斯变换}{第 15 题}{真题 2023--24, Q2(c)}{高斯性判定与一维概率密度}{%
+已知 $W(t)$ 为零均值白噪声，功率谱密度 $N_0/2$，经 $h(t)=e^{-t}u(t)$ 得 $X(t)$，
+再取 $Y(t)=X(t)-X(t-T)$；已知 $R_X(\tau)=\dfrac{N_0}{4}e^{-|\tau|}$。
+
+\key{高斯性判定：是}
+\begin{bul}
+  \item $W(t)$ 为零均值（高斯）白噪声，系统 $h(t)$ 是\textbf{线性时不变}系统，
+        线性系统对高斯输入的响应仍是高斯过程 $\Rightarrow$ $X(t)$ 是零均值高斯过程。
+  \item $Y(t)=X(t)-X(t-T)$ 是同一高斯过程在两个时刻取值的\textbf{线性组合}，
+        而高斯变量的线性组合仍服从高斯分布 $\Rightarrow$ $Y(t)$ \textbf{是零均值高斯过程}。
+\end{bul}
+
+\key{均值}
+\[
+E[Y(t)]=E[X(t)]-E[X(t-T)]=0-0=0 .
+\]
+
+\key{方差}
+\[
+\sigma_Y^2=R_Y(0)=E\big[(X(t)-X(t-T))^2\big]
+=E[X^2(t)]-2E[X(t)X(t-T)]+E[X^2(t-T)],
+\]
+即
+\[
+\sigma_Y^2=2R_X(0)-2R_X(T)=2\cdot\frac{N_0}{4}-2\cdot\frac{N_0}{4}e^{-T}
+=\frac{N_0}{2}\big(1-e^{-T}\big).
+\]
+
+\key{一维概率密度}
+\[
+\boxed{\,f_Y(y)=\frac{1}{\sqrt{2\pi\sigma_Y^2}}\exp\!\Big(-\frac{y^2}{2\sigma_Y^2}\Big)
+=\frac{1}{\sqrt{\pi N_0\big(1-e^{-T}\big)}}\exp\!\Big(-\frac{y^2}{N_0\big(1-e^{-T}\big)}\Big)\,}
+\]
+（化简：$2\pi\sigma_Y^2=\pi N_0(1-e^{-T})$，$2\sigma_Y^2=N_0(1-e^{-T})$。）
+
+\key{与 (b) 的呼应}
+由 $S_Y(\omega)=2S_X(\omega)(1-\cos\omega T)$ 也可得同一结论：
+$\sigma_Y^2=\dfrac{1}{2\pi}\int S_Y(\omega)\dd\omega$。两种路线结果一致。
+}
+
+\apage{第 6 天 \textperiodcentered\ 变换与二维高斯密度}{第 16 题}{教材习题 1.16}{线性变换求二维密度并用两种方法判独立}{%
+$X\sim N(0,1)$、$Y\sim N(0,1)$ 且相互独立，$U=X+Y$，$V=X-Y$。
+
+\key{(1) 联合密度——方法一：雅可比变换}
+反解：$X=\dfrac{U+V}{2}$，$Y=\dfrac{U-V}{2}$。雅可比行列式
+\[
+J=\frac{\partial(x,y)}{\partial(u,v)}
+=\begin{vmatrix} \tfrac12 & \tfrac12\\[2pt] \tfrac12 & -\tfrac12\end{vmatrix}
+=-\frac14-\frac14=-\frac12,
+\qquad |J|=\frac12 .
+\]
+因为 $X,Y$ 独立，
+\[
+f_{UV}(u,v)=f_X\!\Big(\frac{u+v}{2}\Big)f_Y\!\Big(\frac{u-v}{2}\Big)|J|
+=\frac{1}{\sqrt{2\pi}}e^{-\frac{(u+v)^2}{8}}\cdot\frac{1}{\sqrt{2\pi}}e^{-\frac{(u-v)^2}{8}}\cdot\frac12 .
+\]
+把两个指数合并：$\dfrac{(u+v)^2+(u-v)^2}{8}=\dfrac{2u^2+2v^2}{8}=\dfrac{u^2+v^2}{4}$，于是
+\[
+\boxed{\,f_{UV}(u,v)=\frac{1}{4\pi}\exp\!\Big(-\frac{u^2+v^2}{4}\Big)\,}
+\]
+
+\key{(2) 是否独立——看能否分解}
+把上式拆成两个因子：
+\[
+f_{UV}(u,v)=\underbrace{\frac{1}{\sqrt{4\pi}}e^{-u^2/4}}_{f_U(u)}\cdot
+\underbrace{\frac{1}{\sqrt{4\pi}}e^{-v^2/4}}_{f_V(v)},
+\qquad\text{且}\ \Big(\tfrac{1}{\sqrt{4\pi}}\Big)^2=\frac{1}{4\pi}\ \text{\checkmark}
+\]
+即 $U\sim N(0,2)$、$V\sim N(0,2)$ 且\textbf{相互独立}。
+
+\key{方法二：联合高斯 $+$ 不相关 $\Rightarrow$ 独立（更省力）}
+$(U,V)$ 是独立高斯变量的线性变换，故服从\textbf{联合高斯}分布。只需算协方差：
+\[
+\mathrm{Cov}(U,V)=E[UV]-EU\cdot EV=E\big[(X+Y)(X-Y)\big]-0=E[X^2]-E[Y^2]=1-1=0 .
+\]
+联合高斯且协方差为零 $\Rightarrow$ 不相关 $\Rightarrow$ \textbf{独立}；
+且 $D(U)=D(X)+D(Y)=2$，$D(V)=2$。
+两种方法都指向 $U,V\overset{\text{i.i.d.}}{\sim}N(0,2)$。
+}
+
+\apage{第 6 天 \textperiodcentered\ 变换与二维高斯密度}{第 17 题}{公式默写 \textperiodcentered\ §1.2.1、§1.6}{二维高斯密度与"两时刻"联合密度}{%
+\key{(a) 一般二维高斯联合密度}
+\[
+f_{XY}(x,y)=\frac{1}{2\pi\sigma_X\sigma_Y\sqrt{1-\rho^2}}
+\exp\Big\{-\frac{1}{2(1-\rho^2)}\Big[
+\frac{(x-\mu_X)^2}{\sigma_X^2}
+-\frac{2\rho(x-\mu_X)(y-\mu_Y)}{\sigma_X\sigma_Y}
++\frac{(y-\mu_Y)^2}{\sigma_Y^2}\Big]\Big\}
+\]
+
+\key{(b) 独立的充要条件：$\rho=0$}
+当 $\rho=0$ 时，$1-\rho^2=1$，方括号中的交叉项消失：
+\[
+f_{XY}(x,y)=\frac{1}{\sqrt{2\pi}\sigma_X}e^{-\frac{(x-\mu_X)^2}{2\sigma_X^2}}
+\cdot\frac{1}{\sqrt{2\pi}\sigma_Y}e^{-\frac{(y-\mu_Y)^2}{2\sigma_Y^2}}
+=f_X(x)f_Y(y).
+\]
+联合密度可分解为边缘密度之积，故独立。
+反过来，对\textbf{联合高斯}变量，独立 $\Rightarrow$ 不相关 $\Rightarrow\rho=0$，
+所以 $\rho=0$ 是独立与不相关的\textbf{共同}充要条件。
+（提醒：这只对联合高斯成立——第 5、7 题就是反例。）
+
+\key{(c) 特例 $\sigma_X=\sigma_Y=\sigma,\ \rho=0$}
+\[
+\boxed{\,f_{XY}(x,y)=\frac{1}{2\pi\sigma^2}
+\exp\Big\{-\frac{(x-\mu_X)^2+(y-\mu_Y)^2}{2\sigma^2}\Big\}\,}
+\]
+指数只与到中心 $(\mu_X,\mu_Y)$ 的距离有关，是\textbf{圆对称（各向同性）}的高斯密度，
+等高线为同心圆。窄带噪声的同相/正交分量正是这种情形。
+
+\key{(d) 高斯过程的二维密度由什么决定}
+高斯过程的一切有限维分布都是高斯的，而高斯分布由\textbf{一阶矩和二阶矩}完全确定。
+因此 $f_X(x_1,x_2;t_1,t_2)$ 只由两个量决定：
+\begin{enumerate}[label=(\roman*),leftmargin=1.7em,itemsep=1pt]
+  \item \textbf{均值} $m_X(t)$，
+  \item \textbf{自协方差} $C_X(t_1,t_2)$（或等价地用自相关 $R_X$ 与均值）。
+\end{enumerate}
+写成矩阵形式（$\mathbf{x}=(x_1,x_2)^{\mathrm T}$，$\mathbf{m}=\big(m_X(t_1),m_X(t_2)\big)^{\mathrm T}$）：
+\[
+f_X(x_1,x_2;t_1,t_2)=\frac{1}{2\pi\sqrt{\det K}}
+\exp\Big\{-\frac12(\mathbf{x}-\mathbf{m})^{\mathrm T}K^{-1}(\mathbf{x}-\mathbf{m})\Big\},
+\]
+\[
+K=\begin{pmatrix}\sigma_1^2 & C_X(t_1,t_2)\\ C_X(t_1,t_2) & \sigma_2^2\end{pmatrix},
+\qquad \sigma_i^2=C_X(t_i,t_i).
+\]
+\textbf{平稳情形}：$m_X$ 为常数，$C_X(t_1,t_2)=C_X(\tau)$（$\tau=t_2-t_1$），
+$\sigma_1^2=\sigma_2^2=C_X(0)$，相关系数 $\rho_\tau=\dfrac{C_X(\tau)}{C_X(0)}$。
+第 18 题(c) 正是这个公式的直接应用。
+}
+
+\apage{第 6 天 \textperiodcentered\ 变换与二维高斯密度}{第 18 题}{真题 2025--26, Q4(b)--(c)}{窄带高斯同相/正交分量的联合密度}{%
+$X(t)=i(t)\cos\omega_0t-q(t)\sin\omega_0t$，$\omega_0=148\pi$，
+$S_X(\omega)=1$（$144\pi\le|\omega|\le156\pi$），其余为 $0$。
+
+\key{预备：自相关与两个基本关系}
+\[
+R_X(\tau)=\frac{1}{2\pi}\int_{-\infty}^{+\infty}\!\!S_X(\omega)e^{j\omega\tau}\dd\omega
+=\frac{1}{\pi}\int_{144\pi}^{156\pi}\!\!\cos(\omega\tau)\dd\omega
+=\frac{\sin(156\pi\tau)-\sin(144\pi\tau)}{\pi\tau},
+\]
+故
+\[
+R_X(0)=\lim_{\tau\to0}\frac{(156\pi-144\pi)\tau}{\pi\tau}=12
+\quad\Longrightarrow\quad
+\boxed{\sigma_i^2=\sigma_q^2=R_i(0)=R_X(0)=12}
+\]
+另一关键关系（$R_i(\tau)=R_q(\tau)=R_X\cos\omega_0\tau+\hat R_X\sin\omega_0\tau$）：
+\[
+\boxed{\,R_{iq}(\tau)=\hat R_X(\tau)\cos\omega_0\tau-R_X(\tau)\sin\omega_0\tau\,}
+\]
+其中 $\hat R_X$ 为 $R_X$ 的希尔伯特变换，对本例
+\[
+\hat R_X(\tau)=\frac{\cos(144\pi\tau)-\cos(156\pi\tau)}{\pi\tau}.
+\]
+
+\key{(a) 同一时刻：$f_{iq}(i,q;t,t)$}
+此时 $\tau=0$：$\hat R_X(0)=0$（奇函数），故
+\[
+R_{iq}(0)=0\times1-12\times0=0 .
+\]
+$i,q$ 零均值、联合高斯、互不相关 $\Rightarrow$ \textbf{相互独立}，且各自方差为 $12$：
+\[
+\boxed{\,f_{iq}(i,q;t,t)=\frac{1}{2\pi\cdot12}\exp\!\Big(-\frac{i^2+q^2}{2\cdot12}\Big)
+=\frac{1}{24\pi}\exp\!\Big(-\frac{i^2+q^2}{24}\Big)\,}
+\]
+
+\key{(b) 时延 $\tau=\tfrac{1}{12}$：三处计算（命题人精心设计的数值）}
+\[
+\omega_0\tau=\frac{148\pi}{12}=12\pi+\frac{\pi}{3}
+\ \Longrightarrow\ \cos\omega_0\tau=\frac12,\qquad \sin\omega_0\tau=\frac{\sqrt3}{2};
+\]
+\[
+R_X\!\Big(\tfrac1{12}\Big)=\frac{\sin 13\pi-\sin 12\pi}{\pi/12}=0 ;
+\]
+\[
+\hat R_X\!\Big(\tfrac1{12}\Big)=\frac{\cos 12\pi-\cos 13\pi}{\pi/12}
+=\frac{1-(-1)}{\pi/12}=\frac{24}{\pi}.
+\]
+于是
+\[
+R_{iq}\!\Big(\tfrac1{12}\Big)=\frac{24}{\pi}\cdot\frac12-0\cdot\frac{\sqrt3}{2}=\frac{12}{\pi},
+\qquad
+\rho=\frac{R_{iq}(1/12)}{\sigma_i\sigma_q}=\frac{12/\pi}{12}=\frac1\pi .
+\]
+
+\key{(b) 结果：相关系数为 $1/\pi$ 的二维高斯密度}
+两个边缘均为 $N(0,12)$，相关系数 $\rho=1/\pi$，代入第 17 题(a) 的公式：
+\[
+\boxed{\,f_{iq}\!\Big(i,q;t,t+\tfrac1{12}\Big)
+=\frac{1}{24\pi\sqrt{1-\pi^{-2}}}\exp\!\Big\{-\frac{i^2-\frac{2}{\pi}iq+q^2}{24\big(1-\pi^{-2}\big)}\Big\}\,}
+\]
+数值形式：
+\[
+f_{iq}\approx0.01399\,\exp\!\Big\{-\frac{i^2-0.6366\,iq+q^2}{21.57}\Big\}
+\]
+
+\key{为什么要小心（本题的"坑"）}
+若沿用"窄带噪声的 $i$、$q$ 恒不相关"这一\textbf{只在频谱关于 $\omega_0$ 对称时成立}的结论，
+就会得到与 (a) 完全相同的答案。但本题频谱为 $[144\pi,156\pi]$，中心是 $150\pi\neq\omega_0=148\pi$，
+\textbf{并不关于 $\omega_0$ 对称}，因此 $R_{iq}(\tau)\not\equiv0$，交叉项必须保留。
+$\tau=\tfrac1{12}$ 恰好让 $R_X(1/12)=0$、$\cos\omega_0\tau=\tfrac12$，
+使交叉项只由希尔伯特变换项贡献——数值如此"整齐"，正是命题人有意为之。
+}
+
+\apage{第 7 天 \textperiodcentered\ 其余考点}{第 19 题}{教材习题 1.6}{全概率公式与贝叶斯公式}{%
+设 $B_i$ 表示"取到第 $i$ 批"，$i=1,2,3,4$；$D$ 表示"取到次品"。
+\textbf{关键是"随机选一个批次"}，所以批次先验概率均等，与各批数量无关：
+\[
+P(B_1)=P(B_2)=P(B_3)=P(B_4)=\frac14 .
+\]
+条件次品率：
+\[
+P(D|B_1)=0.05,\quad P(D|B_2)=0.40,\quad P(D|B_3)=P(D|B_4)=0.10 .
+\]
+
+\key{(1) 全概率公式}
+\[
+P(D)=\sum_{i=1}^{4}P(B_i)P(D|B_i)
+=\frac14\big(0.05+0.40+0.10+0.10\big)=\frac{0.65}{4}=0.1625 .
+\]
+
+\key{(2) 贝叶斯公式}
+\[
+P(B_2|D)=\frac{P(D|B_2)P(B_2)}{P(D)}
+=\frac{0.40\times0.25}{0.1625}=\frac{0.10}{0.1625}=\frac{8}{13}\approx0.6154 .
+\]
+
+\key{易错点}
+\begin{bul}
+  \item 四批的批量 $2000$、$500$、$1000$、$1000$ 是\textbf{干扰信息}。
+        若误按"从全部零件中随机抽一个"，则先验应取 $P(B_i)=n_i/\sum n_i$，答案完全不同。
+  \item 结论的合理性检查：次品率最高的第二批（$40\%$）应当占据大部分后验概率，
+        $0.6154$ 大于其先验 $0.25$，符合贝叶斯更新方向。
+\end{bul}
+}
+
+\apage{第 7 天 \textperiodcentered\ 其余考点}{第 20 题}{教材习题 1.24}{条件数学期望与重期望公式}{%
+$X\sim U[0,a]$；给定 $X$ 后，$Y$ 在 $[X,a]$ 上均匀分布。
+
+\key{(1) 条件期望 $E(Y|X)$}
+给定 $X$ 时，$Y$ 是区间 $[X,a]$ 上的均匀分布，取区间中点：
+\[
+\boxed{\,E(Y|X)=\frac{X+a}{2},\qquad 0\le X\le a\,}
+\]
+
+\key{(2) 无条件期望 $EY$——用重期望（全期望）公式}
+\[
+E[Y]=E\big\{E[Y|X]\big\}=E\Big[\frac{X+a}{2}\Big]=\frac{E[X]+a}{2}.
+\]
+由 $X\sim U[0,a]$ 得 $E[X]=\dfrac a2$，于是
+\[
+\boxed{\,E[Y]=\frac{\frac a2+a}{2}=\frac{3a}{4}\,}
+\]
+
+\key{另解（顺带验证）}
+先求 $Y$ 的边缘密度。由 $f_{Y|X}(y|x)=\dfrac{1}{a-x}$（$x<y<a$）与 $f_X(x)=\dfrac1a$：
+\[
+f_{XY}(x,y)=\frac{1}{a(a-x)},\qquad
+f_Y(y)=\int_0^y\frac{\dd x}{a(a-x)}=\frac1a\ln\frac{a}{a-y}\quad(0<y<a).
+\]
+再算 $E[Y]=\displaystyle\int_0^a y\cdot\frac1a\ln\frac{a}{a-y}\dd y=\frac{3a}{4}$，与上面一致。
+\textbf{但显然重期望公式省力得多}——条件期望类题目应优先考虑它。
+}
+
+\apage{第 7 天 \textperiodcentered\ 其余考点}{第 21 题}{教材习题 1.33}{由联合特征函数求边缘特征函数与矩}{%
+\[
+\phi_{XY}(u,v)=\frac{6}{6-2ju-3jv-uv}.
+\]
+
+\key{(1) $X$ 的特征函数：令 $v=0$}
+\[
+\phi_X(u)=\phi_{XY}(u,0)=\frac{6}{6-2ju}=\frac{3}{3-ju}=\frac{1}{1-ju/3}.
+\]
+与 $\dfrac{\lambda}{\lambda-ju}=\dfrac{1}{1-ju/\lambda}$ 对照得 $\lambda=3$，故
+\[
+\boxed{X\sim\mathrm{Exp}(3),\qquad f_X(x)=3e^{-3x}\ (x\ge0)}
+\]
+
+\key{(2) $Y$ 的期望与方差：令 $u=0$}
+\[
+\phi_Y(v)=\phi_{XY}(0,v)=\frac{6}{6-3jv}=\frac{2}{2-jv}=\frac{1}{1-jv/2}
+\quad\Longrightarrow\quad Y\sim\mathrm{Exp}(2).
+\]
+\[
+\boxed{E[Y]=\frac{1}{\lambda}=\frac12,\qquad D(Y)=\frac{1}{\lambda^2}=\frac14}
+\]
+
+\key{用性质 3 复核（矩发生性质 $E[Y^k]=j^{-k}\phi_Y^{(k)}(0)$）}
+令 $\phi_Y(v)=(1-jv/2)^{-1}$：
+\[
+\phi_Y'(v)=\frac{j}{2}\Big(1-\frac{jv}{2}\Big)^{-2}
+\ \Rightarrow\ \phi_Y'(0)=\frac j2
+\ \Rightarrow\ E[Y]=j^{-1}\cdot\frac j2=\frac12\ \text{\checkmark}
+\]
+\[
+\phi_Y''(v)=-\frac12\Big(1-\frac{jv}{2}\Big)^{-3}
+\ \Rightarrow\ \phi_Y''(0)=-\frac12
+\ \Rightarrow\ E[Y^2]=j^{-2}\Big(-\frac12\Big)=\frac12\ \text{\checkmark}
+\]
+\[
+D(Y)=E[Y^2]-(E[Y])^2=\frac12-\frac14=\frac14\ \text{\checkmark}
+\]
+
+\key{方法要点}
+\textbf{求某个变量的边缘特征函数，就把联合特征函数中另一个变量置零}。
+这是 §1.5.2 最常考的一个动作。
+}
+
+\end{document}

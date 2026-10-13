@@ -1,0 +1,1105 @@
+% !TEX program = xelatex
+% =====================================================================
+%  《随机信号分析》教材第一章 历年考频分析报告
+%  编译：xelatex（两次，以生成目录与交叉引用）
+%
+%  页面比例对齐 13 英寸 iPad Air (M2) 纵向屏幕：
+%    屏幕 2732 x 2048 px @264ppi  ->  纵向 2048 x 2732 px
+%    paperwidth = 297mm x 2048/2732 = 222.6413mm   （paperheight 仍取 297mm）
+%  高度不变、文本块尺寸不变（文本宽 166mm、高 247mm），所以行宽、字号与
+%  分页都与已校对的 A4 版完全一致，只是左右留白由 22mm 加宽到 28.32mm。
+%  在 iPad 上整页铺满，无上下/左右黑边。
+% =====================================================================
+\documentclass[11pt]{ctexart}
+
+\usepackage[paperwidth=222.6413mm,paperheight=297mm,
+            left=2.8321cm,right=2.8321cm,top=2.6cm,bottom=2.4cm,
+            headsep=0.6cm,footskip=0.9cm]{geometry}
+
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{ragged2e}
+\usepackage{needspace}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{patterns}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage[hidelinks,bookmarksnumbered]{hyperref}
+
+% ------------------------- 配色 -------------------------
+\definecolor{ink}{HTML}{1F2933}
+\definecolor{deepblue}{HTML}{1B3A5C}
+\definecolor{accentA}{HTML}{B23A48}   % S级
+\definecolor{accentB}{HTML}{D97706}   % A级
+\definecolor{accentC}{HTML}{2F6F4E}   % B级
+\definecolor{accentD}{HTML}{6B7280}   % C级
+\definecolor{tintA}{HTML}{FBE9EB}
+\definecolor{tintB}{HTML}{FDF2E3}
+\definecolor{tintC}{HTML}{E8F2EC}
+\definecolor{tintD}{HTML}{F0F1F3}
+\definecolor{rulegray}{HTML}{C9CED6}
+\definecolor{tabhead}{HTML}{1B3A5C}
+
+% ------------------------- 标题样式 -------------------------
+\titleformat{\section}{\normalfont\Large\bfseries\color{deepblue}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{deepblue!85!black}}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries\color{ink}}{\thesubsubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{1.6em}{0.7em}
+\titlespacing*{\subsection}{0pt}{1.2em}{0.5em}
+
+% ------------------------- 页眉页脚 -------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[L]{\footnotesize\color{deepblue}随机信号分析 · 第一章考频分析报告}
+\fancyhead[R]{\footnotesize\color{deepblue}\thepage}
+\fancyfoot[C]{\scriptsize\color{accentD}数据来源：2022--2025 学年四套期末考试真题（UESTC 3024 / UESTCHN 3016）}
+
+% ------------------------- 便捷命令 -------------------------
+\newcommand{\secode}[1]{\texttt{\color{deepblue}#1}}
+\newcommand{\tierS}{\textbf{\color{accentA}S}}
+\newcommand{\tierA}{\textbf{\color{accentB}A}}
+\newcommand{\tierB}{\textbf{\color{accentC}B}}
+\newcommand{\tierC}{\textbf{\color{accentD}C}}
+\newcommand{\hot}[1]{\textcolor{accentA}{\bfseries #1}}
+\newcommand{\code}[1]{\texttt{\small #1}}
+
+\newcommand{\thd}[1]{\textcolor{white}{\bfseries #1}}
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+
+\captionsetup{font={small,color=deepblue},labelfont=bf,skip=5pt}
+
+% 结论框
+\newtcolorbox{keybox}[1][]{
+  colback=tintC, colframe=accentC, boxrule=0.7pt, arc=2pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,
+  fonttitle=\bfseries\color{white}, coltitle=white, colbacktitle=accentC,
+  breakable, #1}
+
+\newtcolorbox{warnbox}[1][]{
+  colback=tintA, colframe=accentA, boxrule=0.7pt, arc=2pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,
+  fonttitle=\bfseries\color{white}, coltitle=white, colbacktitle=accentA,
+  breakable, #1}
+
+\newtcolorbox{infobox}[1][]{
+  colback=tintB, colframe=accentB, boxrule=0.7pt, arc=2pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,
+  fonttitle=\bfseries\color{white}, coltitle=white, colbacktitle=accentB,
+  breakable, #1}
+
+% =====================================================================
+\begin{document}
+
+% ---------------------------------------------------------------- 封面
+\begin{titlepage}
+\centering
+\vspace*{1.6cm}
+
+{\color{deepblue}\rule{\textwidth}{1.6pt}}\\[0.5em]
+{\Huge\bfseries\color{deepblue} 《随机信号分析》教材第一章\par}
+\vspace{0.35em}
+{\Huge\bfseries\color{deepblue} 历年考频分析报告\par}
+\vspace{0.5em}
+{\color{deepblue}\rule{\textwidth}{1.6pt}}\\[1.4em]
+
+{\large\color{ink} 基于 2022--2025 学年四套期末考试真题的考点统计\par}
+\vspace{0.4em}
+{\large\color{accentA}\bfseries 对接第一次作业（Homework \#1）的复习优先级建议\par}
+
+\vspace{1.8cm}
+
+\begin{tcolorbox}[colback=tintD,colframe=rulegray,boxrule=0.6pt,arc=3pt,
+  width=0.92\textwidth,left=12pt,right=12pt,top=10pt,bottom=10pt]
+\centering
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{@{}r@{\hspace{2.2em}}l@{}}
+\textbf{课程} & Stochastic Signal Analysis (UESTC 3024 / UESTCHN 3016) \\
+\textbf{教材} & 《随机信号分析》（第 5 版），李晓峰 等，电子工业出版社 \\
+\textbf{考查范围} & 第 1 章 概率论基础（教材 pp.\,1--36） \\
+\textbf{样本量} & 4 套期末考试真题、共 16 道大题、400 分 \\
+\textbf{作业对接} & Homework \#1（教材 Ch.\,1 习题 1.6 / 1.9 / 1.11 / 1.14 / 1.16 \\
+               & \quad / 1.21 / 1.24 / 1.28 / 1.29 / 1.30 / 1.33） \\
+\end{tabular}
+\end{tcolorbox}
+
+\vspace{1.2cm}
+
+\begin{minipage}{0.92\textwidth}
+\begin{tcolorbox}[colback=white,colframe=accentA,boxrule=1pt,arc=3pt,
+  left=12pt,right=12pt,top=10pt,bottom=10pt]
+{\bfseries\color{accentA} 一句话结论}\\[0.45em]
+\justifying
+第一章内容在四套真题中的\textbf{核心分值平均为 33.8 分/套（占 100 分的 33.8\%）}，
+且有 \textbf{2 套试卷（2023-12、2025-12）直接把一整道 25 分大题留给第一章}。
+其中 \secode{§1.4.2}（矩与联合矩）\textbf{四套全部命中}、累计 37 分，是第一章第一热点；
+\secode{§1.6}（典型分布）与 \secode{§1.2.3}（独立性）\textbf{四套全部涉及}。
+最新一套（2025--2026 学年）第一章分值升至 \textbf{49 分}，为四年最高，
+说明命题正向"概率论基础 + 随机过程"深度融合的方向倾斜。
+\end{tcolorbox}
+\end{minipage}
+
+\vfill
+{\small\color{accentD} 本报告由本机 TeX Live 2025 编译（XeLaTeX + ctex）\par}
+{\small\color{accentD} \today\par}
+\vspace{0.8cm}
+\end{titlepage}
+
+% ---------------------------------------------------------------- 目录
+\pagenumbering{Roman}
+\setcounter{page}{1}
+\tableofcontents
+\clearpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+% =====================================================================
+\section{报告说明}
+
+\subsection{分析对象与数据来源}
+
+本报告回答一个问题：\textbf{教材第一章"概率论基础"的各个考点，在历年期末考试中究竟考了多少、怎么考、优先级如何？}
+
+分析所用的全部原始材料均来自本课程工作目录，未经任何改写：
+
+\begin{itemize}[leftmargin=1.6em,itemsep=2pt]
+  \item \textbf{四套期末考试真题}（\code{试卷/} 目录）：
+    \begin{itemize}[leftmargin=1.4em,itemsep=1pt]
+      \item \code{UESTC3024\_1\_Stochastic Signal Analysis\_202212.pdf} —— 考试日期 2023 年 2 月 28 日（记作 \textbf{2022--23 学年}）
+      \item \code{UESTC3024\_1\_Stochastic Signal Analysis\_202312.pdf} —— 考试日期 2023 年 12 月 28 日（记作 \textbf{2023--24 学年}）
+      \item \code{UESTC3024-UESTCHN3016\_1\_Stochastic Signal Analysis\_202412.pdf} —— 2024 年 12 月（记作 \textbf{2024--25 学年}）
+      \item \code{UESTC3024\_UESTCHN3016\_Stochastic Signal Analysis\_202512\_1.pdf} —— 考试日期 2026 年 1 月 4 日（记作 \textbf{2025--26 学年}）
+    \end{itemize}
+  \item \textbf{教材章节目录}：《随机信号分析》（第 5 版）第 IX 页目录，用于确立考点编码体系。
+  \item \textbf{课件与作业}：\code{CH1概率论基础.pdf}（第一章课件，77 页）、\code{作业/SSA\_Homework\_1\_English.pdf}（第一次作业）。
+\end{itemize}
+
+四套真题的\textbf{所有小问均逐题人工阅读并核对原始版面图像}（PDF 文本抽取会丢失上下标，
+例如 2025--26 学年 Q1 的 $t^2$、$n^2$ 在纯文本中被抽成 \code{t}、\code{n}，本报告已按原始图像更正）。
+
+\subsection{统计口径}
+
+为了让"考频"这一说法可核对、可复现，本报告采用两级归类，并在第三章给出\textbf{逐题明细表}，使每一个分值都能追溯：
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\textwidth}{@{}L{2.6cm}L{5.0cm}L{4.2cm}X@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{归类} & \thd{判定标准} & \thd{计分方式} & \thd{例} \\
+\midrule
+\textbf{核心考点}\newline（primary）
+  & 该小问\textbf{主要考查的技能就是第一章内容}；不掌握该章内容则此题无法作答
+  & 分值\textbf{全额}计入该考点
+  & 2023--24 Q3(b) 求 $E(X),E(Y)$ $\to$ \secode{§1.4.1}，8 分全部计入 \\
+\textbf{间接涉及}\newline（support）
+  & 题目主体属于第 2--6 章，但解题过程中\textbf{必须用到}第一章的某个结论
+  & \textbf{不计分}，仅记"涉及"
+  & 2024--25 Q3(b) 求自相关函数（主体 Ch.\,5），但需用 $D(X\pm Y)$ 公式，涉及 \secode{§1.4.2} \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent
+\textbf{关于分值的两点说明}：
+（1）每套试卷总分 100 分，分值为题干方括号内标注值，四套试卷均已逐题累加校验（合计 100 分）；
+（2）一个小问只归入\textbf{一个}核心考点（避免重复计分），其余相关考点列入"间接涉及"。
+因此\textbf{"核心分值"列的历年合计 = 各年第一章核心分值之和}，可用作横向比较。
+
+\subsection{考点编码体系}
+
+考点编码直接沿用教材第 5 版目录的小节编号（教材 pp.\,1--33），便于对照课本与课件复习：
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}L{1.7cm}L{4.6cm}X@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{编码} & \thd{教材小节标题} & \thd{本报告使用的简称与内涵} \\
+\midrule
+\secode{§1.1.1} & 概率公理 & 样本空间、事件、条件概率、全概率公式、贝叶斯公式、链式法则 \\
+\secode{§1.1.2} & 随机变量 & 分布函数 $F(x)$、密度函数 $f(x)$、分布律、离散型冲激表示 \\
+\secode{§1.2.1} & 多维随机变量 & 联合分布函数 / 联合密度 / 联合分布律、边缘分布 \\
+\secode{§1.2.2} & 条件随机变量 & 条件分布函数与条件密度 \\
+\secode{§1.2.3} & 独立性 & $n$ 个随机变量相互独立的判别与使用 \\
+\secode{§1.3.1} & 随机变量的一元函数 & $Y=g(X)$ 的分布，单调变换公式、整流器（$\delta$ 与 $u$ 函数） \\
+\secode{§1.3.2} & 随机变量的二元函数 & $Z=g(X,Y)$、雅可比变换、卷积公式 $Z=X+Y$ \\
+\secode{§1.3.3} & 瑞利与莱斯分布 & Rayleigh / Rice 分布 \\
+\secode{§1.4.1} & 数学期望（统计平均） & $E[X]$、期望的线性性质、$E[g(X)]$ \\
+\secode{§1.4.2} & 矩与联合矩 & 原点矩、中心矩、均方值、方差、联合矩、协方差、相关系数 \\
+\secode{§1.4.3} & 无关与正交 & 不相关、正交，以及与统计独立的三角关系 \\
+\secode{§1.4.4} & 条件数学期望 & $E[X\mid Y]$、重期望公式 \\
+\secode{§1.4.5} & 重要不等式 & 切比雪夫不等式、柯西--许瓦兹不等式 \\
+\secode{§1.5.1} & （一维）特征函数 & 定义、与密度函数构成傅里叶变换对、性质 1--3 \\
+\secode{§1.5.2} & 多维（联合）特征函数 & 联合特征函数、独立性的充要条件、线性变换、多维高斯特征函数 \\
+\secode{§1.6} & 典型分布 & 0--1、二项、泊松、均匀、指数、高斯、瑞利/莱斯、$\chi^2$ 分布 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent
+说明：教材 §1.7（随机变量的仿真与实验，带 * 号为选学）在四套真题中\textbf{均未出现}，故未纳入考频统计。
+
+\clearpage
+% =====================================================================
+\section{第一章知识结构与命题地图}
+
+第一章共 6 个一级小节、16 个可考查小节，在教材中占 33 页。
+从四套真题的命题方式看，这些考点可以分为三种\textbf{命题形态}，理解形态比记住结论更重要：
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabularx}{\textwidth}{@{}L{2.3cm}L{4.2cm}L{3.6cm}X@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{命题形态} & \thd{典型问法} & \thd{对应考点} & \thd{出现场合} \\
+\midrule
+\textbf{形态一}\newline 独立成题
+  & 给定一个具体的联合密度 / 由随机试验构造的随机信号，求系数、期望、方差、协方差、联合密度
+  & \secode{§1.2.1}、\secode{§1.4.1}、\secode{§1.4.2}
+  & 2023--24 Q3（25 分整题）\newline 2025--26 Q1（25 分整题） \\
+\textbf{形态二}\newline 工具嵌入
+  & 在平稳性 / 功率谱 / 线性系统题中，先要求你写出某随机变量或某随机信号的概率特性
+  & \secode{§1.5.1}、\secode{§1.4.3}、\secode{§1.6}、\secode{§1.3.1}
+  & 2022--23 Q1(b)(c)、Q4(b)\newline 2023--24 Q2(c)\newline 2025--26 Q2(a)、Q4(b)(c) \\
+\textbf{形态三}\newline 前提条件
+  & "证明联合平稳""求不相关条件下的功率谱""判断是否高斯"
+  & \secode{§1.2.3}、\secode{§1.4.2}、\secode{§1.4.3}
+  & 2023--24 Q1(a)、Q4(b)\newline 2024--25 Q1(b)、Q2(a)(c) \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{infobox}[title={形态二的性价比最高}]
+\justifying
+\textbf{形态二}是"投入产出比"最高的部分：它出现在以第 3、5、6 章为背景的题目里，
+分值往往只有 5--10 分，但\textbf{一旦第一章的公式不熟就会整题卡住}。
+例如 2024--25 Q4(c) 要求写出窄带高斯噪声同相/正交分量的二维联合密度，
+本质上是 \secode{§1.6}（二维高斯）+ \secode{§1.2.1}（联合密度）的直接套用，
+而这 10 分与第 6 章的希尔伯特变换分析是\textbf{捆绑}的。
+\end{infobox}
+
+\clearpage
+% =====================================================================
+\section{四套真题逐题考点标注}
+
+本章逐题列出全部 16 道大题、共 56 个小问的考点归属。
+表格中 \textbf{"核心考点"加粗并计分}，"间接涉及"以浅色列出、不计分。
+每套试卷末尾给出该年度第一章核心分值合计。
+
+\subsection{2022--23 学年（考试日期：2023 年 2 月 28 日）}
+
+\begin{center}
+\footnotesize
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{@{}C{0.9cm}C{0.9cm}C{0.8cm}L{4.5cm}L{3.2cm}X@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{题} & \thd{小问} & \thd{分值} & \thd{题目要求（摘要）} & \thd{\color{white}核心考点} & \thd{间接涉及} \\
+\midrule
+\multirow{3}{*}{Q1}
+ & (a) & 6  & $X(t)=U+t,\;U\sim U[0,\pi]$ 的两个样本函数并作图 & --- & \secode{§1.1.2} \\
+ & (b) & \textbf{9}  & 求 $X(t)$ 的特征函数 & \cellcolor{tintA}\textbf{\secode{§1.5.1}} & \secode{§1.3.1}、\secode{§1.6} \\
+ & (c) & \textbf{10} & 求 $X(t)$ 的均值和自协方差 & \cellcolor{tintA}\textbf{\secode{§1.4.2}} & \secode{§1.4.1}、\secode{§1.6} \\
+\midrule
+\multirow{3}{*}{Q2}
+ & (a) & 8  & $\eta(t)=\xi(t)\cos(\omega_0 t+\Theta)$，$\Theta\sim U[0,2\pi]$，求均值 & --- & \secode{§1.4.1}、\secode{§1.6}、\secode{§1.2.3} \\
+ & (b) & 8  & 判断是否广义平稳 & --- & Ch.\,3 \\
+ & (c) & 9  & 求功率谱密度 & --- & Ch.\,3 \\
+\midrule
+\multirow{2}{*}{Q3}
+ & (a) & 10 & 求 $X(t)$ 的功率谱密度 & --- & Ch.\,3、Ch.\,5 \\
+ & (b) & 15 & $Y(t)=aX^2(t)$，求输出的自相关函数 & --- & \secode{§1.3.1}、\secode{§1.4.2}、\secode{§1.6} \\
+\midrule
+\multirow{2}{*}{Q4}
+ & (a) & 15 & $H(j\omega)=\frac{1}{3+j\omega}$，$R_X(\tau)=e^{-|\tau|}$，求 $m_Y,S_Y(\omega),R_Y(\tau)$ & --- & Ch.\,5 \\
+ & (b) & \textbf{10} & $X(t)$ 为高斯信号，求 $Y(t)$ 的一维概率密度函数 & \cellcolor{tintA}\textbf{\secode{§1.3.1}} & \secode{§1.6} \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent\textbf{本年第一章核心分值合计：} $9+10+10=\mathbf{29}$ \textbf{分（29\%）}。
+
+\begin{keybox}[title={本套命题特征}]
+\justifying
+第一章以\textbf{形态二（工具嵌入）}为主：没有独立的第一章大题，29 分全部来自
+Q1 的概率特性求解（特征函数、均值与自协方差）和 Q4(b) 的高斯线性变换。
+\textbf{最值得注意的信号}是 Q1 把"随机信号的样本函数 $\to$ 特征函数 $\to$ 均值与自协方差"
+串成了一道 25 分大题——这正是"概率论基础直接服务于随机信号"的命题思路。
+\end{keybox}
+
+\clearpage
+\subsection{2023--24 学年（考试日期：2023 年 12 月 28 日）}
+
+\begin{center}
+\footnotesize
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{@{}C{0.9cm}C{0.9cm}C{0.8cm}L{4.5cm}L{3.2cm}X@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{题} & \thd{小问} & \thd{分值} & \thd{题目要求（摘要）} & \thd{\color{white}核心考点} & \thd{间接涉及} \\
+\midrule
+\multirow{3}{*}{Q1}
+ & (a) & 12 & $Z=X+Y,\;V=X-Y$（$X,Y$ 独立平稳），证明联合平稳 & --- & \secode{§1.2.3}、Ch.\,3 \\
+ & (b) & 6  & 求功率谱密度 $S_Z(\omega)$ & --- & Ch.\,3 \\
+ & (c) & 7  & 求 $R_{XZ}(\tau)$ 和 $R_{VZ}(\tau)$ & --- & \secode{§1.4.2}、Ch.\,3 \\
+\midrule
+\multirow{3}{*}{Q2}
+ & (a) & 10 & 白噪声经 $h(t)=e^{-t}u(t)$，求 $R_{WX}(\tau)$ 与 $R_X(\tau)$ & --- & Ch.\,5 \\
+ & (b) & 7  & 证明 $S_Y(\omega)=2S_X(\omega)(1-\cos\omega T)$ & --- & \secode{§1.4.2}、Ch.\,3 \\
+ & (c) & \textbf{8}  & 判断 $Y(t)$ 是否服从高斯分布，并写出其一维 PDF & \cellcolor{tintA}\textbf{\secode{§1.6}} & \secode{§1.3.1} \\
+\midrule
+\multirow{4}{*}{Q3}
+ & (a) & \textbf{4}  & $f_{XY}(x,y)=A\sin(x+y)$，$0\le x,y\le\frac{\pi}{2}$，求系数 $A$ & \cellcolor{tintA}\textbf{\secode{§1.2.1}} & \secode{§1.1.2} \\
+ & (b) & \textbf{8}  & 求期望 $E(X)$ 和 $E(Y)$ & \cellcolor{tintA}\textbf{\secode{§1.4.1}} & --- \\
+ & (c) & \textbf{6}  & 求方差 $D(X)$ 和 $D(Y)$ & \cellcolor{tintA}\textbf{\secode{§1.4.2}} & --- \\
+ & (d) & \textbf{7}  & 求联合矩 $m_{XY}$ 与相关系数 $\rho_{XY}$ & \cellcolor{tintA}\textbf{\secode{§1.4.2}} & --- \\
+\midrule
+\multirow{3}{*}{Q4}
+ & (a) & 4  & 用希尔伯特变换求 $a(t),b(t)$ & --- & Ch.\,6 \\
+ & (b) & 15 & 求 $S_a(\omega),S_b(\omega),S_{ab}(\omega)$ & --- & \secode{§1.4.2}、\secode{§1.4.3}、Ch.\,6 \\
+ & (c) & 6  & 指定条件下绘制 $S_{ab}(\omega)$ & --- & Ch.\,6 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent\textbf{本年第一章核心分值合计：} $8+4+8+6+7=\mathbf{33}$ \textbf{分（33\%）}。
+
+\begin{warnbox}[title={本套命题特征：第一章首次独占一道 25 分大题}]
+\justifying
+\textbf{Q3 全部 25 分都属于第一章}，且是纯概率论计算：联合密度归一化 $\to$ 期望 $\to$ 方差 $\to$ 联合矩与相关系数。
+这是四年中第一章考点最"纯粹、最完整"的一次覆盖，\textbf{四个小问正好对应
+\secode{§1.2.1}、\secode{§1.4.1}、\secode{§1.4.2}（方差）、\secode{§1.4.2}（联合矩/相关系数）}。
+如果第一次作业的习题 1.14、1.21 掌握扎实，这 25 分属于高确定性得分点。
+另外 Q2(c) 的"判断高斯性 + 写 PDF"是 \secode{§1.6} 的经典问法。
+\end{warnbox}
+
+\clearpage
+\subsection{2024--25 学年（考试日期：2024 年 12 月）}
+
+\begin{center}
+\footnotesize
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{@{}C{0.9cm}C{0.9cm}C{0.8cm}L{4.5cm}L{3.2cm}X@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{题} & \thd{小问} & \thd{分值} & \thd{题目要求（摘要）} & \thd{\color{white}核心考点} & \thd{间接涉及} \\
+\midrule
+\multirow{3}{*}{Q1}
+ & (a) & 7  & $X[n]=\sin(2\pi n+\phi),\,Y[n]=\cos(2\pi n+\phi)$，求互相关 & --- & \secode{§1.4.1}、\secode{§1.6} \\
+ & (b) & \textbf{9}  & 计算并讨论两信号的\textbf{正交性、不相关性、统计独立性} & \cellcolor{tintA}\textbf{\secode{§1.4.3}} & \secode{§1.2.3} \\
+ & (c) & 9  & 判断是否联合平稳 & --- & Ch.\,3 \\
+\midrule
+\multirow{3}{*}{Q2}
+ & (a) & 12 & $V(t)=X(t)\cos\omega_0 t+Y(t)\sin\omega_0 t$，求平稳条件 & --- & Ch.\,3、\secode{§1.2.3} \\
+ & (b) & 8  & 求 $V(t)$ 的功率谱密度 & --- & Ch.\,3 \\
+ & (c) & \textbf{5}  & 若 $X,Y$ \textbf{不相关}，求 $V(t)$ 的功率谱密度 & \cellcolor{tintA}\textbf{\secode{§1.4.3}} & Ch.\,3 \\
+\midrule
+\multirow{3}{*}{Q3}
+ & (a) & 9  & RC 电路，求 $U,V,U-V$ 的功率谱密度 & --- & Ch.\,3、Ch.\,5 \\
+ & (b) & 6  & 求 $U,V,U-V$ 的自相关函数 & --- & \secode{§1.4.2}、Ch.\,5 \\
+ & (c) & 10 & 求 $U-V$ 与 $U+V$ 的互相关函数 & --- & \secode{§1.4.2}、Ch.\,3 \\
+\midrule
+\multirow{3}{*}{Q4}
+ & (a) & 9  & 理想带通滤波后 $n_i(t)=i(t)\cos\omega_0 t-q(t)\sin\omega_0 t$，求 PSD 与 $i,q$ 自相关 & --- & Ch.\,6 \\
+ & (b) & 6  & 求互功率谱 $S_{iq}(\omega)$ & --- & \secode{§1.4.3}、Ch.\,6 \\
+ & (c) & \textbf{10} & 求 $i(t)$ 与 $q(t)$ 的联合概率密度 $f_{iq}(i,q;t,t)$ & \cellcolor{tintA}\textbf{\secode{§1.6}} & \secode{§1.2.1} \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent\textbf{本年第一章核心分值合计：} $9+5+10=\mathbf{24}$ \textbf{分（24\%）}。
+
+\begin{infobox}[title={本套命题特征：第一章分值最低，但"概念题"分量最重}]
+\justifying
+24 分是四年最低，但\textbf{命题质量最"尖锐"}：Q1(b) 用 9 分直接考
+"正交性 / 不相关性 / 统计独立性三者的关系"——这是 \secode{§1.4.3} 的\textbf{核心概念辨析}，
+不能靠套公式，必须能说清逻辑（独立 $\Rightarrow$ 不相关，反之仅在高斯情形成立；
+不相关且任一均值为零 $\Leftrightarrow$ 正交）。
+Q2(c) 又用 5 分考"不相关条件下的功率谱简化"，与 Q1(b) 形成\textbf{同一考点的双次命中}。
+\textbf{特别注意：第一次作业中没有任何一道题直接训练 \secode{§1.4.3} 的概念辨析}，属于必须自行补强的部分。
+\end{infobox}
+
+\clearpage
+\subsection{2025--26 学年（考试日期：2026 年 1 月 4 日）}
+
+\begin{center}
+\footnotesize
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{@{}C{0.9cm}C{0.9cm}C{0.8cm}L{4.5cm}L{3.2cm}X@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{题} & \thd{小问} & \thd{分值} & \thd{题目要求（摘要）} & \thd{\color{white}核心考点} & \thd{间接涉及} \\
+\midrule
+\multirow{4}{*}{Q1}
+ & (a) & \textbf{6} & 抛硬币构造过程（正面 $\sin 2\pi t$、反面 $t^2$），求一维 PDF $f_X(x,2)$ & \cellcolor{tintA}\textbf{\secode{§1.1.2}} & \secode{§1.3.1} \\
+ & (b) & \textbf{6} & 求二维 PDF $f_X(x_1,x_2;1,2)$ & \cellcolor{tintA}\textbf{\secode{§1.2.1}} & --- \\
+ & (c) & \textbf{6} & 求协方差 $C_X(t_1,t_2)$ & \cellcolor{tintA}\textbf{\secode{§1.4.2}} & --- \\
+ & (d) & \textbf{7} & 独立多次抛硬币构造 $Y[n]$，求二维 PDF $f_Y(y_1,y_2;1,2)$ & \cellcolor{tintA}\textbf{\secode{§1.2.1}} & \secode{§1.2.3} \\
+\midrule
+\multirow{3}{*}{Q2}
+ & (a) & \textbf{9} & $Y=X+Z$，$Z=A(t)\cos(\omega_0 t+\Theta)$，问 $\Phi_\Theta(v)$ 应满足何条件 & \cellcolor{tintA}\textbf{\secode{§1.5.1}} & \secode{§1.2.3}、Ch.\,3 \\
+ & (b) & 7  & 在上述条件下求 $Y(t)$ 的功率谱密度 & --- & \secode{§1.5.1}、Ch.\,3 \\
+ & (c) & 9  & $X$ 均值各态历经且 $R_X(\tau)=e^{-|\tau|}$，判断 $Y$ 是否均值各态历经 & --- & Ch.\,4 \\
+\midrule
+\multirow{3}{*}{Q3}
+ & (a) & 10 & 多径信道 $h(t)=\delta(t)+0.5\delta(t-T_d)$，求 $R_Y,S_Y$ & --- & Ch.\,5 \\
+ & (b) & 10 & 匹配滤波 $g(t)=h^*(-t)$，求 $R_Z,S_Z$ & --- & Ch.\,5 \\
+ & (c) & 5  & 时延扩展 $T_d$ 越大还是越小更有利于大带宽 & --- & Ch.\,5 \\
+\midrule
+\multirow{3}{*}{Q4}
+ & (a) & 10 & 零均值平稳高斯 $X(t)=i\cos\omega_0 t-q\sin\omega_0 t$，画 $S_i(\omega),S_q(\omega)$ & --- & Ch.\,6 \\
+ & (b) & \textbf{7}  & 求 $f_{iq}(i,q;t,t)$ & \cellcolor{tintA}\textbf{\secode{§1.6}} & \secode{§1.2.1} \\
+ & (c) & \textbf{8}  & 求 $f_{iq}\!\left(i,q;t,t+\frac{1}{12}\right)$ & \cellcolor{tintA}\textbf{\secode{§1.4.2}} & \secode{§1.2.1}、\secode{§1.6} \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent\textbf{本年第一章核心分值合计：} $6+6+6+7+9+7+8=\mathbf{49}$ \textbf{分（49\%）}。
+
+\begin{warnbox}[title={本套命题特征：第一章分值创四年新高（49 分）}]
+\justifying
+两个显著变化：
+\begin{enumerate}[leftmargin=1.5em,itemsep=2pt,topsep=3pt]
+  \item \textbf{Q1 整题 25 分全部是第一章内容}，而且命题方式很新：不再给一个现成的联合密度让你算，
+        而是\textbf{用"抛硬币"这一随机试验自己构造随机信号}，再求一维 PDF、二维 PDF、协方差。
+        这要求对 \secode{§1.1.2}（离散取值信号的密度函数用 $\delta$ 函数表示）、
+        \secode{§1.2.1}（二维联合密度）、\secode{§1.4.2}（协方差）、
+        \secode{§1.2.3}（独立重复试验的联合密度可分解）\textbf{全部打通}。
+  \item \textbf{Q4(b)(c) 共 15 分}考窄带高斯同相/正交分量的联合概率密度，
+        其中 (c) 把两个时刻拉开 $1/12$ 秒，本质是考"二维联合高斯密度由均值向量和协方差矩阵完全确定"，
+        即 \secode{§1.4.2}（不同时刻的协方差）+ \secode{§1.6}（高斯）+ \secode{§1.2.1}（联合密度）的综合。
+\end{enumerate}
+\end{warnbox}
+
+\subsection{四套试卷汇总}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\textwidth}{@{}L{3.4cm}C{2.1cm}C{2.4cm}C{2.6cm}X@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{学年（考试时间）} & \thd{第一章核心分值} & \thd{占卷面比例} & \thd{含 25 分整题} & \thd{\color{white}主要命题形态} \\
+\midrule
+2022--23（2023.02） & 29 分 & 29\% & 否 & 工具嵌入（特征函数、自协方差、高斯变换） \\
+\rowcolor{tintD} 2023--24（2023.12） & 33 分 & 33\% & \textbf{是}（Q3） & 独立成题（联合密度 $\to$ 期望 $\to$ 方差 $\to$ 相关系数） \\
+2024--25（2024.12） & 24 分 & 24\% & 否 & 概念辨析（正交 / 不相关 / 独立）+ 联合高斯密度 \\
+\rowcolor{tintD} 2025--26（2026.01） & \textbf{49 分} & \textbf{49\%} & \textbf{是}（Q1） & 独立成题（随机试验构造信号）+ 特征函数 + 联合高斯 \\
+\midrule
+\textbf{四年平均} & \textbf{33.75 分} & \textbf{33.75\%} & 2/4 & --- \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\clearpage
+% =====================================================================
+\section{考频统计与热度分级}
+
+\subsection{一级考点考频总表}
+
+下表是全文最核心的统计结果。\textbf{"核心分值合计"指该考点作为主要考查技能所对应的分值之和}
+（四套试卷合计 135 分），"\textbf{核心命中}"指该考点作为核心考点出现的试卷数，
+"\textbf{间接涉及}"指该考点即使不作为核心、也必须在解题中用到的试卷数。
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}L{1.6cm}L{3.9cm}C{1.6cm}C{1.5cm}C{1.4cm}C{1.4cm}L{2.0cm}@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{编码} & \thd{考点} & \thd{核心分值\newline 合计} & \thd{核心\newline 命中/4} & \thd{间接\newline 涉及/4} & \thd{总命中\newline 率} & \thd{命中试卷} \\
+\midrule
+\rowcolor{tintA}
+\secode{§1.4.2} & \textbf{矩与联合矩}（方差/协方差/相关系数） & \hot{37} & \hot{3} & \hot{4} & \hot{100\%} & 全部四套 \\
+\rowcolor{tintA}
+\secode{§1.6} & \textbf{典型分布}（均匀/指数/高斯等） & \hot{25} & \hot{3} & \hot{4} & \hot{100\%} & 2023--24 起连续三年 \\
+\rowcolor{tintB}
+\secode{§1.5.1} & 一维特征函数 & 18 & 2 & 2 & 75\% & 22--23、25--26 \\
+\rowcolor{tintB}
+\secode{§1.2.1} & 多维随机变量（联合/边缘分布） & 17 & 2 & 3 & 75\% & 23--24、25--26 \\
+\rowcolor{tintB}
+\secode{§1.4.3} & 无关与正交 & 14 & 1 & 2 & 50\% & 23--24、24--25 \\
+\rowcolor{tintC}
+\secode{§1.3.1} & 随机变量的一元函数 & 10 & 1 & 3 & 75\% & 22--23、23--24 \\
+\rowcolor{tintC}
+\secode{§1.4.1} & 数学期望 & 8 & 1 & 3 & 75\% & 22--23、23--24 \\
+\rowcolor{tintC}
+\secode{§1.1.2} & 随机变量（分布/密度函数） & 6 & 1 & 2 & 50\% & 25--26 \\
+\midrule
+\secode{§1.2.3} & 独立性（前提条件型） & 0 & 0 & \hot{4} & \hot{100\%} & 全部四套（均为前提） \\
+\secode{§1.1.1} & 概率公理（全概率/贝叶斯） & 0 & 0 & 1 & 25\% & 25--26（基础概率） \\
+\secode{§1.3.2} & 二元函数（雅可比/卷积） & 0 & 0 & 2 & 50\% & 24--25、25--26（形式） \\
+\secode{§1.5.2} & 多维（联合）特征函数 & 0 & 0 & 2 & 50\% & 24--25、25--26（形式） \\
+\secode{§1.2.2} & 条件随机变量 & 0 & 0 & 0 & 0\% & --- \\
+\secode{§1.3.3} & 瑞利与莱斯分布 & 0 & 0 & 0 & 0\% & --- \\
+\secode{§1.4.4} & 条件数学期望 & 0 & 0 & 0 & 0\% & --- \\
+\secode{§1.4.5} & 重要不等式 & 0 & 0 & 0 & 0\% & --- \\
+\midrule
+\multicolumn{2}{@{}l}{\textbf{合计}} & \textbf{135} & --- & --- & --- & --- \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent
+注："间接涉及"中的 \secode{§1.2.3}（独立性）是一个特殊现象：\textbf{它从未被单独命题，
+却出现在全部四套试卷中}——每一套题都以"某两个随机信号是否独立"作为解题前提。
+\secode{§1.3.2} 与 \secode{§1.5.2} 的"间接涉及"是指窄带高斯联合密度题中隐含的二维变换与联合高斯特征函数思想。
+
+\subsection{各年度第一章核心分值走势}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  ybar,
+  bar width=22pt,
+  width=14.2cm, height=6.4cm,
+  ymin=0, ymax=60,
+  symbolic x coords={Y1,Y2,Y3,Y4},
+  xtick=data,
+  xticklabels={2022--23,2023--24,2024--25,2025--26},
+  x tick label style={font=\small},
+  ylabel={\small 第一章核心分值（分）},
+  ylabel style={font=\small},
+  ytick={0,10,20,30,40,50,60},
+  yticklabel style={font=\small},
+  enlarge x limits=0.16,
+  nodes near coords,
+  nodes near coords style={font=\small\bfseries,color=deepblue},
+  axis line style={draw=rulegray},
+  tick align=outside,
+  every axis plot/.append style={fill=deepblue!72,draw=deepblue},
+  grid=major,
+  major grid style={draw=rulegray!45,dotted},
+]
+\addplot coordinates {(Y1,29) (Y2,33) (Y3,24) (Y4,49)};
+% 参考线用 axis description cs（数值坐标），避免与 symbolic x 坐标冲突
+\draw[accentA,dashed,thick] (axis description cs:0,0.5625) -- (axis description cs:1,0.5625);
+\node[anchor=south west,font=\scriptsize,color=accentA] at (axis description cs:0.02,0.572) {四年均值 33.75};
+\draw[accentC,dashdotted,thick] (axis description cs:0,0.4167) -- (axis description cs:1,0.4167);
+\node[anchor=north west,font=\scriptsize,color=accentC] at (axis description cs:0.02,0.408) {25 分 $\approx$ 一整道大题};
+\end{axis}
+\end{tikzpicture}
+\captionof{figure}{四套试卷第一章核心分值走势（满分 100 分）}
+\end{center}
+
+\begin{keybox}[title={走势解读}]
+\justifying
+四年分值为 29、33、24、49，均值 33.75 分。\textbf{2025--26 学年出现跳升（49 分，近乎翻倍）}，
+且最近两套试卷呈现出"第一章既要独立成题、又要嵌入其他章节"的双重趋势。
+结合 2023--24 与 2025--26 两套试卷各有\textbf{一整道 25 分大题完全属于第一章}这一事实，
+可以合理预期：\textbf{第一章的分值下限约为 24--25 分（即至少一整题的分量），
+上限可达 49 分}，备考时不应把第一章当作"简单送分章节"而压缩复习时间。
+\end{keybox}
+
+\subsection{考点热度分布}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  xbar,
+  bar width=13pt,
+  width=14.2cm, height=7.6cm,
+  xmin=0, xmax=42,
+  symbolic y coords={1.1.2,1.4.1,1.3.1,1.4.3,1.2.1,1.5.1,1.6,1.4.2},
+  ytick=data,
+  y tick label style={font=\small},
+  xlabel={\small 四年核心分值合计（分）},
+  xlabel style={font=\small},
+  xtick={0,5,10,15,20,25,30,35,40},
+  xticklabel style={font=\small},
+  nodes near coords,
+  nodes near coords style={font=\scriptsize\bfseries,color=deepblue},
+  axis line style={draw=rulegray},
+  tick align=outside,
+  every axis plot/.append style={fill=accentB!78,draw=accentB},
+  grid=major,
+  major grid style={draw=rulegray!45,dotted},
+  yticklabels={%
+    \secode{§1.1.2} 随机变量,
+    \secode{§1.4.1} 数学期望,
+    \secode{§1.3.1} 一元函数,
+    \secode{§1.4.3} 无关与正交,
+    \secode{§1.2.1} 多维随机变量,
+    \secode{§1.5.1} 一维特征函数,
+    \secode{§1.6} 典型分布,
+    \secode{§1.4.2} 矩与联合矩},
+]
+\addplot coordinates {(6,1.1.2) (8,1.4.1) (10,1.3.1) (14,1.4.3) (17,1.2.1) (18,1.5.1) (25,1.6) (37,1.4.2)};
+\end{axis}
+\end{tikzpicture}
+\captionof{figure}{第一章各考点四年核心分值排行（合计 135 分）}
+\end{center}
+
+\subsection{热度分级结论}
+
+根据"核心分值合计"与"核心命中试卷数"两个维度，把第一章考点分为四级。
+\textbf{复习时间应按级别分配，而不是按教材页码顺序分配}：
+
+\begin{center}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabularx}{\textwidth}{@{}C{1.5cm}L{3.3cm}C{1.5cm}C{1.3cm}X@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{级别} & \thd{考点} & \thd{分值} & \thd{命中} & \thd{\color{white}掌握标准} \\
+\midrule
+\rowcolor{tintA}
+\cellcolor{accentA}\textcolor{white}{\bfseries S 级} & \secode{§1.4.2} 矩与联合矩 & 37 & 3/4 & 给定任意联合密度能算 $E$、$D$、$\mathrm{Cov}$、$\rho$、$m_{ij}$；熟练 $D(X\pm Y)$ 公式；能算不同时刻的协方差 \\
+\rowcolor{tintA}
+ & \secode{§1.6} 典型分布 & 25 & 3/4 & 默写均匀/指数/高斯分布的 PDF、CF、均值、方差；会做高斯线性变换后的一维与二维 PDF \\
+\midrule
+\rowcolor{tintB}
+\cellcolor{accentB}\textcolor{white}{\bfseries A 级} & \secode{§1.5.1} 一维特征函数 & 18 & 2/4 & 会由 PDF 求 CF、由 CF 反求 PDF 与各阶矩；熟练性质 $\Phi_{aX+b}(v)=e^{jvb}\Phi_X(av)$、独立和 $\Rightarrow$ 乘积 \\
+\rowcolor{tintB}
+ & \secode{§1.2.1} 多维随机变量 & 17 & 2/4 & 联合密度归一化求系数、求边缘密度、写出离散型二维分布律 \\
+\rowcolor{tintB}
+ & \secode{§1.4.3} 无关与正交 & 14 & 1/4 & \textbf{能用文字说清}独立 / 不相关 / 正交的三角关系与成立条件 \\
+\midrule
+\rowcolor{tintC}
+\cellcolor{accentC}\textcolor{white}{\bfseries B 级} & \secode{§1.3.1} 一元函数 & 10 & 1/4 & 单调变换公式 $f_Y(y)=f_X(h(y))|h'(y)|$；离散取值信号用 $\delta$ 函数写密度 \\
+\rowcolor{tintC}
+ & \secode{§1.4.1} 数学期望 & 8 & 1/4 & $E[g(X)]$ 的定义式积分、期望的线性性质 \\
+\rowcolor{tintC}
+ & \secode{§1.1.2} 随机变量 & 6 & 1/4 & 由随机试验写出 $F(x)$ 与 $f(x)$，离散与连续情形的区分 \\
+\rowcolor{tintC}
+ & \secode{§1.2.3} 独立性 & 0 & 4/4 & \textbf{虽不单独计分，但四套全中}：判定独立的方法、独立时联合密度可分解、独立 $\Rightarrow$ $E[XY]=E[X]E[Y]$ \\
+\midrule
+\rowcolor{tintD}
+\cellcolor{accentD}\textcolor{white}{\bfseries C 级} & \secode{§1.1.1}、\secode{§1.2.2}、\secode{§1.3.2}、\secode{§1.3.3}、\secode{§1.4.4}、\secode{§1.4.5}、\secode{§1.5.2} & 0 & 0/4 & 四年未单独命题；但\secode{§1.3.2}、\secode{§1.5.2}以间接形式出现，且其中 4 节\textbf{是第一次作业的必做题}（见第 5 章） \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\clearpage
+% =====================================================================
+\section{第一次作业与历年考频的对接分析}
+
+第一次作业（Homework \#1）共 11 道题，全部取自教材第一章习题（pp.\,34--36），
+其中\textbf{必做 6 题}（1.6、1.14、1.16、1.21、1.24、1.33）、\textbf{选做 5 题}（1.9、1.11、1.28、1.29、1.30）。
+本节把这 11 道题逐一映射到考频体系，找出"高频但作业未覆盖"的缺口，以及"作业覆盖但真题未考"的冗余。
+
+\subsection{作业题目 $\to$ 考点映射}
+
+\begin{center}
+\footnotesize
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{@{}C{1.1cm}C{1.2cm}L{4.9cm}L{3.6cm}C{1.4cm}X@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{习题} & \thd{教材页} & \thd{题目内容（摘要）} & \thd{对应考点} & \thd{该考点\newline 热度} & \thd{\color{white}与真题的对应关系} \\
+\midrule
+1.6 & p.34 & 四批元件抽样，求次品概率与来自第二批的后验概率 & \secode{§1.1.1} 全概率与贝叶斯 & \tierC\ 冷 & 四年真题\textbf{未直接考}贝叶斯 \\
+\rowcolor{tintD}
+1.9 & p.34 & 由分布律求密度函数与分布函数并作图 & \secode{§1.1.2} 随机变量 & \tierB\ 低 & 对应 25--26 Q1(a) 的思想 \\
+1.11 & p.34 & $f(x)=ae^{-|x|}$，求 $a$ 与分布函数 & \secode{§1.1.2} 随机变量 & \tierB\ 低 & 与 23--24 Q3(a) 归一化同型 \\
+\midrule
+\rowcolor{tintA}
+1.14 & p.34 & 二维分布律，求联合/边缘分布、$Z=XY$ 的分布、相关系数 & \secode{§1.2.1}、\secode{§1.3.2}、\secode{§1.4.2} & \tierS\ \hot{热} & \textbf{高度对应} 23--24 Q3 与 25--26 Q1 \\
+1.16 & p.35 & $U=X+Y,\;V=X-Y$（$X,Y$ 独立标准正态），求联合密度与独立性 & \secode{§1.3.2}、\secode{§1.2.3}、\secode{§1.6} & \tierA\ 中高 & \textbf{高度对应} 24--25 Q4(c)、25--26 Q4(b)(c) 的二维高斯联合密度 \\
+\rowcolor{tintA}
+1.21 & p.35 & 已知 $EX,EY,DX,DY,\rho$，求 $U=3X+Y$、$V=X-2Y$ 的 $E,D,\mathrm{Cov}$ & \secode{§1.4.1}、\secode{§1.4.2} & \tierS\ \hot{热} & \textbf{核心训练}：$D(X\pm Y)$ 与协方差，是全部四套题的基础 \\
+1.24 & p.35 & $X\sim U[0,a]$，$Y\mid X\sim U[X,a]$，求 $E(Y\mid X)$ 与 $EY$ & \secode{§1.4.4} 条件数学期望 & \tierC\ 冷 & 四年真题\textbf{未考}条件期望 \\
+\midrule
+\rowcolor{tintB}
+1.28 & p.36 & 求独立变量之和/线性组合的特征函数 & \secode{§1.5.1} 特征函数性质 & \tierA\ 中高 & 对应 22--23 Q1(b)、25--26 Q2(a) \\
+1.29 & p.36 & 由 CF 反求 PDF、均值、均方值、方差 & \secode{§1.5.1} 特征函数 & \tierA\ 中高 & 对应 22--23 Q1(b) 的逆向应用 \\
+\rowcolor{tintB}
+1.30 & p.36 & 用傅里叶变换推导均匀分布的特征函数 & \secode{§1.5.1}、\secode{§1.6} & \tierA/\tierS & 对应 22--23 Q1(b)（$U\sim U[0,\pi]$ 的特征函数） \\
+1.33 & p.36 & 已知联合 CF，求 $X$ 的特征函数及 $Y$ 的期望与方差 & \secode{§1.5.2} 联合特征函数 & \tierC\ 冷 & 四年真题\textbf{未考}联合 CF \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent
+（表格中"热量"栏使用第 4 章的 S/A/B/C 分级；\tierS\ 表示四年核心分值 $\ge 25$ 分。）
+
+\subsection{作业已覆盖的高频考点：这些题必须做透}
+
+\begin{keybox}[title={优先级最高：习题 1.21 与 1.14}]
+\justifying
+\textbf{习题 1.21} 训练的是 \secode{§1.4.2}——四年命中率 100\%、累计 37 分的第一热点。
+它要求用已知的 $E$、$D$、$\rho$ 去求线性组合的期望、方差与协方差，
+其中的关键公式
+\[
+D(aX+bY)=a^2D(X)+b^2D(Y)+2ab\,\mathrm{Cov}(X,Y),\qquad
+\mathrm{Cov}(X,Y)=\rho_{XY}\sqrt{D(X)D(Y)}
+\]
+在 2024--25 Q3(b)(c)、2023--24 Q1(c)、Q2(b) 中被反复使用，是"工具嵌入型"题目的必备武器。
+
+\textbf{习题 1.14} 训练的是"给定二维分布求联合/边缘分布 $\to$ 求函数的分布 $\to$ 求相关系数"这一完整链条，
+与 2023--24 Q3（25 分整题）的命题结构几乎一一对应；
+其第 (4) 问"求相关系数"直接对应 2023--24 Q3(d) 的 7 分。
+\end{keybox}
+
+\begin{infobox}[title={第二优先：习题 1.16 与 1.30 / 1.28 / 1.29}]
+\justifying
+\textbf{习题 1.16}（$U=X+Y$、$V=X-Y$ 的联合密度与独立性）是\secode{§1.3.2} + \secode{§1.6} 的最佳训练，
+而且与 \textbf{2024--25 Q4(c)}（求 $i(t)$ 与 $q(t)$ 的联合概率密度，10 分）、
+\textbf{2025--26 Q4(b)(c)}（求 $f_{iq}(i,q;t,t)$ 与 $f_{iq}(i,q;t,t+\frac{1}{12})$，共 15 分）\textbf{高度同构}：
+都是"两个高斯变量的线性变换 $\to$ 联合高斯密度"。
+掌握 1.16，就掌握了这 25 分中大部分的技术动作。
+
+\textbf{习题 1.28 / 1.29 / 1.30} 三题合起来覆盖 \secode{§1.5.1} 的正向、逆向与傅里叶变换三种用法，
+直接对应 2022--23 Q1(b)（9 分）与 2025--26 Q2(a)（9 分）。
+其中 \textbf{1.30}（均匀分布的特征函数）与 2022--23 Q1(b) 中 $U\sim U[0,\pi]$ 的情形完全一致，属于原题级对应。
+\end{infobox}
+
+\subsection{高频考点中，作业未直接覆盖的缺口}
+
+\begin{warnbox}[title={必须自行补强：\secode{§1.4.3} 无关与正交（14 分，考核形式为概念论述）}]
+\justifying
+\textbf{这是本报告发现的最大缺口。}
+2024--25 Q1(b) 用 \textbf{9 分}要求"计算并讨论两个随机信号的正交性、不相关性与统计独立性，并说明理由"，
+Q2(c) 又用 \textbf{5 分}考查"不相关条件下的功率谱简化"，两处合计 14 分。
+然而\textbf{第一次作业 11 道题中，没有任何一道直接训练这一概念辨析}——
+最接近的习题 1.14(4) 只要求"算相关系数"，习题 1.21 只要求"算协方差"，
+都不涉及"独立 $\Rightarrow$ 不相关（反之仅高斯成立）""不相关 + 零均值 $\Leftrightarrow$ 正交"这一逻辑表述。
+
+\textbf{建议补强方式}：回到教材 §1.4.3（pp.\,18--19）与课件 pp.\,44--46，
+把下面三组关系写成能默写的判断句，并用 2024--25 Q1 的两个正弦/余弦信号自己推一遍：
+\begin{itemize}[leftmargin=1.5em,itemsep=1pt,topsep=3pt]
+  \item \textbf{不相关}：$\mathrm{Cov}(X,Y)=E[XY]-E[X]E[Y]=0$（等价于 $\rho_{XY}=0$）
+  \item \textbf{正交}：$E[XY]=0$
+  \item \textbf{三者关系}：独立 $\Rightarrow$ 不相关（一般不可逆，\textbf{正态分布下可逆}）；
+        不相关 $\Leftrightarrow$ 正交 $+$ 至少一个均值为零
+\end{itemize}
+\end{warnbox}
+
+\begin{infobox}[title={次要缺口：连续型二维联合高斯密度的显式书写}]
+\justifying
+\secode{§1.2.1} 作为核心考点命中 2 套（累计 17 分），但作业中与之对应的习题 1.14 是\textbf{离散型}
+二维分布律，缺少\textbf{连续型二维高斯联合密度}
+{\small
+\[
+f_{XY}(x,y)=\frac{1}{2\pi\sigma_X\sigma_Y\sqrt{1-\rho^2}}
+\exp\!\left\{-\frac{1}{2(1-\rho^2)}\left[\frac{(x-\mu_X)^2}{\sigma_X^2}
+-\frac{2\rho(x-\mu_X)(y-\mu_Y)}{\sigma_X\sigma_Y}+\frac{(y-\mu_Y)^2}{\sigma_Y^2}\right]\right\}
+\]
+}
+的直接默写训练，而 2024--25 Q4(c)、2025--26 Q4(b)(c) 恰恰要求写出它。
+\textbf{习题 1.16 的答案正是这一公式在 $\rho=0$、$\sigma_X=\sigma_Y=1$ 时的特例}，
+建议把 1.16 的结果\textbf{推广默写}到一般 $\rho$ 与任意方差的情形。
+\end{infobox}
+
+\subsection{作业覆盖但四年真题未直接考查的部分}
+
+以下 4 道必做题所对应的考点，在四套真题中\textbf{均未作为独立考点出现}。
+这不意味着不用做——它们占课程作业成绩（Course works 25\%）——
+但可以帮助你\textbf{合理分配时间}：先保证 S/A 级考点，再处理这些内容。
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\textwidth}{@{}C{1.1cm}L{2.6cm}C{1.4cm}L{4.6cm}X@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{习题} & \thd{对应考点} & \thd{类型} & \thd{真题考查情况} & \thd{\color{white}建议} \\
+\midrule
+1.6 & \secode{§1.1.1} 全概率/贝叶斯 & 必做 & 四套真题均未出现贝叶斯计算 & 作业必做；考试优先级最低，但属"送分型"基础题，成本低 \\
+\rowcolor{tintD}
+1.24 & \secode{§1.4.4} 条件数学期望 & 必做 & 四套真题均未考条件期望 & 作业必做；注意重期望公式 $E[X]=E\big[E[X\mid Y]\big]$ \\
+1.16 & \secode{§1.3.2} 二元函数（雅可比） & 必做 & 未作为独立考点，但在 24--25、25--26 的联合高斯题中\textbf{以变换形式间接出现} & \textbf{不能跳过}——它是二维联合高斯密度的技术来源 \\
+\rowcolor{tintD}
+1.33 & \secode{§1.5.2} 联合特征函数 & 必做 & 四套真题均未考联合 CF & 作业必做；了解"独立 $\Leftrightarrow$ 联合 CF 可分解"即可 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{keybox}[title={对接分析结论}]
+\justifying
+第一次作业的 11 道题\textbf{对历年高频考点的覆盖是"部分有效"的}：
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt,topsep=3pt]
+  \item \textbf{覆盖良好}：\secode{§1.4.2}（1.21、1.14）、\secode{§1.4.1}（1.21）、
+        \secode{§1.5.1}（1.28、1.29、1.30）、\secode{§1.6}（1.30）、\secode{§1.2.1} 离散部分（1.14）、
+        \secode{§1.3.2} 与二维高斯（1.16）——这些正好是 S 级与 A 级考点的主体。
+  \item \textbf{存在缺口}：\secode{§1.4.3} 无关与正交（真题 14 分，作业 0 覆盖）、
+        连续型二维联合高斯密度的显式默写（真题 25 分，作业仅覆盖特例）。
+  \item \textbf{存在冗余}：\secode{§1.1.1} 贝叶斯（1.6）、\secode{§1.4.4} 条件期望（1.24）、
+        \secode{§1.5.2} 联合 CF（1.33）四年未考，但仍是作业得分点。
+\end{itemize}
+\textbf{行动建议}：作业照常完成（占 25\% 成绩），但在作业之外，
+必须额外投入时间补齐 \secode{§1.4.3} 的概念辨析与二维联合高斯密度的默写能力。
+\end{keybox}
+
+\clearpage
+% =====================================================================
+\section{复习优先级与公式速查}
+
+\subsection{按考频排序的复习路线}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}C{1.2cm}L{3.0cm}C{1.2cm}L{6.2cm}X@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{序} & \thd{考点} & \thd{分值} & \thd{必须练到的动作} & \thd{\color{white}对应作业题} \\
+\midrule
+\rowcolor{tintA}1 & \secode{§1.4.2} 矩与联合矩 & 37 & 由联合密度算 $E,D,\mathrm{Cov},\rho,m_{ij}$；$D(X\pm Y)$ 公式；不同时刻协方差 & 1.21、1.14(4) \\
+\rowcolor{tintA}2 & \secode{§1.6} 典型分布 & 25 & 默写四种常见分布的 PDF/CF/均值/方差；高斯线性变换的一维与二维 PDF & 1.30、1.16 \\
+\rowcolor{tintB}3 & \secode{§1.5.1} 一维特征函数 & 18 & PDF $\leftrightarrow$ CF 双向转换；性质 1--3；由 CF 求各阶矩 & 1.28、1.29、1.30 \\
+\rowcolor{tintB}4 & \secode{§1.2.1} 多维随机变量 & 17 & 联合密度归一化求系数；边缘密度；离散二维分布律 & 1.14 \\
+\rowcolor{tintB}5 & \secode{§1.4.3} 无关与正交 & 14 & \textbf{文字论述}三种关系与成立条件（作业未覆盖，须补强） & 无（补强） \\
+\rowcolor{tintC}6 & \secode{§1.3.1} 一元函数 & 10 & 单调变换公式；$\delta$ 函数表示离散取值信号的密度 & 1.9、1.11 \\
+\rowcolor{tintC}7 & \secode{§1.4.1} 数学期望 & 8 & $E[g(X)]=\int g(x)f(x)dx$；线性性质 & 1.21 \\
+\rowcolor{tintC}8 & \secode{§1.1.2} 随机变量 & 6 & 由随机试验写 $F(x)$、$f(x)$ & 1.9、1.11 \\
+\rowcolor{tintC}9 & \secode{§1.2.3} 独立性 & 前提 & 判定独立；独立时联合密度可分解、$E[XY]=E[X]E[Y]$ & 1.16、1.14 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{高频考点公式速查}
+
+\subsubsection*{A. \secode{§1.4.2} 矩与联合矩（四年 100\% 命中）}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.7}
+\begin{tabularx}{\textwidth}{@{}L{4.2cm}X@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{名称} & \thd{定义式} \\
+\midrule
+$n$ 阶原点矩 & $m_n=E[X^n]=\displaystyle\int_{-\infty}^{+\infty}x^n f(x)\,dx$ \\
+$n$ 阶中心矩 & $\mu_n=E\big[(X-E X)^n\big]$ \\
+均方值 / 方差 & $E[X^2]$；\quad $D(X)=\sigma_X^2=E[X^2]-(E X)^2$ \\
+联合原点矩 & $m_{kl}=E[X^kY^l]$ \\
+协方差 & $\mathrm{Cov}(X,Y)=E\big[(X-EX)(Y-EY)\big]=E[XY]-EX\cdot EY$ \\
+相关系数 & $\rho_{XY}=\dfrac{\mathrm{Cov}(X,Y)}{\sigma_X\sigma_Y},\qquad |\rho_{XY}|\le 1$ \\
+和差方差 & $D(X\pm Y)=D(X)+D(Y)\pm 2\,\mathrm{Cov}(X,Y)$ \\
+独立时的分解 & 独立 $\Rightarrow$ $E[XY]=EX\cdot EY$，且 $D(X\pm Y)=D(X)+D(Y)$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsubsection*{B. \secode{§1.4.3} 无关与正交（真题 14 分，作业缺口）}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabularx}{\textwidth}{@{}L{2.9cm}L{4.6cm}X@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{概念} & \thd{数学条件} & \thd{与其他的关系} \\
+\midrule
+不相关 & $\mathrm{Cov}(X,Y)=0$，即 $E[XY]=EX\cdot EY$ & 独立 $\Rightarrow$ 不相关；\textbf{正态分布下不相关 $\Leftrightarrow$ 独立} \\
+正交 & $E[XY]=0$ & 不相关 $+$ $EX$ 或 $EY$ 为零 $\Leftrightarrow$ 正交 \\
+独立 & $f_{XY}(x,y)=f_X(x)f_Y(y)$ & 最强条件；成立时必然不相关 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsubsection*{C. \secode{§1.5.1} 一维特征函数（四年 2 次命中）}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.7}
+\begin{tabularx}{\textwidth}{@{}L{4.2cm}X@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{性质} & \thd{表达式 / 说明} \\
+\midrule
+定义 & $\Phi_X(v)=E[e^{jvX}]=\displaystyle\int_{-\infty}^{+\infty}f_X(x)e^{jvx}\,dx$ \\
+与 PDF 的关系 & $f_X(x)=\dfrac{1}{2\pi}\displaystyle\int_{-\infty}^{+\infty}\Phi_X(v)e^{-jvx}\,dv$（傅里叶变换对，唯一性定理） \\
+性质 1（独立和） & $X_1,\dots,X_n$ 独立 $\Rightarrow$ $\Phi_{X_1+\cdots+X_n}(v)=\displaystyle\prod_{i=1}^{n}\Phi_{X_i}(v)$ \\
+性质 2（线性变换） & $\Phi_{aX+b}(v)=e^{jvb}\,\Phi_X(av)$ \\
+性质 3（求矩） & $E[X^k]=j^{-k}\,\Phi_X^{(k)}(0)$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsubsection*{D. \secode{§1.6} 典型分布速查表（四年 100\% 涉及）}
+
+\begin{center}
+\footnotesize
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{@{}L{2.3cm}L{4.4cm}L{3.6cm}X@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{分布} & \thd{密度 / 分布律} & \thd{特征函数 $\Phi_X(v)$} & \thd{均值 / 方差} \\
+\midrule
+均匀 $U(a,b)$ & $f=\dfrac{1}{b-a},\;a<x<b$ & $\dfrac{e^{jvb}-e^{jva}}{jv(b-a)}$ & $\dfrac{a+b}{2}$；$\dfrac{(b-a)^2}{12}$ \\
+指数（参数 $\lambda$） & $f=\lambda e^{-\lambda x},\;x\ge 0$ & $\dfrac{\lambda}{\lambda-jv}$ & $\dfrac{1}{\lambda}$；$\dfrac{1}{\lambda^2}$ \\
+高斯 $N(\mu,\sigma^2)$ & $f=\dfrac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$ & $e^{jv\mu-\frac{1}{2}\sigma^2v^2}$ & $\mu$；$\sigma^2$ \\
+0--1 分布 & $P(X=1)=p,\;P(X=0)=q$ & $q+pe^{jv}$ & $p$；$pq$ \\
+二项 $B(n,p)$ & $P(X=k)=\binom{n}{k}p^kq^{n-k}$ & $(q+pe^{jv})^n$ & $np$；$npq$ \\
+泊松 $P(\lambda)$ & $P(X=k)=\dfrac{\lambda^k}{k!}e^{-\lambda}$ & $e^{\lambda(e^{jv}-1)}$ & $\lambda$；$\lambda$ \\
+瑞利 & $f=\dfrac{x}{\sigma^2}e^{-\frac{x^2}{2\sigma^2}},\;x\ge0$ & --- & $\sigma\sqrt{\dfrac{\pi}{2}}$；$\left(2-\dfrac{\pi}{2}\right)\sigma^2$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsubsection*{E. 二维高斯联合密度（2024--25 与 2025--26 共 25 分）}
+
+\[
+f_{XY}(x,y)=\frac{1}{2\pi\sigma_X\sigma_Y\sqrt{1-\rho^2}}
+\exp\left\{-\frac{1}{2(1-\rho^2)}\left[
+\frac{(x-\mu_X)^2}{\sigma_X^2}
+-\frac{2\rho(x-\mu_X)(y-\mu_Y)}{\sigma_X\sigma_Y}
++\frac{(y-\mu_Y)^2}{\sigma_Y^2}\right]\right\}
+\]
+
+\noindent
+\textbf{使用要点}：当 $\rho=0$ 时退化为两个一维高斯密度之积（即此时不相关 $\Leftrightarrow$ 独立）；
+窄带高斯噪声的同相分量 $i(t)$ 与正交分量 $q(t)$ 之间若 $\rho=0$ 且方差相同，
+则 $f_{iq}(i,q)=\dfrac{1}{2\pi\sigma^2}e^{-\frac{i^2+q^2}{2\sigma^2}}$——
+这正是 2024--25 Q4(c) 与 2025--26 Q4(b) 的标准答案形态。
+若两个时刻不同（如 2025--26 Q4(c) 的 $t$ 与 $t+\frac{1}{12}$），
+只需把 $\rho$ 换成由该时间差算出的归一化相关系数。
+
+\subsection{应试提示：中英文术语对照}
+
+真题全部为英文命题，复习时建议直接用英文术语记忆关键概念：
+
+\begin{center}
+\footnotesize
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\textwidth}{@{}L{3.4cm}L{3.6cm}L{3.4cm}X@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{中文} & \thd{英文（真题用法）} & \thd{中文} & \thd{英文（真题用法）} \\
+\midrule
+期望 & expectation, mean & 特征函数 & characteristic function, $\phi_X(v)$ \\
+方差 & variance, $D(X)$ & 联合特征函数 & joint characteristic function \\
+协方差 & covariance & 正交 & orthogonality, orthogonal \\
+相关系数 & correlation coefficient, $\rho$ & 不相关 & uncorrelatedness, uncorrelated \\
+联合密度 & joint probability density function & 统计独立 & statistical independence \\
+边缘密度 & marginal density & 平稳（广义） & wide-sense stationary (WSS) \\
+自相关 & autocorrelation & 联合平稳 & jointly stationary \\
+功率谱密度 & power spectral density (PSD) & 互功率谱 & cross PSD \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{infobox}[title={答题细节提醒（来自真题题干）}]
+\justifying
+四套试卷的封面说明均写明："\textit{All graphs should be clearly labelled and sufficiently large so that all
+elements are easy to read.}"——第一章相关小问中，2022--23 Q1(a)（画样本函数）、
+2023--24 Q4(c)（画 $S_{ab}(\omega)$）、2025--26 Q4(a)（画 $S_i(\omega),S_q(\omega)$）
+都明确要求\textbf{作图并标注}。画图时务必标清坐标轴、关键频率点与幅值，
+这些是独立计分项（分别 6、6、10 分）。
+\end{infobox}
+
+\clearpage
+% =====================================================================
+\appendix
+\section{四套真题第一章考点标注汇总表}
+
+\begin{center}
+\footnotesize
+\renewcommand{\arraystretch}{1.3}
+\begin{longtable}{@{}L{2.3cm}C{1.2cm}C{0.9cm}L{5.4cm}L{3.0cm}@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{学年} & \thd{题号} & \thd{分值} & \thd{题目要点} & \thd{核心考点} \\
+\midrule
+\endfirsthead
+\toprule
+\rowcolor{tabhead}
+\thd{学年} & \thd{题号} & \thd{分值} & \thd{题目要点} & \thd{核心考点} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+2022--23 & Q1(b) & 9  & $X(t)=U+t$ 的特征函数 & \secode{§1.5.1} \\
+         & Q1(c) & 10 & $X(t)$ 的均值与自协方差 & \secode{§1.4.2} \\
+         & Q4(b) & 10 & 高斯输入下输出的一维 PDF & \secode{§1.3.1} \\
+\midrule
+2023--24 & Q2(c) & 8  & 判断高斯性并写出其一维 PDF & \secode{§1.6} \\
+         & Q3(a) & 4  & 联合密度归一化求系数 $A$ & \secode{§1.2.1} \\
+         & Q3(b) & 8  & 求 $E(X),E(Y)$ & \secode{§1.4.1} \\
+         & Q3(c) & 6  & 求 $D(X),D(Y)$ & \secode{§1.4.2} \\
+         & Q3(d) & 7  & 求联合矩 $m_{XY}$ 与相关系数 $\rho_{XY}$ & \secode{§1.4.2} \\
+\midrule
+2024--25 & Q1(b) & 9  & 讨论正交性、不相关性与统计独立性 & \secode{§1.4.3} \\
+         & Q2(c) & 5  & 不相关条件下求 $V(t)$ 的功率谱密度 & \secode{§1.4.3} \\
+         & Q4(c) & 10 & 求 $i(t)$ 与 $q(t)$ 的联合 PDF & \secode{§1.6} \\
+\midrule
+2025--26 & Q1(a) & 6  & 抛硬币信号的一维 PDF $f_X(x,2)$ & \secode{§1.1.2} \\
+         & Q1(b) & 6  & 二维 PDF $f_X(x_1,x_2;1,2)$ & \secode{§1.2.1} \\
+         & Q1(c) & 6  & 协方差 $C_X(t_1,t_2)$ & \secode{§1.4.2} \\
+         & Q1(d) & 7  & 独立抛掷序列的二维 PDF $f_Y(y_1,y_2;1,2)$ & \secode{§1.2.1} \\
+         & Q2(a) & 9  & $\Phi_\Theta(v)$ 应满足的条件 & \secode{§1.5.1} \\
+         & Q4(b) & 7  & 求 $f_{iq}(i,q;t,t)$ & \secode{§1.6} \\
+         & Q4(c) & 8  & 求 $f_{iq}(i,q;t,t+\frac{1}{12})$ & \secode{§1.4.2} \\
+\midrule
+\multicolumn{2}{@{}l}{\textbf{第一章核心分值总计}} & \textbf{135} & \multicolumn{2}{l}{四套试卷各年：29 / 33 / 24 / 49 分} \\
+\end{longtable}
+\end{center}
+
+% =====================================================================
+\clearpage
+\section{数据来源与核对说明}
+
+\subsection{原始文件清单}
+
+\begin{center}
+\footnotesize
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{@{}L{8.4cm}L{2.6cm}X@{}}
+\toprule
+\rowcolor{tabhead}
+\thd{文件} & \thd{类型} & \thd{在本报告中的作用} \\
+\midrule
+\code{试卷/UESTC3024\_1\_Stochastic Signal Analysis\_202212.pdf} & 真题 & 2022--23 学年考点标注 \\
+\code{试卷/UESTC3024\_1\_Stochastic Signal Analysis\_202312.pdf} & 真题 & 2023--24 学年考点标注 \\
+\code{试卷/UESTC3024-UESTCHN3016\_1\_Stochastic Signal Analysis\_202412.pdf} & 真题 & 2024--25 学年考点标注 \\
+\code{试卷/UESTC3024\_UESTCHN3016\_Stochastic Signal Analysis\_202512\_1.pdf} & 真题 & 2025--26 学年考点标注 \\
+\code{教材/随机信号分析（第5版）(李晓峰，等).pdf} & 教材 & 第 IX 页目录 $\to$ 考点编码体系 \\
+\code{CH1概率论基础.pdf} & 课件 & 第一章 77 页课件，用于核对考点内涵 \\
+\code{作业/SSA\_Homework\_1\_English.pdf} & 作业 & 第一次作业 11 题 $\to$ 考点映射 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{核对方法}
+
+\begin{enumerate}[leftmargin=1.6em,itemsep=3pt]
+  \item 对四套 PDF 真题先用 \code{pdftotext -layout} 抽取文本，再用 \code{pdftoppm} 渲染为
+        110\,dpi 图像，\textbf{逐页人工比对}，确保公式、上下标、分值标注无遗漏。
+        （已发现并更正的例子：2025--26 Q1 的 $t^2$、$n^2$ 在纯文本中被误抽为 $t$、$n$；
+        2023--24 Q1 的 $S_X(\omega)=\frac{16}{\omega^2+16}$、$S_Y(\omega)=\frac{\omega^2}{\omega^2+16}$
+        在纯文本中为空。）
+  \item 逐题累加每套试卷的分值，确认均为 100 分：
+        \begin{itemize}[leftmargin=1.4em,itemsep=0pt,topsep=2pt]
+          \item 2022--23：$6{+}9{+}10{+}8{+}8{+}9{+}10{+}15{+}15{+}10=100$
+          \item 2023--24：$12{+}6{+}7{+}10{+}7{+}8{+}4{+}8{+}6{+}7{+}4{+}15{+}6=100$
+          \item 2024--25：$7{+}9{+}9{+}12{+}8{+}5{+}9{+}6{+}10{+}9{+}6{+}10=100$
+          \item 2025--26：$6{+}6{+}6{+}7{+}9{+}7{+}9{+}10{+}10{+}5{+}10{+}7{+}8=100$
+        \end{itemize}
+  \item 每个小问只归入一个核心考点，避免重复计分；其余相关考点记入"间接涉及"。
+        因此各考点核心分值之和 135 分 $=$ 四套试卷第一章核心分值之和
+        （$29+33+24+49$），可交叉校验。
+\end{enumerate}
+
+\subsection{统计的局限}
+
+\begin{itemize}[leftmargin=1.6em,itemsep=3pt]
+  \item \textbf{样本量有限}：仅有 4 套真题，任何"考频"结论都应视为\textbf{趋势参考}而非确定性规律。
+        某考点"0 命中"只说明近四年未考，不等于不会考。
+  \item \textbf{核心 / 间接的归类含判断成分}：本报告已在第 3 章列出逐题明细，
+        读者若对某个小问的归类有不同意见，可直接依据明细表重新汇总。
+  \item \textbf{未纳入的其他考核形式}：课程还有 1--2 次 quiz 计入 Course works（占 25\%），
+        其题型未知，可能覆盖本报告统计之外的考点（例如本章的贝叶斯、条件期望、不等式）。
+  \item \textbf{章节交叉的分值归属}：像 2024--25 Q3(b)、Q4(c) 这类"主体属其他章、但必须用第一章工具"的小问，
+        本报告计为 0 核心分、仅记"间接涉及"，因此\textbf{第一章的实际重要性可能被低估}。
+\end{itemize}
+
+\vspace{1.2em}
+\begin{center}
+{\color{deepblue}\rule{0.5\textwidth}{0.6pt}}\\[0.6em]
+{\small\color{accentD} —— 报告结束 ——}
+\end{center}
+
+\end{document}
