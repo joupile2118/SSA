@@ -1,0 +1,414 @@
+% =====================================================================
+%  exam-frequency-report / assets/report-preamble.tex
+%  Reusable preamble for an exam-frequency report.
+%
+%  Compile with XeLaTeX (twice).  Load-bearing choices, each of which
+%  fixes a real failure mode -- see the skill's Pitfalls table:
+%    * ctexart + xelatex          -> CJK actually renders
+%    * amsmath only, before newtxmath -> avoids the \Bbbk clash with amssymb
+%    * xcolor[table]              -> \rowcolor is defined
+%    * \noindent before \rule/\tabularx -> no 17pt \parindent overfull
+%  Adjust \setReportMeta and the geometry block per task.
+% =====================================================================
+\documentclass[11pt,fontset=fandol]{ctexart}
+
+% --- page geometry ---------------------------------------------------
+% Keep the long edge at a size you have already validated (A4 height
+% preserves the vertical layout).  To match a reading device, set
+%   paperwidth = paperheight * Wpx / Hpx
+% e.g. 13-inch iPad Air M2 portrait (2048x2732):
+%   paperheight=297mm, paperwidth=297*512/683=222.6413mm
+\usepackage[paperwidth=222.6413mm,paperheight=297mm,
+            left=1.9cm,right=1.9cm,top=2.1cm,bottom=1.7cm,headsep=0.5cm]{geometry}
+
+% --- math: order matters ---------------------------------------------
+% DO NOT load newtxtext in a CJK (ctex) document.
+% On macOS ctex falls back to the macold fontset, whose \ttfamily CJK slot
+% points at STFangsong -- absent from current macOS.  Any Chinese inside
+% \texttt (e.g. a path written as \code{试卷/教材}) then fails with
+%   ! Font TU/STFangsong ... not loadable
+% and those glyphs come out as mojibake.  Verified: newtxtext triggers it,
+% newtxmath is harmless, and \setCJKmonofont does NOT repair it.
+% Pure-ASCII (non-ctex) documents may load newtxtext normally.
+\usepackage{amsmath}
+\usepackage{newtxmath}
+
+% --- tables, colour, boxes -------------------------------------------
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx,xltabular,needspace}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{ragged2e}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{patterns}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage[hidelinks,bookmarksnumbered]{hyperref}
+
+% --- palette ---------------------------------------------------------
+\definecolor{ink}{HTML}{1F2933}
+\definecolor{deepblue}{HTML}{1B3A5C}
+\definecolor{accentA}{HTML}{B23A48}   % S tier
+\definecolor{accentB}{HTML}{D97706}   % A tier
+\definecolor{accentC}{HTML}{2F6F4E}   % B tier
+\definecolor{accentD}{HTML}{6B7280}   % C tier
+\definecolor{tintA}{HTML}{FBE9EB}
+\definecolor{tintB}{HTML}{FDF2E3}
+\definecolor{tintC}{HTML}{E8F2EC}
+\definecolor{tintD}{HTML}{F0F1F3}
+\definecolor{rulegray}{HTML}{C9CED6}
+\definecolor{tabhead}{HTML}{1B3A5C}
+
+% --- headings --------------------------------------------------------
+\titleformat{\section}{\normalfont\Large\bfseries\color{deepblue}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{deepblue!85!black}}{\thesubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{1.2em}{0.6em}
+\titlespacing*{\subsection}{0pt}{1.0em}{0.5em}
+
+% --- running head ----------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\footnotesize\color{deepblue}\ReportShortTitle}
+\fancyhead[R]{\footnotesize\color{deepblue}\thepage}
+\fancyfoot[C]{\scriptsize\color{accentD}\ReportSourceLine}
+\newcommand{\ReportShortTitle}{Exam-frequency report}
+\newcommand{\ReportSourceLine}{}
+
+% --- helpers ---------------------------------------------------------
+% Section-code tag.  Use the textbook's OWN numbering.
+\newcommand{\secode}[1]{\texttt{\color{deepblue}#1}}
+\newcommand{\tierS}{\textbf{\color{accentA}S}}
+\newcommand{\tierA}{\textbf{\color{accentB}A}}
+\newcommand{\tierB}{\textbf{\color{accentC}B}}
+\newcommand{\tierC}{\textbf{\color{accentD}C}}
+\newcommand{\hot}[1]{\textcolor{accentA}{\bfseries #1}}
+\newcommand{\code}[1]{\texttt{\small #1}}
+\newcommand{\thd}[1]{\textcolor{white}{\bfseries #1}}
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+% NOTE: \newlist needs an explicit label= or enumitem raises "Undefined label".
+\newlist{qparts}{enumerate}{1}
+\setlist[qparts]{label=(\alph*),leftmargin=1.5em,itemsep=2.5pt,topsep=3pt,parsep=0pt}
+\newlist{qnum}{enumerate}{1}
+\setlist[qnum]{label=(\arabic*),leftmargin=1.5em,itemsep=2.5pt,topsep=3pt,parsep=0pt}
+\newlist{bul}{itemize}{1}
+\setlist[bul]{label=\textbullet,leftmargin=1.6em,itemsep=1.5pt,topsep=2pt,parsep=0pt}
+\captionsetup{font={small,color=deepblue},labelfont=bf,skip=5pt}
+
+% --- callout boxes ---------------------------------------------------
+\newtcolorbox{keybox}[1][]{colback=tintC,colframe=accentC,boxrule=0.7pt,arc=2pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=accentC,breakable,#1}
+\newtcolorbox{warnbox}[1][]{colback=tintA,colframe=accentA,boxrule=0.7pt,arc=2pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=accentA,breakable,#1}
+\newtcolorbox{infobox}[1][]{colback=tintB,colframe=accentB,boxrule=0.7pt,arc=2pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=accentB,breakable,#1}
+
+% --- one-item-per-page layout (review sets) --------------------------
+% tcolorbox `height fill` absorbs the remaining page height.
+% Do NOT combine with `breakable`.
+\newtcolorbox{workspace}{height fill,enhanced,colback=white,colframe=gray!45,
+  boxrule=0.5pt,arc=1.5pt,left=9pt,right=9pt,top=6pt,bottom=6pt}
+
+% --- pgfplots reference lines on a symbolic axis ---------------------
+% A numeric line on `symbolic x coords` fails with
+%   "the input coordinate '...' has not been defined".
+% Draw it in axis-description coordinates instead, e.g. y=33.75 of ymax=60:
+%   \draw[accentA,dashed,thick]
+%     (axis description cs:0,0.5625) -- (axis description cs:1,0.5625);
+%   \node[anchor=south west,font=\scriptsize,color=accentA]
+%     at (axis description cs:0.02,0.578) {four-year mean};
+
+\clubpenalty=10000\widowpenalty=10000\displaywidowpenalty=10000
+\renewcommand{\ReportShortTitle}{第3章考频分析}\renewcommand{\ReportSourceLine}{八套真题 · 2026-10-27}
+
+
+\begin{document}
+
+\begin{titlepage}\centering\vspace*{1.5cm}{\Huge\bfseries 随机信号分析}\par\vspace{1cm}{\LARGE\bfseries 第3章考频分析报告}\par\vspace{6mm}{\large 平稳性与功率谱密度 · 八套真题版}\par\vspace{1cm}
+
+\begin{keybox}[title=本样本的结论]本章独占核心分值共106分，八套均值\textbf{13.25分/套}。逐套为0、0、9、19、17、25、29、7分；最近四套均值\textbf{19.50分/套}，早期四套均值7.00分/套。\par 优先练习§3.4.2的相关—功率谱互换与互谱（S），其次§3.1.1的广义平稳判据和§3.1.2的联合平稳性（A）。相关性质、功率和白噪声是贯穿后续章节的前提工具。\end{keybox}
+
+\vfill 8套试卷 · 107个计分小问 · 800分\par 对接第三次作业全部10题\par 2026年10月27日\end{titlepage}
+
+\tableofcontents\clearpage
+
+\section{统计方法与适用边界}
+
+主归属与分值复用已验收的共享审计数据。每小问只有一个主考点，分值全额计入该点；其他必要工具仅记间接涉及，不另加分。本次不重新给第1、2章或第5、6章题目分配核心分值。所有八套原卷哈希核对一致，并逐页查看已有渲染图，核对公式、分值和图形边界。
+
+每套全部小问合计100分，107小问合计800分。本章逐小节核心分相加为106分，等于八套本章分值之和。第1、2、3章在每套卷的核心分之和不超过100；其余分值仍留在其他章节。
+
+本章间接标签单独维护在\texttt{SSA\_CH3\_Exam\_Tagging.json}的\texttt{chapter3\_support}字段，便于与旧数据区分；未将所有常规期望运算都泛化成第3章命中。核心命中和间接命中均按试卷计数，同一套多问只计1套，两者可重叠。
+
+S：核心总分至少30且至少3套主归属命中；A：有核心分且总分至少15或至少2套命中；B：其余正核心分；C：0核心分。0核心且间接涉及至少4套，另列前提型。该口径与前两章一致，不能解释为未来考试概率。
+
+\section{试卷清单与逐套分值}
+
+\begin{xltabular}{\textwidth}{@{}l l r r r@{}}\toprule 文件代号 & 封面日期 & 小问数 & 卷面总分 & 本章核心\\\midrule\endfirsthead\toprule 文件代号 & 封面日期 & 小问数 & 卷面总分 & 本章核心\\\midrule\endhead\midrule\multicolumn{5}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+201812 & 2019-01-04 & 14 & 100 & 0\\
+201912 & 2019-12-29 & 19 & 100 & 0\\
+202104 & 2021-01-11 & 11 & 100 & 9\\
+202112 & 2022-01-04 & 15 & 100 & 19\\
+202212 & 2023-02-28 & 10 & 100 & 17\\
+202312 & 2023-12-28 & 13 & 100 & 25\\
+202412 & 2024-12 & 12 & 100 & 29\\
+202512 & 2026-01-04 & 13 & 100 & 7\\\end{xltabular}
+
+201812与201912两套本章主归属为0，并不代表不使用谱分析；它们的滤波和窄带题主归属在第5、6章。202104实际封面日期为2021-01-11；202212为2023-02-28。201912第5页提前标End of question paper，第6--7页的Q6--Q8仍完整纳入。
+
+\begin{xltabular}{\textwidth}{@{}l r r r@{}}\toprule 样本 & 套数 & 本章核心总分 & 均值\\\midrule\endfirsthead\toprule 样本 & 套数 & 本章核心总分 & 均值\\\midrule\endhead\midrule\multicolumn{4}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+早期四套 & 4 & 28 & 7.00\\
+最近四套 & 4 & 78 & 19.50\\
+全部八套 & 8 & 106 & 13.25\\\end{xltabular}
+
+只有202312的Q1全部25分归第3章；其余大题为跨章混合题或本章部分小问。不能把整道题都计给本章。
+
+\begin{center}\begin{tikzpicture}\begin{axis}[width=.96\textwidth,height=5cm,ybar,ymin=0,ymax=35,bar width=13pt,xtick={0,1,2,3,4,5,6,7},xticklabels={201812,201912,202104,202112,202212,202312,202412,202512},x tick label style={rotate=25,anchor=east},ylabel={本章核心分值},nodes near coords]\addplot[fill=deepblue] coordinates {(0,0) (1,0) (2,9) (3,19) (4,17) (5,25) (6,29) (7,7)};\end{axis}\end{tikzpicture}\end{center}
+
+\section{教材知识地图、考频与分级}
+
+\begin{xltabular}{\textwidth}{@{}l X r r r l@{}}\toprule 小节 & 教材考点 & 核心分 & 核心命中 & 间接涉及 & 级别\\\midrule\endfirsthead\toprule 小节 & 教材考点 & 核心分 & 核心命中 & 间接涉及 & 级别\\\midrule\endhead\midrule\multicolumn{6}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+3.1.1 & 严格与广义平稳信号 & 27 & 4/8 & 5/8 & A\\
+3.1.2 & 联合平稳性 & 29 & 3/8 & 2/8 & A\\
+3.2.1 & 严格循环平稳性（选学） & 0 & 0/8 & 0/8 & C\\
+3.2.2 & 广义循环平稳性（选学） & 0 & 0/8 & 0/8 & C\\
+3.3.1 & 相关函数基本性质 & 0 & 0/8 & 8/8 & 前提\\
+3.3.2 & 相关函数的物理意义 & 0 & 0/8 & 8/8 & 前提\\
+3.4.1 & 功率谱与互谱基本概念 & 0 & 0/8 & 0/8 & C\\
+3.4.2 & 功率谱与互谱的定义与性质 & 50 & 6/8 & 8/8 & S\\
+3.4.3 & 维纳–辛钦定理证明（选学） & 0 & 0/8 & 0/8 & C\\
+3.5.1 & 白噪声 & 0 & 0/8 & 4/8 & 前提\\
+3.5.2 & 热噪声（选学） & 0 & 0/8 & 0/8 & C\\
+3.6 & 应用举例 & 0 & 0/8 & 0/8 & C\\\end{xltabular}
+
+§3.4.2共50分/6套；§3.1.2共29分/3套；§3.1.1共27分/4套。§3.3.1、§3.3.2、§3.5.1虽没有独占核心分，仍反复服务于谱积分、回波、线性系统与噪声题。§3.4.1的概念在本报告并入实际运用§3.4.2的任务，不把同一小问再次拆分计分。
+
+\begin{center}\begin{tikzpicture}\begin{axis}[width=.94\textwidth,height=4.5cm,xbar,xmin=0,xmax=58,ytick={0,1,2},yticklabels={3.1.1,3.1.2,3.4.2},xlabel={八套累计核心分},nodes near coords]\addplot[fill=accentC] coordinates {(27,0) (29,1) (50,2)};\end{axis}\end{tikzpicture}\end{center}
+
+\Needspace{12\baselineskip}\section{逐小问归属审计}
+
+\Needspace{8\baselineskip}\subsection{201812：本章0分}
+
+下表含该套全部小问；原卷PDF页码用于直接定位。主归属只保留一个；本章间接标签不计分。
+
+\begin{xltabular}{\textwidth}{@{}L{1.7cm} r l L{3.1cm} X@{}}\toprule 小问/页 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endfirsthead\toprule 小问/页 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endhead\midrule\multicolumn{5}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+Q1/p.2 & 10 & 1.3.1 & -- & 均匀变量的仿射变换 Y=5X+1\\
+Q2a/p.2 & 4 & 1.2.1 & -- & 联合密度 A sin(x+y) 的归一化\\
+Q2b/p.2 & 6 & 1.4.1 & -- & 由联合密度求两个均值\\
+Q3/p.2 & 10 & 2.2.1 & -- & 独立高斯系数正余弦的均值与相关\\
+Q4a/p.2 & 5 & 2.2.1 & -- & 随机相位回波的均值与相关；幅度条件须说明\\
+Q4b/p.2 & 5 & 4.1.1 & -- & 正弦回波的时间均值\\
+Q4c/p.2 & 6 & 4.1.2 & 3.3.2 & 随机幅度下的各态历经条件\\
+Q5/p.3 & 7 & 5.1.2 & 3.3.1 & 级联系统中两输出的互相关\\
+Q6a/p.3 & 8 & 5.1.2 & 3.3.2, 3.4.2 & 已知谱经一阶滤波后的均值与功率\\
+Q6b/p.3 & 5 & 5.2.3 & 3.4.2 & 等效噪声带宽\\
+Q6c/p.3 & 3 & 5.3.2 & 3.4.2 & 输出的等效矩形带宽\\
+Q7a/p.4 & 10 & 6.3.2 & 3.4.2 & 三角形带通谱的正交分量相关\\
+Q7b/p.4 & 6 & 6.4.1 & 3.3.2, 3.4.2 & 窄带高斯正交分量的联合密度\\
+Q8/p.4 & 15 & 5.1.2 & 3.4.2 & 随机相位单频输入的一阶滤波输出相关\\\end{xltabular}
+
+本章核心：无；本套总分100。
+
+\Needspace{8\baselineskip}\subsection{201912：本章0分}
+
+下表含该套全部小问；原卷PDF页码用于直接定位。主归属只保留一个；本章间接标签不计分。
+
+\begin{xltabular}{\textwidth}{@{}L{1.7cm} r l L{3.1cm} X@{}}\toprule 小问/页 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endfirsthead\toprule 小问/页 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endhead\midrule\multicolumn{5}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+Q1a/p.2 & 6 & 1.3.1 & -- & Y=6X+2 的密度；Gaussian in [0,1] 有歧义\\
+Q1b/p.2 & 4 & 1.5.1 & -- & 仿射变换特征函数；分布参数须澄清\\
+Q2/p.2 & 8 & 1.2.1 & -- & 联合密度 x exp[-x(y+1)] 的边缘密度\\
+Q3a/p.2 & 4 & 2.2.3 & -- & 半随机 0/1 二进制信号均值\\
+Q3b/p.3 & 6 & 2.2.3 & -- & 同一符号区间与不同区间的相关\\
+Q4a/p.4 & 4 & 2.2.1 & -- & 随机相位正弦回波均值与相关\\
+Q4b/p.4 & 4 & 4.1.1 & -- & 回波信号的时间均值\\
+Q4c/p.4 & 6 & 4.1.2 & 3.3.2 & 随机幅度与相关各态历经\\
+Q5a/p.4 & 3 & 2.2.1 & -- & sgn(A) 随机相位正弦的二阶量\\
+Q5b/p.4 & 7 & 4.1.2 & 3.3.2 & 符号随机幅度的广义各态历经\\
+Q6a/p.6 & 8 & 5.1.2 & 3.3.2, 3.4.2 & 一阶滤波后的均值与功率\\
+Q6b/p.6 & 5 & 5.2.3 & 3.4.2 & 等效噪声带宽\\
+Q6c/p.6 & 3 & 5.3.2 & 3.4.2 & 等效矩形带宽\\
+Q7a/p.6 & 8 & 6.3.2 & 3.4.2 & 正交分量谱与相关\\
+Q7b/p.6 & 6 & 6.4.1 & 3.3.2, 3.4.2 & 窄带高斯联合密度\\
+Q8a/p.7 & 4 & 2.2.1 & -- & 同步检波本振的均值与相关\\
+Q8b/p.7 & 6 & 6.3.2 & 3.3.1 & 独立相乘信号的均值与相关\\
+Q8c/p.7 & 4 & 6.3.2 & 3.4.2 & 混频及低通后的功率谱\\
+Q8d/p.7 & 4 & 6.3.2 & 3.3.2, 3.4.2 & 低通输出相关与平均功率\\\end{xltabular}
+
+本章核心：无；本套总分100。
+
+\Needspace{8\baselineskip}\subsection{202104：本章9分}
+
+下表含该套全部小问；原卷PDF页码用于直接定位。主归属只保留一个；本章间接标签不计分。
+
+\begin{xltabular}{\textwidth}{@{}L{1.7cm} r l L{3.1cm} X@{}}\toprule 小问/页 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endfirsthead\toprule 小问/页 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endhead\midrule\multicolumn{5}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+Q1a/p.2 & 15 & 2.4.3 & -- & A+B cos(t) 的一维与二维高斯分布\\
+Q1b/p.2 & 10 & 1.4.2 & -- & 两时刻采样向量的协方差矩阵\\
+Q2a/p.2 & 8 & 2.2.1 & -- & 随机相位正弦加独立噪声的均值\\
+Q2b/p.2 & 8 & 2.2.1 & 3.3.1, 3.5.1 & 正弦与白噪声之和的相关；连续白噪声须谨慎\\
+Q2c/p.2 & 2 & 3.1.1 & 3.5.1 & 判断广义平稳\\
+Q2d/p.2 & 7 & 3.4.2 & 3.1.1, 3.5.1 & 正弦线谱与白噪声谱叠加\\
+Q3a/p.2 & 10 & 5.1.2 & 3.4.2 & 三角相关输入经RC后的功率谱\\
+Q3b/p.2 & 15 & 5.1.2 & 3.3.1, 3.4.2 & 输出减输入的功率谱\\
+Q4a/p.3 & 8 & 5.1.2 & 3.4.2 & 指数相关高斯输入经指数冲激响应\\
+Q4b/p.3 & 10 & 1.6 & 3.3.2, 3.4.2 & 滤波高斯输出的一维密度\\
+Q4c/p.3 & 7 & 1.6 & -- & 零均值非退化高斯变量为正的概率\\\end{xltabular}
+
+本章核心：Q2c（2分）、Q2d（7分）；本套总分100。
+
+\Needspace{8\baselineskip}\subsection{202112：本章19分}
+
+下表含该套全部小问；原卷PDF页码用于直接定位。主归属只保留一个；本章间接标签不计分。
+
+\begin{xltabular}{\textwidth}{@{}L{1.7cm} r l L{3.1cm} X@{}}\toprule 小问/页 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endfirsthead\toprule 小问/页 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endhead\midrule\multicolumn{5}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+Q1a/p.2 & 5 & 1.4.2 & -- & A+B cos(t) 的均值与自相关\\
+Q1b/p.2 & 10 & 2.4.3 & -- & 一维与二维高斯密度及奇异时刻\\
+Q1c/p.2 & 10 & 1.5.2 & -- & X(0),X(pi/2) 的联合特征函数与协方差\\
+Q2a/p.2 & 7 & 2.3.2 & 3.3.1 & 独立回波与噪声之和的均值、相关\\
+Q2b/p.2 & 5 & 2.3.2 & 3.1.2, 3.3.1 & 发射信号与带时延回波的互相关\\
+Q2c/p.2 & 5 & 3.1.1 & 3.3.1 & 回波加噪声的广义平稳性\\
+Q2d/p.2 & 8 & 3.1.2 & 3.1.1, 3.3.1 & 输入与回波的联合广义平稳\\
+Q3a/p.3 & 5 & 5.1.2 & 3.4.2 & RC/RL频响及输出差分的谱\\
+Q3b/p.3 & 7 & 5.1.2 & 3.3.1, 3.4.2 & RC/RL频响及输出差分的谱\\
+Q3c/p.3 & 5 & 5.1.2 & 3.4.2 & RC/RL频响及输出差分的谱\\
+Q3d/p.3 & 8 & 5.1.2 & 3.3.1, 3.4.2 & RC/RL频响及输出差分的谱\\
+Q4a/p.4 & 6 & 3.4.2 & 3.3.2 & 带通余弦谱积分求功率\\
+Q4b/p.4 & 7 & 6.3.2 & 3.4.2 & 正交分量功率谱\\
+Q4c/p.4 & 7 & 6.3.2 & 3.4.2 & 同相与正交分量互谱及互相关\\
+Q4d/p.4 & 5 & 1.4.3 & -- & 由零互相关和零均值判断正交、无关\\\end{xltabular}
+
+本章核心：Q2c（5分）、Q2d（8分）、Q4a（6分）；本套总分100。
+
+\Needspace{8\baselineskip}\subsection{202212：本章17分}
+
+下表含该套全部小问；原卷PDF页码用于直接定位。主归属只保留一个；本章间接标签不计分。
+
+\begin{xltabular}{\textwidth}{@{}L{1.7cm} r l L{3.1cm} X@{}}\toprule 小问/页 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endfirsthead\toprule 小问/页 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endhead\midrule\multicolumn{5}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+Q1a/p.2 & 6 & 2.1.1 & -- & 固定随机参数画样本函数\\
+Q1b/p.2 & 9 & 1.5.1 & -- & 平移均匀变量的特征函数\\
+Q1c/p.2 & 10 & 1.4.2 & -- & 随机直线的均值与协方差\\
+Q2a/p.2 & 8 & 2.2.1 & -- & 均匀随机相位平均为零\\
+Q2b/p.2 & 8 & 3.1.1 & 3.3.1 & 计算相关后判断广义平稳\\
+Q2c/p.2 & 9 & 3.4.2 & -- & 由相关函数变换得到调制谱\\
+Q3a/p.3 & 10 & 5.2.1 & 3.4.2, 3.5.1 & 白噪声通过RC低通\\
+Q3b/p.3 & 15 & 2.4.3 & 3.3.1, 3.3.2, 3.4.2, 3.5.1 & 承接(a)，平方器输出需高斯四阶矩\\
+Q4a/p.4 & 15 & 5.1.2 & 3.4.2 & LTI输出均值、谱和相关\\
+Q4b/p.4 & 10 & 1.3.1 & 3.3.2, 3.4.2 & 高斯输入经线性系统保持高斯\\\end{xltabular}
+
+本章核心：Q2b（8分）、Q2c（9分）；本套总分100。
+
+\Needspace{8\baselineskip}\subsection{202312：本章25分}
+
+下表含该套全部小问；原卷PDF页码用于直接定位。主归属只保留一个；本章间接标签不计分。
+
+\begin{xltabular}{\textwidth}{@{}L{1.7cm} r l L{3.1cm} X@{}}\toprule 小问/页 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endfirsthead\toprule 小问/页 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endhead\midrule\multicolumn{5}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+Q1a/p.2 & 12 & 3.1.2 & 3.1.1, 3.3.1 & 和差信号的联合平稳性\\
+Q1b/p.2 & 6 & 3.4.2 & -- & 和信号的功率谱\\
+Q1c/p.2 & 7 & 3.4.2 & 3.3.1 & 由已知谱反变换并组合互相关\\
+Q2a/p.2 & 10 & 5.2.1 & 3.4.2, 3.5.1 & 白噪声滤波后的相关函数\\
+Q2b/p.2 & 7 & 5.1.2 & 3.3.1, 3.4.2 & 延时差分的输出谱\\
+Q2c/p.2 & 8 & 1.6 & 3.3.2, 3.5.1 & 白噪声未明说高斯，结论需条件\\
+Q3a/p.3 & 4 & 1.2.1 & -- & 联合密度归一化\\
+Q3b/p.3 & 8 & 1.4.1 & -- & 由密度求均值\\
+Q3c/p.3 & 6 & 1.4.2 & -- & 由密度求方差\\
+Q3d/p.3 & 7 & 1.4.2 & -- & 联合矩与相关系数\\
+Q4a/p.4 & 4 & 6.3.1 & -- & 希尔伯特变换与正交分量\\
+Q4b/p.4 & 15 & 6.3.2 & 3.4.2 & 正交分量功率谱与互谱\\
+Q4c/p.4 & 6 & 6.3.2 & 3.4.2 & 载频位置改变互谱\\\end{xltabular}
+
+本章核心：Q1a（12分）、Q1b（6分）、Q1c（7分）；本套总分100。
+
+\Needspace{8\baselineskip}\subsection{202412：本章29分}
+
+下表含该套全部小问；原卷PDF页码用于直接定位。主归属只保留一个；本章间接标签不计分。
+
+\begin{xltabular}{\textwidth}{@{}L{1.7cm} r l L{3.1cm} X@{}}\toprule 小问/页 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endfirsthead\toprule 小问/页 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endhead\midrule\multicolumn{5}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+Q1a/p.2 & 7 & 2.3.2 & -- & 离散正弦和余弦的互相关\\
+Q1b/p.2 & 9 & 1.4.3 & 3.1.2, 3.3.1 & 正交、无关与独立性区别\\
+Q1c/p.2 & 9 & 3.1.2 & 3.1.1, 3.3.1 & 联合平稳性判断\\
+Q2a/p.2 & 12 & 3.1.1 & 3.1.2, 3.3.1 & 正交调制和信号的平稳条件\\
+Q2b/p.2 & 8 & 3.4.2 & -- & 由平稳条件求功率谱\\
+Q2c/p.2 & 5 & 1.4.3 & 3.3.1, 3.4.2 & 无关条件下交叉项简化\\
+Q3a/p.3 & 9 & 5.2.1 & 3.4.2, 3.5.1 & RC电阻、电容支路频响\\
+Q3b/p.3 & 6 & 5.2.1 & 3.4.2, 3.5.1 & 由支路谱求相关\\
+Q3c/p.3 & 10 & 5.1.2 & 3.3.1, 3.4.2, 3.5.1 & 先由支路频响求互相关\\
+Q4a/p.3 & 9 & 6.3.2 & 3.4.2, 3.5.1 & 理想带通噪声及正交分量\\
+Q4b/p.4 & 6 & 6.3.2 & 3.4.2 & 同相与正交分量互谱\\
+Q4c/p.4 & 10 & 1.6 & 3.3.2, 3.4.2 & 联合高斯密度及无关推独立\\\end{xltabular}
+
+本章核心：Q1c（9分）、Q2a（12分）、Q2b（8分）；本套总分100。
+
+\Needspace{8\baselineskip}\subsection{202512：本章7分}
+
+下表含该套全部小问；原卷PDF页码用于直接定位。主归属只保留一个；本章间接标签不计分。
+
+\begin{xltabular}{\textwidth}{@{}L{1.7cm} r l L{3.1cm} X@{}}\toprule 小问/页 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endfirsthead\toprule 小问/页 & 分 & 主归属 & 本章间接 & 核对说明\\\midrule\endhead\midrule\multicolumn{5}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+Q1a/p.2 & 6 & 1.1.2 & -- & 同一次投币定义的单时刻密度\\
+Q1b/p.2 & 6 & 1.2.1 & -- & 同一次投币定义的二时刻密度\\
+Q1c/p.2 & 6 & 1.4.2 & -- & 两个样本函数的协方差\\
+Q1d/p.2 & 7 & 1.2.1 & -- & 每个时刻重新独立投币\\
+Q2a/p.2 & 9 & 1.5.1 & 3.1.1, 3.3.1 & 相位特征函数控制平稳条件\\
+Q2b/p.2 & 7 & 3.4.2 & 3.3.1 & 随机幅度调制的功率谱\\
+Q2c/p.2 & 9 & 4.1.1 & 3.3.1 & 利用时间平均方差判断均值各态历经\\
+Q3a/p.3 & 10 & 5.1.2 & 3.3.1, 3.4.2 & 两径LTI系统输出相关与谱\\
+Q3b/p.3 & 10 & 5.4.3 & 3.4.2 & 匹配滤波后的相关与谱\\
+Q3c/p.3 & 5 & 5.3.2 & 3.4.2 & 等效矩形带宽与时延\\
+Q4a/p.4 & 10 & 6.3.2 & 3.4.2 & 非中心载频的正交分量谱\\
+Q4b/p.4 & 7 & 1.6 & 3.3.2, 3.4.2 & 同一时刻二维高斯分布\\
+Q4c/p.4 & 8 & 1.4.2 & 3.3.2, 3.4.2 & 异时刻协方差决定联合密度\\\end{xltabular}
+
+本章核心：Q2b（7分）；本套总分100。
+
+\section{第三次作业覆盖与缺口}
+
+\begin{xltabular}{\textwidth}{@{}l L{3.5cm} X@{}}\toprule 题号 & 覆盖小节 & 训练作用\\\midrule\endfirsthead\toprule 题号 & 覆盖小节 & 训练作用\\\midrule\endhead\midrule\multicolumn{3}{r}{\small 续下页}\\\endfoot\bottomrule\endlastfoot
+3.4 & 3.1.1 & 独立过程乘积；严格/广义解释\\
+3.5 & 3.1.1 / 3.3.1 & 平方器产生直流与二倍频相关\\
+3.9 & 3.1.2 / 3.3.1 & 和、差与互相关的展开\\
+3.14 & 3.3.1 / 3.4.2 & 相关合法性、给定方差与谱正性\\
+3.16 & 3.1.1 / 3.3.1 & 同一个随机幅度的二阶矩\\
+3.21 & 3.4.2 & 实信号PSD的必要与充分构造条件\\
+3.25 & 3.4.2 & 互谱傅里叶变换与共轭\\
+3.1（选） & 3.1.1 & 有限维分布与平稳性，重复时刻\\
+3.7（选） & 3.2.2 & 循环平稳的同时周期平移\\
+3.19（选） & 3.4.2 & 反变换、谱线、非有限功率边界\\\end{xltabular}
+
+作业已覆盖三类核心点，但仍缺少：由完整均值和相关证明\textbf{联合}WSS；回波时延的互相关方向；随机相位\textbf{乘性调制}引起的移频谱；正弦/余弦联合调制的平稳条件；相位特征函数的1阶与2阶消项；由带通谱面积直接求功率；连续白噪声的广义模型与采样独立模型区别。复习题集在全部10道作业之外补齐这些题型。
+
+作业额外覆盖而样本未独占计分的内容包括：§3.2.2循环平稳、§3.3.1相关函数可行性判别以及严格平稳证明。这些不是废题，仍按作业要求练；但不应挤掉S级的反变换和调制谱。
+
+\section{复习顺序与公式速查}
+
+建议按21题、7天、每天3题组织：第1天平稳定义与乘积；第2天平方器、和差和联合平稳；第3天回波、循环平稳与相关可行性；第4天随机幅度与PSD判别；第5天互谱、谱线及反变换；第6天平稳调制和相位条件；第7天带通功率、白噪声与原题异常诊断。当天先独立写题，再对照中文详解。
+
+\[\begin{aligned}R_{XY}(\tau)&=E[X(t+\tau)Y(t)],&R_{YX}(\tau)&=R_{XY}(-\tau),\\
+S_X(\omega)&=\int R_X(\tau)e^{-j\omega\tau}\,d\tau,&R_X(\tau)&=\frac1{2\pi}\int S_X(\omega)e^{j\omega\tau}\,d\omega,\\
+P_X&=R_X(0)=\sigma_X^2+m_X^2,&S_{YX}(\omega)&=S_{XY}^*(\omega).\end{aligned}\]
+
+\[e^{-a|\tau|}\ \longleftrightarrow\ \frac{2a}{a^2+\omega^2},\qquad
+\cos\omega_0\tau\ \longleftrightarrow\ \pi[\delta(\omega-\omega_0)+\delta(\omega+\omega_0)].\]
+\[S_{X\cos(\omega_0t+\Theta)}(\omega)=\frac14[S_X(\omega-\omega_0)+S_X(\omega+\omega_0)].\]
+末式要求X为实WSS、二阶矩有限、均匀相位与整个过程独立；均值可非零。理想白噪声用$S_N=N_0/2$与$R_N=(N_0/2)\delta(\tau)$描述，无有限的瞬时方差。
+
+\section{题面异常、来源与局限}
+
+\begin{warnbox}[title=原题不自动等于自洽模型]202104 Q2同时使用连续时间理想白噪声与瞬时N(0,1)记号，须先说明模型。202312 Q1给$S_Y(\omega)=\omega^2/(\omega^2+16)$，其积分发散；可形式反变换为$\delta(\tau)-2e^{-4|\tau|}$，却不能视为普通有限方差过程。统计保留原主归属与分值；复习题明确给有限功率改编并另设诊断题。202512 Q2(c)的$m_A\ne0$与未中心化相关$R_A=e^{-|\tau|}$不相容；若要使用须改为协方差或调整均值，不能默默修题。\end{warnbox}
+
+202412 Q1的离散频率为$2\pi$，故两序列各自是时间常数，不能沿用连续时间一般频率正弦的零均值结论。第三章教材中原书疑似笔误仍以教材交接记录为准，本次不改教材。
+
+八套横跨不同试卷结构，早期为8道大题，后期为4道；存在重复题型和年份间隔。核心归属是一套公开的方法选择，0核心不保证以后不考，八套均值和最近四套均值不能混称为确定趋势。§3.2、§3.4.3证明、§3.5.2热噪声未出现独占核心计分，复习题不另加完整热噪声数值题与维纳–辛钦严格证明，保留作业中的循环平稳题。
+
+教材题面取自已验收第3章重排源码（书p.63--88）；作业来自用户提供的Homework \#3图片。八套来源、封面日期、哈希与全量107小问见共享审计JSON，本章扩展标注见本章JSON。旧四套来源为格院往年试卷仓库的固定提交\texttt{6d1f1ff98185154e02d346036439ddd0964a0e4d}，不依赖仓库最新状态。
+
+\end{document}

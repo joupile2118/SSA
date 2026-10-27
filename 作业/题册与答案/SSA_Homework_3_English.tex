@@ -1,0 +1,111 @@
+% Copy this preamble into a self-contained final file; adjust chapter, title and dates.
+% Self-contained source. Compile twice with XeLaTeX into tmp/.
+% Exercise wording is translated from the Chinese textbook, not an official English edition.
+\documentclass[12pt]{article}
+\usepackage[paperwidth=222.6413mm,paperheight=297mm,margin=22mm,headheight=16pt,headsep=8mm,footskip=12mm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,enumitem,fancyhdr,xcolor,lastpage}
+\usepackage[unicode,hidelinks]{hyperref}
+\hypersetup{pdftitle={Stochastic Signal Analysis - Homework 3},pdfauthor={}}
+\definecolor{muted}{gray}{0.38}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small Stochastic Signal Analysis}
+\fancyhead[R]{\small Homework 3}
+\fancyfoot[L]{\scriptsize\color{muted}English translation from the Chinese textbook (5th ed.)}
+\fancyfoot[R]{\small Page \thepage\ of \pageref*{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\parindent}{0pt}\setlength{\parskip}{0.5em}
+\linespread{1.18}
+\setlist[enumerate]{label=(\arabic*),leftmargin=2.3em,labelsep=0.4em,itemsep=0.35em,topsep=0.4em}
+\newcommand{\problem}[3]{%
+ {\small\color{muted}Chapter 3\enspace /\enspace Stationarity and Power Spectral Density}\par
+ {\small Due: \textbf{1 week after Chapter 3 is completed}}\par
+ \vspace{2mm}
+ {\small Name: \underline{\hspace{35mm}}\hfill Student ID: \underline{\hspace{38mm}}}\par
+ \vspace{4mm}
+ {\LARGE\bfseries Exercise #1}\hfill{\normalsize\bfseries #2}\par
+ {\small\color{muted}Textbook p.\ #3}\par\vspace{3mm}}
+\newcommand{\answer}{\par\vspace{6mm}{\small\color{muted}Answer / Working}\par\vspace{1mm}{\color{muted}\hrule height 0.3pt}\vfill}
+\newcommand{\E}{\mathbb E}\newcommand{\ee}{\mathrm e}\newcommand{\jj}{\mathrm j}
+
+\begin{document}
+\problem{3.4}{Required}{85}
+The random processes $X(t)$ and $Y(t)$ are independent and each is stationary. Prove that $Z(t)=X(t)Y(t)$ is also stationary.
+\answer
+\newpage
+\problem{3.5}{Required}{85}
+Let $X(t)=10\sin(\omega_0t+\Theta)$, where $\omega_0$ is a deterministic constant and $\Theta$ is uniformly distributed on $[-\pi,\pi]$. A square-law device produces $Y(t)=X^2(t)$. Find:
+\begin{enumerate}\item the mean of $Y(t)$;\item its autocorrelation function;\item whether $Y(t)$ is wide-sense stationary.\end{enumerate}
+\answer
+\newpage
+\problem{3.9}{Required}{85}
+The stationary random processes $X(t)$ and $Y(t)$ are statistically independent, have zero means, and have autocorrelation functions
+\[R_X(\tau)=\ee^{-|\tau|},\qquad R_Y(\tau)=\cos(2\pi\tau).\]
+\begin{enumerate}\item Find the autocorrelation of $Z(t)=X(t)+Y(t)$.\item Find the autocorrelation of $W(t)=X(t)-Y(t)$.\item Find the cross-correlation $R_{ZW}(\tau)$.\end{enumerate}
+\answer
+\newpage
+\problem{3.14}{Required}{86}
+Two zero-mean wide-sense stationary random processes $X(t)$ and $Y(t)$ have variances $\sigma_X^2=5$ and $\sigma_Y^2=10$. Can the following functions be their autocorrelation functions? Explain each answer. Here $u(\tau)$ denotes the unit step.
+\begin{enumerate}
+\item $R_X(\tau)=5u(\tau)\exp(-3\tau)$.
+\item $R_X(\tau)=5\sin(5\tau)$.
+\item $R_Y(\tau)=9/(1+2\tau^2)$.
+\item $R_Y(\tau)=-\cos(6\tau)\exp(-|\tau|)$.
+\item $R_X(\tau)=5[\sin(3\tau)/(3\tau)]^2$.
+\item $R_Y(\tau)=6+4\sin(10\tau)/(10\tau)$.
+\item $R_X(\tau)=5\exp(-|\tau|)$.
+\item $R_Y(\tau)=6+4\exp(-3\tau^2)$.
+\end{enumerate}
+Removable singularities are understood by their limits.
+\answer
+\newpage
+\problem{3.16}{Required}{86}
+The processes $X(t)$ and $Y(t)$ are independent and each is stationary, with
+\[R_X(\tau)=2\ee^{-|\tau|}\cos(\omega_0\tau),\qquad R_Y(\tau)=9+\exp(-3\tau^2).\]
+Let $Z(t)=AX(t)Y(t)$, where the random variable $A$ has mean $2$ and variance $9$, and $A$, $X(t)$ and $Y(t)$ are mutually independent. Find the mean, variance and autocorrelation of $Z(t)$.
+\answer
+\newpage
+\problem{3.21}{Required}{86--87}
+Which of the following functions can be power spectral densities of real random signals? Explain why or why not.
+\begin{enumerate}
+\item $[\sin\omega/\omega]^2$.
+\item $\omega^2/(\omega^6+3\omega^2+3)$.
+\item $\omega^2/(\omega^4-1)-\delta(\omega)$.
+\item $\omega^4/(\jj\omega^6+\omega^2+1)$.
+\item $|\omega|/(\omega^4+2\omega^2+1)$.
+\item $\exp[-(\omega-1)^2]$.
+\end{enumerate}
+\answer
+\newpage
+\problem{3.25}{Required}{87}
+Two random processes $X(t)$ and $Y(t)$ are jointly stationary, with cross-correlation
+\[R_{XY}(\tau)=\begin{cases}9\ee^{-3\tau},&\tau\geq0,\\0,&\tau<0.\end{cases}\]
+Find the cross-power spectral densities $S_{XY}(\omega)$ and $S_{YX}(\omega)$.
+\answer
+\newpage
+\problem{3.1}{Optional}{85}
+A random voltage signal $U(t)$ is statistically independent at distinct times. Its one-dimensional distribution is Gaussian with mean $0$ and variance $2$.
+\begin{enumerate}
+\item Find the density functions $f(u;t)$, $f(u_1,u_2;t_1,t_2)$ and $f(u_1,\ldots,u_k;t_1,\ldots,t_k)$, for arbitrary positive integer $k$.
+\item Determine the stationarity of $U(t)$.
+\end{enumerate}
+\answer
+\newpage
+\problem{3.7}{Optional}{85}
+The real random signal $Y(t)$ is wide-sense cyclostationary with cycle period $100$. Its mean satisfies $m(10)=20$, and its two-time correlation satisfies $R(5,1)=10$. Find:
+\begin{enumerate}
+\item $\E[5Y(110)]$ and $\E[10Y(310)+50]$;
+\item $\E[Y(105)Y(101)]$ and $\E[30Y(205)Y(201)+200]$;
+\item $\E[10Y(305)Y(301)+6Y(210)+80]$.
+\end{enumerate}
+\answer
+\newpage
+\problem{3.19}{Optional}{86}
+Find the autocorrelation function and the mean-square value of a stationary signal $X(t)$ for each of the following power spectral densities:
+\begin{enumerate}
+\item $S_X(\omega)=\omega^2/(\omega^4+3\omega^2+2)$.
+\item
+\[S_X(\omega)=\begin{cases}8\delta(\omega)+20(1-|\omega|/10),&|\omega|\leq10,\\0,&|\omega|>10.\end{cases}\]
+\item $S_X(\omega)=p\cos^4(\omega\tau_0)$, where $p$ is a constant.
+\end{enumerate}
+\answer
+\end{document}

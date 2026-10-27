@@ -1,0 +1,177 @@
+% Copy this preamble into a self-contained final file; adjust chapter, title and dates.
+\documentclass[11pt]{article}
+\usepackage[paperwidth=222.6413mm,paperheight=297mm,margin=22mm,headheight=15pt,headsep=8mm,footskip=11mm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,needspace,enumitem,fancyhdr,xcolor,tikz}
+\usepackage{lastpage}
+\usepackage[unicode,hidelinks]{hyperref}
+\hypersetup{pdftitle={Stochastic Signal Analysis - Homework 3 Solutions}}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small Stochastic Signal Analysis}\fancyhead[R]{\small Homework \#3: Solutions}
+\fancyfoot[L]{\scriptsize Companion to the English exercise sheet}\fancyfoot[R]{\small\thepage\ / \pageref*{LastPage}}
+\setlength{\parindent}{0pt}\setlength{\parskip}{0.5em}\linespread{1.12}
+\newcommand{\E}{\mathbb E}\newcommand{\Var}{\operatorname{Var}}\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\jj}{\mathrm j}\newcommand{\ee}{\mathrm e}
+\newcommand{\problem}[3]{\par\addvspace{1em}\Needspace{8\baselineskip}{\LARGE\bfseries Exercise #1}\hfill #2\par{\small\color{gray}Textbook p. #3}\par\vspace{3mm}}
+\newcommand{\step}[1]{\par\Needspace{6\baselineskip}\textbf{#1}\par}
+\newcommand{\LambdaTri}{\Lambda}
+
+\begin{document}
+\problem{3.4}{Required}{85}
+{\small Textbook sections: 3.1.1}
+\step{1. Wide-sense interpretation.}
+Independence here means independence of the two processes, including their finite vectors, not merely independence of $X(t)$ and $Y(t)$ at one time. If their constant means are $m_X,m_Y$, independence gives
+\[\boxed{m_Z=m_Xm_Y},\qquad
+\begin{aligned}R_Z(t+\tau,t)&=\E[X(t+\tau)X(t)Y(t+\tau)Y(t)]\\&=R_X(\tau)R_Y(\tau).\end{aligned}\]
+The second moments are finite because $\E[Z^2(t)]=\E[X^2(t)]\E[Y^2(t)]$. Thus $Z$ has a constant mean and a lag-only correlation, so it is WSS.
+\step{2. Strict-sense interpretation.}
+For arbitrary $t_1,\ldots,t_k$, write $\boldsymbol X=(X(t_i))$ and $\boldsymbol Y=(Y(t_i))$. The joint law is the product of their laws. A common time shift leaves each law invariant and preserves this product. Applying the deterministic map
+\[(\boldsymbol x,\boldsymbol y)\longmapsto(x_1y_1,\ldots,x_ky_k)\]
+therefore leaves the law of $(Z(t_1),\ldots,Z(t_k))$ invariant. Hence independent strictly stationary processes also have a strictly stationary product. No density assumption is needed.
+
+\problem{3.5}{Required}{85}
+{\small Textbook sections: 3.1.1 / 3.3.1}
+\step{1. Use a harmonic identity.}
+Let $a=\omega_0t+\Theta$. Then $Y(t)=100\sin^2a=50-50\cos(2a)$. A uniform phase gives $\E[\cos(2a)]=0$, hence $\boxed{m_Y=50}$.
+\step{2. Multiply the two samples before averaging.}
+For $a_1=\omega_0(t+\tau)+\Theta$ and $a_0=\omega_0t+\Theta$,
+\[\E[\cos(2a_1)\cos(2a_0)]=\tfrac12\cos(2\omega_0\tau),\]
+because the sum-angle term averages to zero. Consequently,
+\[\boxed{R_Y(\tau)=2500+1250\cos(2\omega_0\tau)}.\]
+The constant mean and lag-only correlation prove WSS. Also $\E[Y^2]=3750$, $\Var(Y)=1250$ and $C_Y(\tau)=1250\cos(2\omega_0\tau)$. The same formulas hold for $\omega_0=0$, when every realization of $Y$ is constant in time.
+
+\problem{3.9}{Required}{85}
+{\small Textbook sections: 3.1.2 / 3.3.1}
+\step{1. Remove cross terms using independence and zero means.}
+For all $s,t$, $R_{XY}(s,t)=\E[X(s)]\E[Y(t)]=0$, and likewise $R_{YX}=0$.
+\step{2. Expand each product.}
+\[\begin{aligned}
+R_Z(\tau)&=R_X(\tau)+R_Y(\tau)+R_{XY}(\tau)+R_{YX}(\tau),\\
+R_W(\tau)&=R_X(\tau)+R_Y(\tau)-R_{XY}(\tau)-R_{YX}(\tau),\\
+R_{ZW}(\tau)&=R_X(\tau)-R_Y(\tau)-R_{XY}(\tau)+R_{YX}(\tau).
+\end{aligned}\]
+Using $R_{ZW}(\tau)=\E[Z(t+\tau)W(t)]$ therefore yields
+\[\boxed{R_Z(\tau)=R_W(\tau)=\ee^{-|\tau|}+\cos(2\pi\tau)},\]
+\[\boxed{R_{ZW}(\tau)=\ee^{-|\tau|}-\cos(2\pi\tau)}.\]
+Here $R_Z(0)=R_W(0)=2$ and $R_{ZW}(0)=0$. Zero same-time covariance does not by itself imply independence of $Z$ and $W$.
+
+\problem{3.14}{Required}{86}
+{\small Textbook sections: 3.3.1 / 3.4.2}
+\step{1. State the tests and transform convention.}
+For a real WSS signal, $R$ is real and even, $R(0)=\sigma^2+m^2$, and it is positive semidefinite. A nonnegative finite spectral measure is a sufficient validity test. We use
+\[S(\omega)=\int_{-\infty}^{\infty}R(\tau)\ee^{-\jj\omega\tau}\,d\tau,
+\qquad R(\tau)=\frac1{2\pi}\int_{-\infty}^{\infty}S(\omega)\ee^{\jj\omega\tau}\,d\omega.\]
+\step{2. The four rejected candidates.}
+\begin{enumerate}
+\item Not valid: $5u(\tau)\ee^{-3\tau}$ is not even, regardless of the convention for $u(0)$.
+\item Not valid: $5\sin(5\tau)$ is odd and has $R(0)=0\ne5$.
+\item Not valid for the specified $Y$: its value at zero is $9\ne10$. It is a valid correlation for a zero-mean process of variance $9$, so rejection is due to the given variance.
+\item Not valid: $R(0)=-1$, which cannot be a mean-square value.
+\end{enumerate}
+\step{3. The four accepted candidates.}
+Write $\Lambda(x)=\max(1-|x|,0)$; rectangle edge values do not affect the integrals. Each of the following spectra is a nonnegative finite measure:
+\[\begin{aligned}
+S_{(5)}(\omega)&=\frac{5\pi}{3}\Lambda(\omega/6),\\
+S_{(6)}(\omega)&=12\pi\delta(\omega)+\frac{2\pi}{5}\mathbf1_{\{|\omega|<10\}},\\
+S_{(7)}(\omega)&=\frac{10}{1+\omega^2},\\
+S_{(8)}(\omega)&=12\pi\delta(\omega)+4\sqrt{\frac\pi3}\ee^{-\omega^2/12}.
+\end{aligned}\]
+They have $R_{(5)}(0)=R_{(7)}(0)=5$ and $R_{(6)}(0)=R_{(8)}(0)=10$. Thus $\boxed{\text{(5), (6), (7), (8) are valid.}}$
+The constant $6$ in (6) and (8) can come from a time-constant zero-mean random component of variance $6$; it does not force the ensemble mean to be nonzero. Evenness and the bound $|R(\tau)|\le R(0)$ alone would not establish validity.
+
+\problem{3.16}{Required}{86}
+{\small Textbook sections: 3.1.1 / 3.3.1}
+\step{1. Determine the mean of $X$ rather than assuming it.}
+The supplied $R_X$ is absolutely integrable and has no zero-frequency spectral atom. One direct justification uses $\overline X_T=T^{-1}\int_0^T X(t)\,dt$. Since $|R_X(\tau)|\le2\ee^{-|\tau|}$,
+\[m_X^2=|\E\overline X_T|^2\le\E[\overline X_T^2]
+\le\frac1{T^2}\int_0^T\!\int_0^T2\ee^{-|t-s|}\,ds\,dt\le\frac4T.\]
+Letting $T\to\infty$ gives $m_X=0$. The continuous correlation ensures that this mean-square averaging argument is legitimate. We need not determine $m_Y$.
+\step{2. Keep the same random amplitude at both times.}
+$\E[A^2]=\Var(A)+(\E A)^2=9+4=13$. Mutual independence gives
+\[\boxed{m_Z=\E[A]m_Xm_Y=0},\]
+\[\begin{aligned}
+R_Z(\tau)&=\E[A^2]R_X(\tau)R_Y(\tau)\\
+&=\boxed{26\ee^{-|\tau|}\cos(\omega_0\tau)\bigl(9+\ee^{-3\tau^2}\bigr)}.
+\end{aligned}\]
+Finally, $\boxed{\Var[Z(t)]=R_Z(0)-m_Z^2=260}$. Replacing $\E[A^2]$ by $(\E A)^2$ would incorrectly treat the two occurrences of $A$ as independent draws.
+
+\problem{3.21}{Required}{86--87}
+{\small Textbook sections: 3.4.2}
+\step{1. Apply the real-signal PSD criteria.}
+An ordinary finite-power real WSS signal has a real, even, nonnegative spectral measure of finite total mass. A density must therefore be integrable; impulse weights must be nonnegative.
+\begin{enumerate}
+\item Valid. The removable value at $\omega=0$ is $1$. It is real, even, nonnegative and integrable, decaying as $O(\omega^{-2})$.
+\item Valid. The denominator $\omega^6+3\omega^2+3$ is strictly positive for real $\omega$. The function is even, nonnegative, regular at zero and $O(\omega^{-4})$ at infinity.
+\item Invalid. For $0<|\omega|<1$ the ordinary part is negative; there are poles at $\omega=\pm1$ and a negative impulse at zero. These already violate nonnegativity.
+\item Invalid. For nonzero real $\omega$, the denominator generally has a nonzero imaginary part; the function is not a real PSD.
+\item Valid. It equals $|\omega|/(1+\omega^2)^2$, an even nonnegative integrable function. Its integral is $1$, so its mean-square value would be $1/(2\pi)$.
+\item Invalid for a real signal. It is nonnegative and integrable but is not even: its center is $\omega=1$. It could be a PSD for a complex signal, which is outside the stated question.
+\end{enumerate}
+Thus $\boxed{\text{(1), (2), (5) are valid.}}$
+
+\problem{3.25}{Required}{87}
+{\small Textbook sections: 3.4.2}
+\step{1. Transform the prescribed cross-correlation.}
+Using $R_{XY}(\tau)=\E[X(t+\tau)Y(t)]$ and the forward kernel $\ee^{-\jj\omega\tau}$,
+\[S_{XY}(\omega)=9\int_0^\infty\ee^{-(3+\jj\omega)\tau}\,d\tau
+=\boxed{\frac9{3+\jj\omega}}.\]
+The single endpoint value at $\tau=0$ does not affect this Fourier integral.
+\step{2. Reverse the process order.}
+For real jointly WSS processes, $R_{YX}(\tau)=R_{XY}(-\tau)$, hence
+\[\boxed{S_{YX}(\omega)=S_{XY}^*(\omega)=\frac9{3-\jj\omega}}.\]
+A cross-spectrum may be complex and need not be nonnegative. Its real part here is $27/(9+\omega^2)$ and the imaginary part of $S_{XY}$ is $-9\omega/(9+\omega^2)$. These are the requested formal transforms; individual auto-spectra were not supplied for a joint spectral-realizability test.
+
+\problem{3.1}{Optional}{85}
+{\small Textbook sections: 3.1.1}
+\step{1. Distinct observation times.}
+For each $t$, $U(t)\sim N(0,2)$, so
+\[\boxed{f(u;t)=\frac1{2\sqrt\pi}\ee^{-u^2/4}}.\]
+If $t_1\ne t_2$, independence gives
+\[\boxed{f(u_1,u_2;t_1,t_2)=\frac1{4\pi}\ee^{-(u_1^2+u_2^2)/4}}.\]
+For pairwise distinct $t_1,\ldots,t_k$, the stated independence of samples gives
+\[\boxed{f(u_1,\ldots,u_k;t_1,\ldots,t_k)=(4\pi)^{-k/2}\exp\left(-\frac14\sum_{i=1}^ku_i^2\right)}.\]
+\step{2. Repeated times and stationarity.}
+Repeated times refer to the same random variable, not independent draws. For example, if $t_1=t_2$ the law is supported on $u_1=u_2$, with generalized density $f(u_1;t_1)\delta(u_2-u_1)$; an ordinary two-dimensional density does not exist. For general repeated times, take a product density over distinct time groups and impose equality inside each group.
+All finite-dimensional laws depend only on which times coincide. A common time shift preserves those equalities, proving strict stationarity. Also
+\[m_U=0,\qquad R_U(\tau)=\begin{cases}2,&\tau=0,\\0,&\tau\ne0,\end{cases}\]
+so the process is WSS. This continuum-indexed independent-sample model is not mean-square continuous. Do not replace this finite-variance correlation by a Dirac impulse: ideal continuous-time white noise is a different generalized-process model.
+
+\problem{3.7}{Optional}{85}
+{\small Textbook sections: 3.2.2}
+\step{1. Shift both correlation arguments by the same number of cycles.}
+Wide-sense cyclostationarity gives $m(t+100k)=m(t)$ and
+\[R(t_1+100k,t_2+100k)=R(t_1,t_2),\qquad k\in\mathbb Z.\]
+It does not in general permit arbitrary independent shifts of the two arguments. Linearity of expectation needs no independence assumption.
+\step{2. Substitute the supplied mean and correlation.}
+\[\begin{aligned}
+\E[5Y(110)]&=5m(10)=\boxed{100},\\
+\E[10Y(310)+50]&=10m(10)+50=\boxed{250},\\
+\E[Y(105)Y(101)]&=R(5,1)=\boxed{10},\\
+\E[30Y(205)Y(201)+200]&=30R(5,1)+200=\boxed{500},\\
+\E[10Y(305)Y(301)+6Y(210)+80]&=10R(5,1)+6m(10)+80=\boxed{300}.
+\end{aligned}\]
+
+\problem{3.19}{Optional}{86}
+{\small Textbook sections: 3.4.2}
+\step{1. Rational spectrum: partial fractions.}
+Factor $\omega^4+3\omega^2+2=(\omega^2+1)(\omega^2+2)$ and write
+\[S_X(\omega)=-\frac1{\omega^2+1}+\frac2{\omega^2+2}.\]
+The pair $\mathcal F\{\ee^{-a|\tau|}\}=2a/(a^2+\omega^2)$ gives
+\[\boxed{R_X(\tau)=-\frac12\ee^{-|\tau|}+\frac1{\sqrt2}\ee^{-\sqrt2|\tau|}},
+\qquad\boxed{\E[X^2]=\frac{\sqrt2-1}{2}}.\]
+A negative tail of $R_X$ is allowed; its Fourier transform is still nonnegative.
+\step{2. Impulse plus triangular spectrum.}
+Write the spectrum as $8\delta(\omega)+20\Lambda(\omega/10)$. An impulse at zero gives the constant $8/(2\pi)=4/\pi$. The inverse transform of the triangle is a squared sinc, giving
+\[\boxed{R_X(\tau)=\frac4\pi+\frac{100}\pi\left[\frac{\sin(5\tau)}{5\tau}\right]^2},
+\qquad\boxed{\E[X^2]=\frac{104}\pi}.\]
+The continuous triangle has area $20\times10=200$; with impulse mass $8$, the total power is $(200+8)/(2\pi)$.
+\step{3. The nondecaying spectrum requires a generalized interpretation.}
+If $p>0$, $p\cos^4(\omega\tau_0)$ has an infinite integral (also when $\tau_0=0$). Thus it is not the spectrum of an ordinary finite-variance WSS signal and there is no finite mean-square value. Using
+\[\cos^4x=\frac38+\frac12\cos2x+\frac18\cos4x,\]
+its inverse transform as a tempered distribution is
+\[\boxed{\begin{aligned}
+R_X(\tau)=p\bigl\{&\tfrac38\delta(\tau)
++\tfrac14[\delta(\tau-2\tau_0)+\delta(\tau+2\tau_0)]\\
+&+\tfrac1{16}[\delta(\tau-4\tau_0)+\delta(\tau+4\tau_0)]\bigr\}.
+\end{aligned}}\]
+Distributional $R_X(0)$ is not a finite number; writing $\delta(0)$ as a numeric answer is invalid. If $p=0$, the zero signal has zero power. If $p<0$, the expression is negative on a set of positive measure and cannot be a PSD. The original question did not restrict $p$, so these cases must be separated.
+\end{document}

@@ -1,0 +1,117 @@
+{
+  "chapter": 3,
+  "homework": 3,
+  "date": "2026-10-27",
+  "six_pdf_pages": [
+    38,
+    10,
+    6,
+    10,
+    23,
+    13
+  ],
+  "total_pdf_pages": 100,
+  "new_documents": 5,
+  "reused_textbook": "Verified SHA-256 matches DSH accepted handoff; original source and PDF unchanged.",
+  "new_document_checks": {
+    "self_contained": true,
+    "portrait_ratio": "2048:2732",
+    "overfull_boxes": 0,
+    "missing_glyphs": 0,
+    "unresolved_references": 0,
+    "final_rendered_pages_visually_reviewed": 62
+  },
+  "independent_rebuild": {
+    "all_passed": true,
+    "documents": [
+      {
+        "source": "教材/重排版/SSA_Textbook_CH3_zh.tex",
+        "pages": 38,
+        "isolated_compilation": "passed, no companion source/image files",
+        "text_matches_delivered_pdf": true
+      },
+      {
+        "source": "作业/题册与答案/SSA_Homework_3_English.tex",
+        "pages": 10,
+        "isolated_compilation": "passed, no companion source/image files",
+        "text_matches_delivered_pdf": true
+      },
+      {
+        "source": "作业/题册与答案/SSA_Homework_3_Solutions_English.tex",
+        "pages": 6,
+        "isolated_compilation": "passed, no companion source/image files",
+        "text_matches_delivered_pdf": true
+      },
+      {
+        "source": "试卷/考频与复习/SSA_CH3_Exam_Frequency_Report.tex",
+        "pages": 10,
+        "isolated_compilation": "passed, no companion source/image files",
+        "text_matches_delivered_pdf": true
+      },
+      {
+        "source": "试卷/考频与复习/SSA_CH3_Review_Problem_Set.tex",
+        "pages": 23,
+        "isolated_compilation": "passed, no companion source/image files",
+        "text_matches_delivered_pdf": true
+      },
+      {
+        "source": "试卷/考频与复习/SSA_CH3_Review_Solutions_zh.tex",
+        "pages": 13,
+        "isolated_compilation": "passed, no companion source/image files",
+        "text_matches_delivered_pdf": true
+      }
+    ]
+  },
+  "math_checks": {
+    "homework": 14,
+    "supplementary": 20,
+    "all_passed": true,
+    "scope": "Exact arithmetic, spectral-line coefficients, numerical moments and phase/spectral integration; mathematical proofs and model boundaries reviewed analytically."
+  },
+  "source_exam_checks": {
+    "papers": 8,
+    "pages": 36,
+    "subquestions": 107,
+    "all_source_hashes_verified": true,
+    "all_rendered_source_pages_reviewed": true,
+    "marks_per_paper": [
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100
+    ],
+    "primary_assignments_preserved": true
+  },
+  "chapter3_core_marks": [
+    0,
+    0,
+    9,
+    19,
+    17,
+    25,
+    29,
+    7
+  ],
+  "chapter3_mean": 13.25,
+  "chapter3_recent_four_mean": 19.5,
+  "review": {
+    "problems": 21,
+    "days": 7,
+    "homework_coverage": {
+      "3.1": 2,
+      "3.4": 3,
+      "3.5": 4,
+      "3.9": 5,
+      "3.7": 8,
+      "3.14": 9,
+      "3.16": 10,
+      "3.21": 11,
+      "3.25": 13,
+      "3.19": 14
+    }
+  }
+}

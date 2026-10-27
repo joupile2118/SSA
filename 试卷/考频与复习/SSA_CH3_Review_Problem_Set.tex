@@ -1,0 +1,163 @@
+\documentclass[11pt]{article}
+\usepackage[paperwidth=222.6413mm,paperheight=297mm,left=1.9cm,right=1.9cm,top=2.1cm,bottom=1.8cm,headsep=0.5cm]{geometry}
+\usepackage{amsmath,amssymb,mathrsfs}
+\usepackage[table]{xcolor}
+\usepackage{booktabs,tabularx,xltabular,array,ragged2e,enumitem,tcolorbox,tikz,fancyhdr}
+\tcbuselibrary{skins,breakable}
+\usepackage[hidelinks]{hyperref}
+\definecolor{navy}{HTML}{1B3A5C}\definecolor{accentred}{HTML}{B23A48}
+\definecolor{muted}{HTML}{5A6470}\definecolor{qbg}{HTML}{F4F6F8}\definecolor{linec}{HTML}{9AA3AD}
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newlist{qp}{enumerate}{1}\setlist[qp]{label=(\alph*),leftmargin=1.5em,itemsep=2pt}
+\newlist{qn}{enumerate}{1}\setlist[qn]{label=(\arabic*),leftmargin=1.5em,itemsep=2pt}
+\newlist{qparts}{enumerate}{1}\setlist[qparts]{label=(\alph*),leftmargin=1.5em,itemsep=2pt}
+\newlist{qnum}{enumerate}{1}\setlist[qnum]{label=(\arabic*),leftmargin=1.5em,itemsep=2pt}
+\newlist{bul}{itemize}{1}\setlist[bul]{label=\textbullet,leftmargin=1.5em,itemsep=2pt}
+\newcommand{\key}[1]{\par\vspace{4pt}\noindent\textbf{\color{navy}#1}\par\vspace{2pt}}
+\newcommand{\hint}[1]{\par\smallskip{\small\itshape Hint: #1}\par}
+\newcommand{\sect}[1]{{\small\color{muted}#1}}
+\newcommand{\dd}{\mathrm d}\newcommand{\Var}{\operatorname{Var}}\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\E}{\mathbb E}\newcommand{\ee}{\mathrm e}\newcommand{\jj}{\mathrm j}
+\newtcolorbox{workspace}{height fill,enhanced,colback=white,colframe=linec!55,boxrule=0.5pt,arc=1.5pt}
+\newcommand{\qtitle}[2]{\clearpage\begin{tcolorbox}[colback=navy,colframe=navy,arc=1.5pt,boxrule=0pt]\color{white}\large\bfseries #1\hfill\small #2\end{tcolorbox}}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\footnotesize\color{navy}SSA -- Chapter 3 -- Review Problems}\fancyhead[R]{\footnotesize\thepage}
+\fancyfoot[C]{\scriptsize Eight-paper edition -- 2026-10-27}
+\hypersetup{pdftitle={SSA Chapter 3 Review Problem Set}}
+
+\begin{document}
+\begin{titlepage}\centering\vspace*{1.5cm}{\Huge\bfseries Stochastic Signal Analysis}\par\vspace{1cm}{\LARGE\bfseries Chapter 3 Review Problem Set}\par\vspace{6mm}{\large Stationarity and Power Spectral Density}\par\vspace{1cm}{\large 21 problems / 7 days / 3 problems per day}\par\vspace{1cm}
+\begin{tcolorbox}[colback=qbg,colframe=navy]Based on the same eight verified past papers as the frequency report. Chapter 3 has 106 primary marks across this sample, averaging 13.25 marks per paper; the recent-four mean is 19.50.\par All ten assigned and suggested homework exercises are included in full. Extra questions address joint WSS, delays, modulation spectra, white noise, and original-paper inconsistencies. Translations and adaptations are study materials, not official English textbook questions.\end{tcolorbox}\vfill 2026-10-27\end{titlepage}
+\section*{Problem and Source Index}
+{\small\renewcommand{\arraystretch}{1.15}\begin{xltabular}{\textwidth}{@{}r r L{9.4cm} X@{}}\toprule Q & Day & Source & Sections\\\midrule\endfirsthead\toprule Q & Day & Source & Sections\\\midrule\endhead\midrule\multicolumn{4}{r}{\small Continued on next page}\\\endfoot\bottomrule\endlastfoot
+1 & 1 & Original recall and counterexample & 3.1.1\\
+2 & 1 & Textbook 3.1 / Optional homework & 3.1.1\\
+3 & 1 & Textbook 3.4 / Required homework & 3.1.1\\
+4 & 2 & Textbook 3.5 / Required homework & 3.1.1 / 3.3.1\\
+5 & 2 & Textbook 3.9 / Required homework & 3.1.2 / 3.3.1\\
+6 & 2 & Adapted from 202312 Q1; finite-power correction & 3.1.1 / 3.1.2 / 3.4.2\\
+7 & 3 & Adapted from 202112 Q2(a--d) & 3.1.1 / 3.1.2 / 3.3.1\\
+8 & 3 & Textbook 3.7 / Optional homework & 3.2.2\\
+9 & 3 & Textbook 3.14 / Required homework & 3.3.1 / 3.4.2\\
+10 & 4 & Textbook 3.16 / Required homework & 3.1.1 / 3.3.1\\
+11 & 4 & Textbook 3.21 / Required homework & 3.4.2\\
+12 & 4 & Original transform-pair exercise & 3.3.1 / 3.3.2 / 3.4.2\\
+13 & 5 & Textbook 3.25 / Required homework & 3.4.2\\
+14 & 5 & Textbook 3.19 / Optional homework & 3.4.2\\
+15 & 5 & Adapted from 202212 Q2(a--c) & 3.1.1 / 3.4.2\\
+16 & 6 & Adapted from 202512 Q2(a,b); consistent amplitude model & 3.1.1 / 3.4.2\\
+17 & 6 & Adapted from 202412 Q2(a,b); zero means and nonzero carrier specified & 3.1.1 / 3.1.2 / 3.4.2\\
+18 & 6 & Adapted from 202412 Q1(a--c) & 3.1.1 / 3.1.2\\
+19 & 7 & Adapted from 202112 Q4(a); carrier separation stated & 3.3.2 / 3.4.2\\
+20 & 7 & Original exercise; tools used in 202104 Q2 and recent RC-noise questions & 3.3.2 / 3.4.2 / 3.5.1\\
+21 & 7 & Original diagnostic based on 202312 Q1 and 202512 Q2(c) & 3.1.1 / 3.3.2 / 3.4.2\\
+\end{xltabular}}
+\par\smallskip Use $R_{XY}(\tau)=\E[X(t+\tau)Y(t)]$ and the angular-frequency Fourier pair with inverse factor $1/(2\pi)$. Source labels identify every explicit adaptation. Each following page is one problem with working space.
+\qtitle{Problem 1}{Day 1}
+{\small\color{accentred}Original recall and counterexample}\par\smallskip{\small\color{muted}Sections: 3.1.1}\par\medskip{\large\bfseries Stationarity: definitions and limits}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]State the definitions of strict-sense stationarity (SSS) and wide-sense stationarity (WSS), including the finite-second-moment requirement. Prove that SSS with finite second moments implies WSS, and that a jointly Gaussian WSS process is SSS. Does WSS imply SSS in general? Give a concrete counterexample with its time-dependent one-dimensional law and constant mean and correlation.\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 2}{Day 1}
+{\small\color{accentred}Textbook 3.1 / Optional homework}\par\smallskip{\small\color{muted}Sections: 3.1.1}\par\medskip{\large\bfseries Independent samples in continuous time}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]A random voltage signal $U(t)$ is statistically independent at distinct times. Its one-dimensional distribution is Gaussian with mean $0$ and variance $2$.
+\begin{enumerate}
+\item Find the density functions $f(u;t)$, $f(u_1,u_2;t_1,t_2)$ and $f(u_1,\ldots,u_k;t_1,\ldots,t_k)$, for arbitrary positive integer $k$.
+\item Determine the stationarity of $U(t)$.
+\end{enumerate}\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 3}{Day 1}
+{\small\color{accentred}Textbook 3.4 / Required homework}\par\smallskip{\small\color{muted}Sections: 3.1.1}\par\medskip{\large\bfseries Independent stationary products}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]The random processes $X(t)$ and $Y(t)$ are independent and each is stationary. Prove that $Z(t)=X(t)Y(t)$ is also stationary.\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 4}{Day 2}
+{\small\color{accentred}Textbook 3.5 / Required homework}\par\smallskip{\small\color{muted}Sections: 3.1.1 / 3.3.1}\par\medskip{\large\bfseries Square-law output}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Let $X(t)=10\sin(\omega_0t+\Theta)$, where $\omega_0$ is a deterministic constant and $\Theta$ is uniformly distributed on $[-\pi,\pi]$. A square-law device produces $Y(t)=X^2(t)$. Find:
+\begin{enumerate}\item the mean of $Y(t)$;\item its autocorrelation function;\item whether $Y(t)$ is wide-sense stationary.\end{enumerate}\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 5}{Day 2}
+{\small\color{accentred}Textbook 3.9 / Required homework}\par\smallskip{\small\color{muted}Sections: 3.1.2 / 3.3.1}\par\medskip{\large\bfseries Sums, differences and cross-correlation}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]The stationary random processes $X(t)$ and $Y(t)$ are statistically independent, have zero means, and have autocorrelation functions
+\[R_X(\tau)=\ee^{-|\tau|},\qquad R_Y(\tau)=\cos(2\pi\tau).\]
+\begin{enumerate}\item Find the autocorrelation of $Z(t)=X(t)+Y(t)$.\item Find the autocorrelation of $W(t)=X(t)-Y(t)$.\item Find the cross-correlation $R_{ZW}(\tau)$.\end{enumerate}\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 6}{Day 2}
+{\small\color{accentred}Adapted from 202312 Q1; finite-power correction}\par\smallskip{\small\color{muted}Sections: 3.1.1 / 3.1.2 / 3.4.2}\par\medskip{\large\bfseries Joint WSS and rational spectra}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Let $X$ and $Y$ be independent zero-mean real WSS processes with
+\[S_X(\omega)=\frac{16}{\omega^2+16},\qquad S_Y(\omega)=\frac8{\omega^2+4}.\]
+Put $Z=X+Y$ and $V=X-Y$. Prove that $X,Y$ and also $Z,V$ are jointly WSS. Find $S_Z$, $R_{XZ}$ and $R_{VZ}$. State the cross-correlation convention you use.
+\par The original paper uses $S_Y=\omega^2/(\omega^2+16)$, which is not integrable. This problem explicitly replaces it by a finite-power spectrum; Problem 21 diagnoses the original.\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 7}{Day 3}
+{\small\color{accentred}Adapted from 202112 Q2(a--d)}\par\smallskip{\small\color{muted}Sections: 3.1.1 / 3.1.2 / 3.3.1}\par\medskip{\large\bfseries Delayed radar echo}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Let $X(t)$ and $N(t)$ be independent zero-mean real WSS processes with correlations $R_X$ and $R_N$. Let $Y(t)=\alpha X(t-d)+N(t)$, where $\alpha$ and $d$ are deterministic real constants. Using $R_{XY}(\tau)=\E[X(t+\tau)Y(t)]$, find the mean and autocorrelation of $Y$, both $R_{XY}$ and $R_{YX}$, and establish the WSS of $Y$ and the joint WSS of $X,Y$. Explain why the delay signs differ in the two cross-correlations.\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 8}{Day 3}
+{\small\color{accentred}Textbook 3.7 / Optional homework}\par\smallskip{\small\color{muted}Sections: 3.2.2}\par\medskip{\large\bfseries Cyclostationary shifts}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]The real random signal $Y(t)$ is wide-sense cyclostationary with cycle period $100$. Its mean satisfies $m(10)=20$, and its two-time correlation satisfies $R(5,1)=10$. Find:
+\begin{enumerate}
+\item $\E[5Y(110)]$ and $\E[10Y(310)+50]$;
+\item $\E[Y(105)Y(101)]$ and $\E[30Y(205)Y(201)+200]$;
+\item $\E[10Y(305)Y(301)+6Y(210)+80]$.
+\end{enumerate}\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 9}{Day 3}
+{\small\color{accentred}Textbook 3.14 / Required homework}\par\smallskip{\small\color{muted}Sections: 3.3.1 / 3.4.2}\par\medskip{\large\bfseries Admissible autocorrelations}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Two zero-mean wide-sense stationary random processes $X(t)$ and $Y(t)$ have variances $\sigma_X^2=5$ and $\sigma_Y^2=10$. Can the following functions be their autocorrelation functions? Explain each answer. Here $u(\tau)$ denotes the unit step.
+\begin{enumerate}
+\item $R_X(\tau)=5u(\tau)\exp(-3\tau)$.
+\item $R_X(\tau)=5\sin(5\tau)$.
+\item $R_Y(\tau)=9/(1+2\tau^2)$.
+\item $R_Y(\tau)=-\cos(6\tau)\exp(-|\tau|)$.
+\item $R_X(\tau)=5[\sin(3\tau)/(3\tau)]^2$.
+\item $R_Y(\tau)=6+4\sin(10\tau)/(10\tau)$.
+\item $R_X(\tau)=5\exp(-|\tau|)$.
+\item $R_Y(\tau)=6+4\exp(-3\tau^2)$.
+\end{enumerate}
+Removable singularities are understood by their limits.\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 10}{Day 4}
+{\small\color{accentred}Textbook 3.16 / Required homework}\par\smallskip{\small\color{muted}Sections: 3.1.1 / 3.3.1}\par\medskip{\large\bfseries A shared random amplitude}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]The processes $X(t)$ and $Y(t)$ are independent and each is stationary, with
+\[R_X(\tau)=2\ee^{-|\tau|}\cos(\omega_0\tau),\qquad R_Y(\tau)=9+\exp(-3\tau^2).\]
+Let $Z(t)=AX(t)Y(t)$, where the random variable $A$ has mean $2$ and variance $9$, and $A$, $X(t)$ and $Y(t)$ are mutually independent. Find the mean, variance and autocorrelation of $Z(t)$.\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 11}{Day 4}
+{\small\color{accentred}Textbook 3.21 / Required homework}\par\smallskip{\small\color{muted}Sections: 3.4.2}\par\medskip{\large\bfseries Real-signal PSD admissibility}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Which of the following functions can be power spectral densities of real random signals? Explain why or why not.
+\begin{enumerate}
+\item $[\sin\omega/\omega]^2$.
+\item $\omega^2/(\omega^6+3\omega^2+3)$.
+\item $\omega^2/(\omega^4-1)-\delta(\omega)$.
+\item $\omega^4/(\jj\omega^6+\omega^2+1)$.
+\item $|\omega|/(\omega^4+2\omega^2+1)$.
+\item $\exp[-(\omega-1)^2]$.
+\end{enumerate}\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 12}{Day 4}
+{\small\color{accentred}Original transform-pair exercise}\par\smallskip{\small\color{muted}Sections: 3.3.1 / 3.3.2 / 3.4.2}\par\medskip{\large\bfseries A spectrum with continuous and line parts}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]A zero-mean real WSS signal has
+\[R_X(\tau)=2\ee^{-3|\tau|}+4\cos(5\tau)+1.\]
+Find its PSD and mean-square value. Explain why a zero-mean signal can have a zero-frequency spectral impulse. Construct it as a sum of three independent zero-mean WSS components, specifying the correlation of each component; no stochastic differential equation is required.\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 13}{Day 5}
+{\small\color{accentred}Textbook 3.25 / Required homework}\par\smallskip{\small\color{muted}Sections: 3.4.2}\par\medskip{\large\bfseries Causal-looking cross-correlation and cross-spectrum}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Two random processes $X(t)$ and $Y(t)$ are jointly stationary, with cross-correlation
+\[R_{XY}(\tau)=\begin{cases}9\ee^{-3\tau},&\tau\geq0,\\0,&\tau<0.\end{cases}\]
+Find the cross-power spectral densities $S_{XY}(\omega)$ and $S_{YX}(\omega)$.\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 14}{Day 5}
+{\small\color{accentred}Textbook 3.19 / Optional homework}\par\smallskip{\small\color{muted}Sections: 3.4.2}\par\medskip{\large\bfseries Inverse transforms and infinite-power boundary}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Find the autocorrelation function and the mean-square value of a stationary signal $X(t)$ for each of the following power spectral densities:
+\begin{enumerate}
+\item $S_X(\omega)=\omega^2/(\omega^4+3\omega^2+2)$.
+\item
+\[S_X(\omega)=\begin{cases}8\delta(\omega)+20(1-|\omega|/10),&|\omega|\leq10,\\0,&|\omega|>10.\end{cases}\]
+\item $S_X(\omega)=p\cos^4(\omega\tau_0)$, where $p$ is a constant.
+\end{enumerate}\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 15}{Day 5}
+{\small\color{accentred}Adapted from 202212 Q2(a--c)}\par\smallskip{\small\color{muted}Sections: 3.1.1 / 3.4.2}\par\medskip{\large\bfseries Random-phase multiplicative modulation}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Let $\xi(t)$ be a real WSS process with finite second moments, mean $m_\xi$, correlation $R_\xi$ and PSD $S_\xi$. Let $\Theta\sim U[0,2\pi)$ be independent of the entire process. For $\omega_0>0$, put
+\[\eta(t)=\xi(t)\cos(\omega_0t+\Theta).\]
+Derive $m_\eta$, $R_\eta$ and $S_\eta$, and prove WSS. Do not assume $m_\xi=0$. Explain how any DC spectral line of $\xi$ moves under this modulation.\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 16}{Day 6}
+{\small\color{accentred}Adapted from 202512 Q2(a,b); consistent amplitude model}\par\smallskip{\small\color{muted}Sections: 3.1.1 / 3.4.2}\par\medskip{\large\bfseries Nonuniform phase: what must vanish?}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Let $A(t)$ be a real WSS process with mean $1$ and covariance $C_A(\tau)=\ee^{-|\tau|}$. A phase $\Theta$ is independent of the entire process and has characteristic function $\phi_\Theta(v)=\E[\ee^{\jj v\Theta}]$. For $\omega_0>0$, put $Z(t)=A(t)\cos(\omega_0t+\Theta)$.
+\begin{enumerate}\item Derive its mean and two-time correlation, and give necessary and sufficient conditions on $\phi_\Theta(1),\phi_\Theta(2)$ for WSS.\item Under these conditions find $S_Z$.\item If $X$ is an independent real WSS process, find $S_{X+Z}$.\end{enumerate}
+The covariance, rather than uncentered correlation, is specified here to avoid the inconsistency in the original paper's part (c).\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 17}{Day 6}
+{\small\color{accentred}Adapted from 202412 Q2(a,b); zero means and nonzero carrier specified}\par\smallskip{\small\color{muted}Sections: 3.1.1 / 3.1.2 / 3.4.2}\par\medskip{\large\bfseries Quadrature modulation and joint stationarity}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Let $X,Y$ be jointly WSS real processes with zero means. Let $\omega_0>0$, and define
+\[V(t)=X(t)\cos(\omega_0t)+Y(t)\sin(\omega_0t).\]
+Expand $R_V(t+\tau,t)$ and show that WSS is equivalent to
+\[R_X(\tau)=R_Y(\tau)=R_0(\tau),\qquad R_{XY}(\tau)=-R_{YX}(\tau).\]
+Under these conditions derive $R_V(\tau)$ and $S_V(\omega)$ in terms of $S_0,S_{XY}$. Simplify further if $X$ and $Y$ are uncorrelated at every lag. Use $R_{XY}(\tau)=\E[X(t+\tau)Y(t)]$.\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 18}{Day 6}
+{\small\color{accentred}Adapted from 202412 Q1(a--c)}\par\smallskip{\small\color{muted}Sections: 3.1.1 / 3.1.2}\par\medskip{\large\bfseries Sampling at an integer number of cycles}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]For integer $n$, let $X[n]=\sin(2\pi n+\Phi)$ and $Y[n]=\cos(2\pi n+\Phi)$, with $\Phi\sim U(0,\pi)$. Find both means, both autocorrelations, and their cross-correlation. Are the sequences orthogonal, uncorrelated, independent, jointly WSS and jointly SSS? Justify each statement. Explain why continuous-time uniform-full-phase shortcuts do not apply.\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 19}{Day 7}
+{\small\color{accentred}Adapted from 202112 Q4(a); carrier separation stated}\par\smallskip{\small\color{muted}Sections: 3.3.2 / 3.4.2}\par\medskip{\large\bfseries Power from a bandpass cosine spectrum}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]A zero-mean real WSS signal has the two-sided angular-frequency PSD
+\[S_X(\omega)=\begin{cases}
+P\cos[\pi(\omega-\omega_0)/\Delta],&|\omega-\omega_0|\leq\Delta/2,\\
+P\cos[\pi(\omega+\omega_0)/\Delta],&|\omega+\omega_0|\leq\Delta/2,\\
+0,&\text{otherwise},
+\end{cases}\]
+where $P>0$, $\Delta>0$ and $\omega_0>\Delta/2$. Sketch the spectrum with its peak heights and band edges. Determine the mean-square value and variance, showing both lobe areas and the $1/(2\pi)$ factor. Here $P$ labels the spectral height, not the total power.\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 20}{Day 7}
+{\small\color{accentred}Original exercise; tools used in 202104 Q2 and recent RC-noise questions}\par\smallskip{\small\color{muted}Sections: 3.3.2 / 3.4.2 / 3.5.1}\par\medskip{\large\bfseries White noise, finite bandwidth and finite variance}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]Ideal continuous-time white noise has two-sided angular-frequency PSD $S_N(\omega)=N_0/2$, with $N_0>0$. A band-limited approximation has
+\[S_{N_B}(\omega)=\frac{N_0}{2}\mathbf1_{\{|\omega|\leq B\}},\qquad B>0.\]
+Find $R_{N_B}(\tau)$ and its mean-square value, and take the distributional limit $B\to\infty$. Explain why ideal continuous-time white noise cannot simultaneously have this nonzero flat PSD and a finite pointwise variance. Does white imply Gaussian? Contrast this model with the finite-variance independent-sample process in textbook 3.1.\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\qtitle{Problem 21}{Day 7}
+{\small\color{accentred}Original diagnostic based on 202312 Q1 and 202512 Q2(c)}\par\smallskip{\small\color{muted}Sections: 3.1.1 / 3.3.2 / 3.4.2}\par\medskip{\large\bfseries Diagnose two original-paper inconsistencies}\par\smallskip\begin{tcolorbox}[colback=qbg,colframe=qbg,boxrule=0pt]\begin{enumerate}
+\item The 202312 paper gives $S_Y(\omega)=\omega^2/(\omega^2+16)$. Find its formal inverse Fourier transform. Can an ordinary finite-variance WSS signal have this PSD? Explain without assigning a numeric value to $\delta(0)$.
+\item The 202512 paper states $m_A\ne0$ and later gives the uncentered correlation $R_A(\tau)=\ee^{-|\tau|}$. Explain why these cannot both describe a real WSS process with finite second moments.
+\item Give a consistent way to reinterpret or modify each model. Separate these explicit changes from the original questions.
+\end{enumerate}\end{tcolorbox}\smallskip\begin{workspace}\hfill{\color{linec}\footnotesize Working space}\end{workspace}
+\end{document}
